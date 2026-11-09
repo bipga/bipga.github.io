@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="Interpret native pair scores, endpoint selection, overlap, ranking provenance and report availability."><title>Evaluation and metrics — BPUPGA documentation</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
+<body data-page="evaluation"><a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link" href="quickstart.html">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link" href="algorithms.html">Algorithms</a><a class="nav-link active" href="evaluation.html" aria-current="page">Evaluation</a><a class="nav-link" href="diagnostics.html">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link" href="faq.html">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> API v0.1 <span>Research checkout</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
+<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span>Evaluation and metrics</div><div class="top-actions"><span class="release">PYTHON API · v0.1</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="api.html">API reference ↗</a></div></header>
+<div class="content-layout"><main id="main"><article><div class="eyebrow">BPUPGA / DOCUMENTATION</div><h1>Evaluation and metrics</h1><p class="lead">Interpret native pair scores, endpoint selection, overlap, ranking provenance and report availability.</p>
+<p><code>evaluate</code> scores the native result after alignment. It does not
+refit a model or apply a new assignment decoder. Keep the returned native pairs,
+their feasibility checks, and their ranking representation together when reporting
+results.</p>
+<div class="code-window"><div class="code-header"><span>Evaluate the quickstart result</span></div><pre><code>metrics = bp.evaluate(result, data, ks=(1, 5, 10))
+print(metrics[&quot;pair&quot;])
+print(metrics[&quot;validity&quot;])
+print(metrics[&quot;ranking_policy&quot;])</code></pre></div>
+<h2 id="pair-recovery">Exact-pair recovery<a class="permalink" href="#pair-recovery" aria-label="Link to Exact-pair recovery">#</a></h2>
+<p>Let <code>P</code> be the set of distinct native predicted pairs,
+<code>T</code> the reference pair set, and <code>c = |P ∩ T|</code>. The standard
+metrics are:</p>
+<div class="formula">Pair precision = c / |P|<br>
+Pair recall = c / |T|<br>Pair F1 = 2c / (|P| + |T|)</div>
+<p>Zero denominators use zero. Exact duplicate pairs are counted once for
+pair-set scoring. Repeated source or target endpoints remain visible in
+<code>validity</code>; a pair score does not establish one-to-one feasibility.
+A valid empty prediction is distinct from a failed execution.</p>
+<h2 id="matchability">Endpoint matchability and overlap<a class="permalink" href="#matchability" aria-label="Link to Endpoint matchability and overlap">#</a></h2>
+<p>Matched-node precision, recall, and F1 compare the unique predicted endpoint
+set on each graph with the endpoints in the reference. They measure selection of
+participating nodes separately from correct identity pairing.</p>
+<p>Overlap estimates distinguish predicted pair count from distinct source and
+target coverage. For graph orders <code>M</code> and <code>N</code>, predicted
+coverages are <code>|predicted sources| / M</code> and
+<code>|predicted targets| / N</code>. Pair count and endpoint count may differ
+when the native output repeats endpoints.</p>
+<h2 id="node-classification">Node classification<a class="permalink" href="#node-classification" aria-label="Link to Node classification">#</a></h2>
+<p><code>node_classification</code> contains source and target confusion counts,
+node accuracy, balanced accuracy, and unmatched-node precision/recall/F1.
+These use the same endpoint-count function as the campaign evaluator.
+Balanced accuracy is <code>None</code> when either reference class is absent.
+Selecting the correct participating nodes does not establish correct identity
+pairing; inspect pair recovery separately.</p>
+<h2 id="ranking">Directional ranking<a class="permalink" href="#ranking" aria-label="Link to Directional ranking">#</a></h2>
+<p>Hits@k is the fraction of reference-covered queries whose correct counterpart
+appears at rank k or better. MRR is the mean reciprocal rank. Dense scores rank
+against all opposite-side input nodes, with lower local candidate IDs breaking
+exact score ties. Both directions and the arithmetic average of their metric
+values are returned.</p>
+<p>Sparse outputs are ranked within the retrieved candidate lists. An absent true
+counterpart contributes zero to Hits@k and MRR; omitted scores are not fabricated.
+When only paired embeddings are present, ranking uses Euclidean distance and
+records that representation in <code>ranking_policy</code>.</p>
+<p>GRAMPA exposes its current soft-transformed ranking and the corresponding
+<code>raw_ranking</code>. S-GWL's continuous outputs represent recursive block
+scores. Ranking metrics answer a covered-query question; they do not measure
+rejection of unmatched nodes.</p>
+<h2 id="report-fields">Returned report<a class="permalink" href="#report-fields" aria-label="Link to Returned report">#</a></h2>
+<div class="table-scroll"><table><thead><tr><th>Key</th><th>Content</th><th>Availability</th></tr></thead><tbody><tr><td>method / output_variant</td><td>Method identity; output_variant is &#x27;native&#x27;</td><td>Always</td></tr><tr><td>pair</td><td>precision, recall, f1, true_positive, predicted, ground_truth</td><td>Reference-relative pair accounting</td></tr><tr><td>matchability</td><td>source and target precision/recall/F1</td><td>None for a reference flagged incomplete</td></tr><tr><td>overlap_estimation</td><td>Pair-count errors and directional endpoint coverage errors</td><td>None for a reference flagged incomplete</td></tr><tr><td>node_classification</td><td>Source/target TP, FP, FN, TN, accuracy, balanced accuracy, unmatched precision/recall/F1</td><td>None for an incomplete reference; balanced accuracy also requires both classes</td></tr><tr><td>validity</td><td>Index ranges, raw/unique pair counts, repeated pair/endpoints, is_one_to_one</td><td>Always for a validated result</td></tr><tr><td>ranking</td><td>source_to_target, target_to_source, bidirectional</td><td>None when no usable score/candidate/embedding representation exists</td></tr><tr><td>ranking_policy</td><td>Score representation, tie rule, or skipped_reason</td><td>Always</td></tr><tr><td>raw_ranking</td><td>GRAMPA ranking before its soft transform</td><td>GRAMPA with a continuous matrix</td></tr><tr><td>runtime</td><td>native_reported_seconds; optional peak_memory_mb</td><td>Existing result measurements</td></tr><tr><td>reference_note</td><td>Interpretation relative to supplied annotation coverage</td><td>Always</td></tr><tr><td>skipped_metrics</td><td>Reasons matchability, overlap estimates and node classification were skipped</td><td>Reference flagged incomplete</td></tr></tbody></table></div>
+<h2 id="incomplete-reference">Incomplete reference annotations<a class="permalink" href="#incomplete-reference" aria-label="Link to Incomplete reference annotations">#</a></h2>
+<p>Unannotated nodes are not automatically confirmed unmatched nodes. Mark known
+limitations in <code>metadata.json</code> with a nonempty
+<code>groundtruth_limitations</code> value, or set
+<code>ground_truth_complete</code> or <code>groundtruth_complete</code> to
+<code>false</code>. The public API then returns <code>None</code> for matchability,
+overlap estimates and node classification, with explicit reasons. Pair and ranking scores remain
+relative to the known reference.</p>
+<div class="note"><span>i</span><div><p><strong>Annotation scope of campaign records.</strong>
+Existing campaign files may retain classification and coverage quantities
+computed against reference-complement sets. Such quantities are annotation-relative
+when the reference is incomplete; they do not establish that an unannotated node
+is truly unmatched.</p></div></div>
+<h2 id="campaign-decoder-views">Campaign decoder views<a class="permalink" href="#campaign-decoder-views" aria-label="Link to Campaign decoder views">#</a></h2>
+<p>The public <code>evaluate</code> function scores native output only. The
+campaign stores additional decoder views as separate offline analyses of the
+same saved fit; calling <code>align</code> or <code>evaluate</code> does not select
+or apply these extra decoders.</p>
+<div class="table-scroll"><table><thead><tr><th>Saved variant</th><th>Decision rule</th><th>Interpretation</th></tr></thead><tbody><tr><td>native</td><td>Pairs returned by the registered method adapter</td><td>Primary output; endpoint conflicts remain visible</td></tr><tr><td>common_decoder</td><td>Mutual top 1% candidates per row/column (at least one), unmatched_cost=0.05; exact optional assignment with private dummies</td><td>Shared post-fit partial one-to-one rule; no true matching size is supplied</td></tr><tr><td>method_aware_decoder</td><td>Project-defined rules using the method&#x27;s native scores, pairs or recorded iteration signals</td><td>A method-plus-decoder system, not an author&#x27;s native output or a universally best rule</td></tr><tr><td>legacy_common_decoder</td><td>Earlier rectangular heuristic, retained for comparison</td><td>Known private-dummy optimality limitation; not the current Common decoder</td></tr></tbody></table></div>
+<p>The frozen configuration and variant metadata identify the rules used by each
+record. All variants share ranking metrics from the same continuous fit scores
+before hard decoding. A change in pair F1 across decoders is not a new ranking
+result or another model fit; GRAMPA's soft/raw rankings are score views.</p>
+
+<h2 id="reporting-seeds">Report repeated runs<a class="permalink" href="#reporting-seeds" aria-label="Link to Report repeated runs">#</a></h2>
+<p>Compute metrics per run before taking means. Report sample standard deviation
+and successful-run count alongside failure statuses. Do not replace missing scores
+with zero, calculate mean F1 from mean precision/recall, or treat relabelings of a
+single natural graph pair as independent graph samples.</p>
+<p>Reference: <a href="api.html#evaluate">evaluate</a>,
+<a href="api.html#AlignmentResult">AlignmentResult</a>, and
+<a href="logs.html">saved run records</a>.</p>
+</article><nav class="page-navigation" aria-label="Previous and next pages"><a href="algorithms.html"><span>← Previous</span>Algorithms</a><a href="diagnostics.html"><span>Next →</span>Post-inference diagnostics</a></nav><footer><span>BPUPGA Python API · v0.1</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link " href="#pair-recovery">Exact-pair recovery</a><a class="toc-link " href="#matchability">Endpoint matchability and overlap</a><a class="toc-link " href="#node-classification">Node classification</a><a class="toc-link " href="#ranking">Directional ranking</a><a class="toc-link " href="#report-fields">Returned report</a><a class="toc-link " href="#incomplete-reference">Incomplete reference annotations</a><a class="toc-link " href="#campaign-decoder-views">Campaign decoder views</a><a class="toc-link " href="#reporting-seeds">Report repeated runs</a></aside></div></div>
+<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>

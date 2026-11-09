@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="A complete first example, followed by a configurable example for prepared benchmark data."><title>Quick start — BPUPGA documentation</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
+<body data-page="quickstart"><a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link active" href="quickstart.html" aria-current="page">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link" href="algorithms.html">Algorithms</a><a class="nav-link" href="evaluation.html">Evaluation</a><a class="nav-link" href="diagnostics.html">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link" href="faq.html">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> API v0.1 <span>Research checkout</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
+<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span>Quick start</div><div class="top-actions"><span class="release">PYTHON API · v0.1</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="api.html">API reference ↗</a></div></header>
+<div class="content-layout"><main id="main"><article><div class="eyebrow">BPUPGA / DOCUMENTATION</div><h1>Quick start</h1><p class="lead">A complete first example, followed by a configurable example for prepared benchmark data.</p><h2 id="toy-example">1. Run a self-contained toy example<a class="permalink" href="#toy-example" aria-label="Link to 1. Run a self-contained toy example">#</a></h2><p>The example creates a tiny graph pair in a temporary directory, registers a degree-based adapter, and calls the same load → align → evaluate workflow. The adapter demonstrates the interface and makes no research performance claim.</p><p><a class="download-link" href="toy_example.py" download>↓ Download toy_example.py</a> <a class="download-link" href="examples.zip" download>↓ All examples</a></p><div class="code-window"><div class="code-header"><span>toy_example.py</span></div><pre><code>&quot;&quot;&quot;Run a small local API example without invoking a built-in model.
+
+From the repository root, set PYTHONPATH=baseline_exdit_261029/api.
+This degree-based adapter illustrates the contract; it is not a baseline claim.
+&quot;&quot;&quot;
+import json
+import tempfile
+from pathlib import Path
+
+import bpupga as bp
+
+
+class DegreeAdapter:
+    def fit(self, graph1, graph2):
+        source = sorted(graph1, key=lambda u: (-graph1.degree(u), u))
+        target = sorted(graph2, key=lambda v: (-graph2.degree(v), v))
+        return bp.AlignmentResult(
+            method=&quot;degree_example&quot;,
+            predicted_pairs=list(zip(source, target)),
+            runtime_sec=0.0,
+        )
+
+
+def factory(*, parameters, seed, device, dataset_family):
+    return DegreeAdapter()
+
+
+def main():
+    bp.register_algorithm(&quot;degree_example&quot;, factory)
+    with tempfile.TemporaryDirectory(prefix=&quot;bpupga-demo-&quot;) as directory:
+        root = Path(directory)
+        (root / &quot;G1.edgelist&quot;).write_text(&quot;10 11\n11 12\n&quot;)
+        (root / &quot;G2.edgelist&quot;).write_text(&quot;20 21\n21 22\n&quot;)
+        (root / &quot;G1.nodes&quot;).write_text(&quot;10\n11\n12\n13\n&quot;)
+        (root / &quot;G2.nodes&quot;).write_text(&quot;20\n21\n22\n23\n&quot;)
+        (root / &quot;Alignment.json&quot;).write_text(
+            json.dumps({&quot;10&quot;: 20, &quot;11&quot;: 21, &quot;12&quot;: 22}))
+        (root / &quot;metadata.json&quot;).write_text(json.dumps({
+            &quot;purpose&quot;: &quot;API toy example&quot;,
+            &quot;ground_truth_complete&quot;: True,
+        }))
+        data = bp.Dataset.load(root)
+        method = bp.Algorithm(&quot;degree_example&quot;, seed=2026)
+        result = method.align(data.graph1, data.graph2)
+        report = bp.evaluate(result, data)
+        print(&quot;Pair metrics:&quot;, report[&quot;pair&quot;])
+        print(&quot;Validity:&quot;, report[&quot;validity&quot;])
+        print(&quot;Original IDs:&quot;, data.pairs_to_original(result.predicted_pairs))
+        print(&quot;Ranking availability:&quot;, report[&quot;ranking_policy&quot;])
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</code></pre></div><h2 id="prepared-example">2. Align a prepared benchmark instance<a class="permalink" href="#prepared-example" aria-label="Link to 2. Align a prepared benchmark instance">#</a></h2><p>Run from the repository root with the import setup in <a href="installation.html">Installation</a>. Select a method and prepared input to update the code below. Available dependencies and supported devices follow the selected implementation; the example defaults to CPU.</p>
+<div class="example-controls"><label>Method <select id="method-select"><option value="grampa">GRAMPA</option><option value="regal">REGAL</option><option value="fugal">FUGAL</option><option value="cena">CENA</option><option value="s_gwl">S-GWL</option><option value="immnc">iMMNC</option><option value="oiteralign">OIterAlign</option><option value="alpine">ALPINE</option><option value="gradalign_plus">GradAlign+</option><option value="slotalign">SLOTAlign</option><option value="ulot">ULOT</option><option value="opgm_unsupervised">OPGM-U</option></select></label><label>Prepared instance <select id="dataset-select"><option value="fbtw">FbTw · 0.6 overlap</option><option value="grqc">GrQc · 0.6 overlap</option><option value="dblp">DBLP · 0.6 overlap</option><option value="Arxiv1-Arxiv2">Arxiv1–Arxiv2 · 0.6 overlap</option></select></label></div>
+<div class="code-window"><div class="code-header">quickstart.py</div><pre><code id="quickstart-code">import bpupga as bp
+
+data = bp.Dataset.load(
+    &quot;baseline_exdit_261029/date_261023/fbtw/bpupga/&quot;
+    &quot;rho_s0p6_rho_t0p6/construction_seed_2026&quot;)
+method = bp.Algorithm(
+    &quot;grampa&quot;, parameters={&quot;eta&quot;: 1.0}, seed=2026, device=&quot;cpu&quot;)
+result = method.align(data.graph1, data.graph2)
+metrics = bp.evaluate(result, data, ks=(1, 5, 10))
+print(metrics[&quot;pair&quot;])
+</code></pre></div><p class="note">These choices produce example calls. They do not load a campaign's frozen parameter overrides or initiate remote computation. See the <a href="algorithms.html">method catalog</a> before running a more expensive method.</p>
+<h2 id="read-result">3. Read the result<a class="permalink" href="#read-result" aria-label="Link to 3. Read the result">#</a></h2><div class="code-window"><div class="code-header"><span>Inspect outputs</span></div><pre><code>print(result.method)
+print(result.predicted_pairs[:5])
+print(data.pairs_to_original(result.predicted_pairs[:5]))
+print(metrics[&quot;pair&quot;])
+print(metrics[&quot;validity&quot;])
+print(metrics[&quot;ranking_policy&quot;])</code></pre></div><p>Native pairs use local integer IDs. Pair metrics deduplicate exact pair repetitions and disclose endpoint conflicts. Rankings are available only when the method returns a suitable score representation. <a href="evaluation.html">Evaluation</a> explains each report field.</p>
+<h2 id="next-steps">Next steps<a class="permalink" href="#next-steps" aria-label="Link to Next steps">#</a></h2><ul><li><a href="datasets.html">Build your own input or a partial-overlap instance.</a></li><li><a href="diagnostics.html">Inspect errors after alignment.</a></li><li><a href="logs.html">Read an existing campaign attempt without fitting again.</a></li><li><a href="extending.html">Register your own graph-only adapter.</a></li></ul></article><nav class="page-navigation" aria-label="Previous and next pages"><a href="installation.html"><span>← Previous</span>Installation</a><a href="datasets.html"><span>Next →</span>Datasets and construction</a></nav><footer><span>BPUPGA Python API · v0.1</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link " href="#toy-example">1. Run a self-contained toy example</a><a class="toc-link " href="#prepared-example">2. Align a prepared benchmark instance</a><a class="toc-link " href="#read-result">3. Read the result</a><a class="toc-link " href="#next-steps">Next steps</a></aside></div></div>
+<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>

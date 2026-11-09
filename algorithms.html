@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="Choose a current adapter, configure real method parameters, and use a shared alignment call."><title>Algorithms — BPUPGA documentation</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
+<body data-page="algorithms"><a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link" href="quickstart.html">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link active" href="algorithms.html" aria-current="page">Algorithms</a><a class="nav-link" href="evaluation.html">Evaluation</a><a class="nav-link" href="diagnostics.html">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link" href="faq.html">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> API v0.1 <span>Research checkout</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
+<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span>Algorithms</div><div class="top-actions"><span class="release">PYTHON API · v0.1</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="api.html">API reference ↗</a></div></header>
+<div class="content-layout"><main id="main"><article><div class="eyebrow">BPUPGA / DOCUMENTATION</div><h1>Algorithms</h1><p class="lead">Choose a current adapter, configure real method parameters, and use a shared alignment call.</p>
+<p>Choose a registered name, provide method-specific parameters, then call the same
+<code>align(graph1, graph2)</code> method. The public interface keeps the reference
+mapping outside the algorithm call.</p>
+<h2 id="choose-a-method">Choose a method<a class="permalink" href="#choose-a-method" aria-label="Link to Choose a method">#</a></h2>
+<p>The names below select the current project adapters. Parameter excerpts come
+from the current adapters and public wrapper; they are not a complete parameter list
+or a promise that omitted defaults reproduce the formal campaign settings.</p>
+<div class="table-scroll"><table><thead><tr><th>Name passed to Algorithm</th><th>Display name</th><th>Verified configuration excerpts</th></tr></thead><tbody><tr><td>alpine</td><td>ALPINE</td><td>mu=1.0; weight=2; CPU float64; fixed 10 × 10 steps</td></tr><tr><td>cena</td><td>CENA</td><td>q=0.5; layers=3; embedding_dim=64; embedding_epochs=5</td></tr><tr><td>fugal</td><td>FUGAL</td><td>mu=1.0; niter=15; inner_iterations=10</td></tr><tr><td>gradalign_plus</td><td>GradAlign+</td><td>epochs=10; k_hop=3; hid_dim=100; gradual_iterations=10</td></tr><tr><td>grampa</td><td>GRAMPA</td><td>eta=1.0; center_adjacency=False; dtype=&#x27;float64&#x27;</td></tr><tr><td>immnc</td><td>iMMNC</td><td>k_de=3; k_nei=3; initial_anchor_ratio=0.04; iterations=10</td></tr><tr><td>oiteralign</td><td>OIterAlign</td><td>dp_min_degree=6; diffusion_step=5; nearest_candidates=50</td></tr><tr><td>opgm_unsupervised</td><td>OPGM-U</td><td>layers=5; hidden_dim=64; epochs=100; learning_rate=0.001</td></tr><tr><td>regal</td><td>REGAL</td><td>max_layer=2; alpha=0.01; buckets=2.0; landmark_seed=42</td></tr><tr><td>s_gwl</td><td>S-GWL</td><td>partition_levels=3; cluster_count=2; outer_iterations=2000</td></tr><tr><td>slotalign</td><td>SLOTAlign</td><td>bases=2; joint_epoch=100; epoch=1000; feature_rounds=3</td></tr><tr><td>ulot</td><td>ULOT</td><td>alpha=0.5; rho=1.0; checkpoint=&#x27;bundled_sbm_50000&#x27;</td></tr></tbody></table></div>
+<h2 id="configure-a-method">Configure a method<a class="permalink" href="#configure-a-method" aria-label="Link to Configure a method">#</a></h2>
+<p>Use the common <code>seed</code> and <code>device</code> arguments for execution
+settings. Put algorithm-specific controls in <code>parameters</code>. Configuration
+is constructed lazily when <code>align</code> runs; its effective dictionary is
+then available as <code>algorithm.config</code>.</p>
+<div class="code-window"><div class="code-header"><span>Configure and align</span></div><pre><code>import bpupga as bp
+
+algorithm = bp.Algorithm(
+    &quot;grampa&quot;,
+    parameters={&quot;eta&quot;: 1.0, &quot;center_adjacency&quot;: False},
+    seed=2026,
+    device=&quot;cpu&quot;,
+)
+# data is the prepared instance loaded in the quickstart.
+result = algorithm.align(data.graph1, data.graph2)
+print(algorithm.config)</code></pre></div>
+<h2 id="execution-settings">Execution settings and dependencies<a class="permalink" href="#execution-settings" aria-label="Link to Execution settings and dependencies">#</a></h2>
+<ul>
+<li><code>device="cpu"</code> is the facade default. A CUDA request is relevant only
+when supported by the selected implementation and its installed dependencies.</li>
+<li>Built-in execution imports the existing model environment, including PyTorch.
+Some methods additionally need vendor packages or bundled weights.</li>
+<li><code>dataset_family="Oregon-1"</code> selects the documented FUGAL numerical
+policy for that family. It does not supply correspondence labels.</li>
+<li>Topology-derived pseudo-anchors or an internal optimization loop do not create
+a public training lifecycle. The user entry point remains <code>align</code>.</li>
+</ul>
+<h2 id="author-alpine">Original-author CPU ALPINE<a class="permalink" href="#author-alpine" aria-label="Link to Original-author CPU ALPINE">#</a></h2>
+<p><code>alpine</code> calls the archived author's <code>Alpine</code> and
+<code>Alpine_pp_new</code> functions through <code>baseline.alpine_author_cpu</code>.
+Both <code>device="cpu"</code> and <code>device="auto"</code> select CPU;
+an explicit CUDA request is rejected. Computation uses float64.</p>
+<p>The model controls are <code>mu</code> and <code>weight</code>. The author fixes
+ten outer iterations, ten inner steps, Sinkhorn regularization 1.0, 500 projection
+iterations, and tolerance <code>1e-5</code>. Corresponding parameter keys must retain
+these values, including <code>niter=10</code>; unsupported controls are rejected.</p>
+<h2 id="sgwl-numerics">S-GWL numerical revision<a class="permalink" href="#sgwl-numerics" aria-label="Link to S-GWL numerical revision">#</a></h2>
+<p><code>s_gwl</code> uses the retained-log proximal-state and dual-gauge v2
+revision. It preserves the unrounded log transport between proximal updates and
+normalizes the two scaling factors together, without clipping the kernel or
+changing the objective or iteration budgets. Inspect
+<code>result.metadata["numerical_revision"]</code> and
+<code>result.metadata["numerical_revision_diagnostics"]</code> for provenance.
+Temporary hooks are restored after success or failure. Run concurrent S-GWL
+fits in separate Python processes because the adapter uses module-level hooks.</p>
+<div class="note"><span>i</span><div><p><strong>OPGM-U is an explicit adaptation.</strong>
+Use <code>opgm_unsupervised</code> for this project's unsupervised implementation.
+The original supervised <code>opgm</code> name is rejected as incompatible with
+the unsupervised contract. The two names are not aliases.</p>
+<p>ULOT's fixed <code>rho</code> is a model hyperparameter. Do not populate it from
+the held-out true overlap.</p></div></div>
+<h2 id="custom-methods">Custom methods<a class="permalink" href="#custom-methods" aria-label="Link to Custom methods">#</a></h2>
+<p>A registered factory returns an adapter with <code>fit(graph1, graph2)</code>
+and an <code>AlignmentResult</code> output. The shared public caller is still
+<code>Algorithm(...).align(...)</code>. Follow the
+<a href="extending.html">custom-algorithm tutorial</a> for a complete example.</p>
+<p>Reference: <a href="api.html#Algorithm">Algorithm</a>,
+<a href="api.html#Algorithm-align">align</a>, and
+<a href="api.html#register-algorithm">register_algorithm</a>.</p>
+</article><nav class="page-navigation" aria-label="Previous and next pages"><a href="datasets.html"><span>← Previous</span>Datasets and construction</a><a href="evaluation.html"><span>Next →</span>Evaluation and metrics</a></nav><footer><span>BPUPGA Python API · v0.1</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link " href="#choose-a-method">Choose a method</a><a class="toc-link " href="#configure-a-method">Configure a method</a><a class="toc-link " href="#execution-settings">Execution settings and dependencies</a><a class="toc-link " href="#author-alpine">Original-author CPU ALPINE</a><a class="toc-link " href="#sgwl-numerics">S-GWL numerical revision</a><a class="toc-link " href="#custom-methods">Custom methods</a></aside></div></div>
+<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>

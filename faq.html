@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="Resolve import, dependency, graph-format, annotation-scope and saved-run questions."><title>Troubleshooting and FAQ — BPUPGA documentation</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
+<body data-page="faq"><a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link" href="quickstart.html">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link" href="algorithms.html">Algorithms</a><a class="nav-link" href="evaluation.html">Evaluation</a><a class="nav-link" href="diagnostics.html">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link active" href="faq.html" aria-current="page">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> API v0.1 <span>Research checkout</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
+<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span>Troubleshooting and FAQ</div><div class="top-actions"><span class="release">PYTHON API · v0.1</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="api.html">API reference ↗</a></div></header>
+<div class="content-layout"><main id="main"><article><div class="eyebrow">BPUPGA / DOCUMENTATION</div><h1>Troubleshooting and FAQ</h1><p class="lead">Resolve import, dependency, graph-format, annotation-scope and saved-run questions.</p>
+<h2 id="import">Python cannot import bpupga<a class="permalink" href="#import" aria-label="Link to Python cannot import bpupga">#</a></h2>
+<p>Run the setup from the repository root and add the consolidated
+<code>api/</code> directory to Python's import path:</p>
+<div class="code-window"><div class="code-header"><span>Shell</span></div><pre><code>export PYTHONPATH=&quot;$PWD/baseline_exdit_261029/api${PYTHONPATH:+:$PYTHONPATH}&quot;
+python -c &quot;import bpupga; print(bpupga.__file__)&quot;</code></pre></div>
+<p>Use the project's existing model environment. This facade is not a PyPI
+package and depends on the adjacent dated implementation tree. Copying only
+<code>api/bpupga/</code> is insufficient for the built-in methods.</p>
+<h2 id="checkout-collision">“common is already loaded from another checkout”<a class="permalink" href="#checkout-collision" aria-label="Link to “common is already loaded from another checkout”">#</a></h2>
+<p>Historical baseline trees reuse the top-level import names
+<code>baseline</code>, <code>baselines</code>, and <code>common</code>. Start a
+fresh Python process when switching checkouts. Do not mix the historical and
+current result classes in one session.</p>
+<h2 id="dependencies">Missing PyTorch, scikit-learn, vendor packages, or weights<a class="permalink" href="#dependencies" aria-label="Link to Missing PyTorch, scikit-learn, vendor packages, or weights">#</a></h2>
+<p>The facade wraps existing code rather than replacing its environment.
+Loading needs NetworkX and NumPy. Evaluation imports the existing metric module
+and scikit-learn. Built-in execution imports PyTorch and the selected author's
+dependencies; some models require their existing weights. Diagnostics additionally
+reuse the sibling legacy evaluation tree. Follow the repository environment
+instructions rather than installing a guessed universal dependency set.</p>
+<h2 id="devices">Does device='cpu' mean every implementation is lightweight?<a class="permalink" href="#devices" aria-label="Link to Does device=&#x27;cpu&#x27; mean every implementation is lightweight?">#</a></h2>
+<p>No. It requests the CPU path where the selected implementation supports it;
+it does not reduce dense matrices, epochs or candidate sets. Device support and
+memory needs remain method-specific. The facade does not reserve a GPU or attach
+a new job to the background campaign queue.</p>
+<h2 id="graph-input">Why does align reject my graph?<a class="permalink" href="#graph-input" aria-label="Link to Why does align reject my graph?">#</a></h2>
+<p>Direct graph arguments must be nonempty simple undirected NetworkX graphs,
+without self loops and with local IDs <code>0..n-1</code>. Use
+<code>Dataset.load</code> for file-backed inputs: the loader handles sorted integer
+ID reindexing and removes self loops. Explicit node lists preserve isolates.
+Alignment copies topology and discards graph/node/edge attributes.</p>
+<h2 id="output-dir">Why does construct refuse the output directory?<a class="permalink" href="#output-dir" aria-label="Link to Why does construct refuse the output directory?">#</a></h2>
+<p>Every construction writes a new instance. Existing directories and symlinks
+are refused to protect data provenance. Choose a new destination; there is no
+public force-overwrite option.</p>
+<h2 id="ratios">Requested and realized overlap differ slightly<a class="permalink" href="#ratios" aria-label="Link to Requested and realized overlap differ slightly">#</a></h2>
+<p>The constructor allocates integer identity groups, so finite-size rounding
+can alter realized source and target ratios. Read the generated metadata instead
+of assuming the requested floating-point values were achieved exactly. Node
+overlap is not an edge-deletion percentage.</p>
+<h2 id="reference-completeness">What if my correspondences are incomplete?<a class="permalink" href="#reference-completeness" aria-label="Link to What if my correspondences are incomplete?">#</a></h2>
+<p>Record known annotation limitations in metadata. The API retains
+reference-relative pair/ranking accounting and skips matchability/overlap or
+private-node analyses that require complete labels. An absent reference link
+alone does not prove the node is truly unmatched.</p>
+<h2 id="missing-ranking">Why is ranking None?<a class="permalink" href="#missing-ranking" aria-label="Link to Why is ranking None?">#</a></h2>
+<p>A valid pair list does not necessarily provide a continuous ranking over
+candidates. Read <code>ranking_policy.skipped_reason</code>. Do not infer a full
+ranking from accepted hard pairs or replace missing candidates with fabricated
+scores.</p>
+<h2 id="noninjective">Why is Pair F1 present when is_one_to_one is false?<a class="permalink" href="#noninjective" aria-label="Link to Why is Pair F1 present when is_one_to_one is false?">#</a></h2>
+<p>Pair-set recovery and one-to-one feasibility are distinct. Exact duplicates
+are removed during pair scoring, while repeated endpoints are disclosed. Use the
+validity report when interpreting native results.</p>
+<h2 id="diagnose-missing">Diagnostics cannot find diagnostics.py<a class="permalink" href="#diagnose-missing" aria-label="Link to Diagnostics cannot find diagnostics.py">#</a></h2>
+<p>Retain <code>BPUPGA/baseline261023/evaluation/</code> beside the dated project.
+The public wrapper reuses that inspected diagnostic implementation and reports a
+missing source file explicitly. It does not rerun a model to reconstruct artifacts.</p>
+<h2 id="log-result">RunLog has no native_metrics<a class="permalink" href="#log-result" aria-label="Link to RunLog has no native_metrics">#</a></h2>
+<p>Only a recorded <code>SUCCESS</code> exposes native metrics. Running, failed,
+and incompatible attempts return <code>None</code>; a file lacking native metrics
+also remains unavailable. Reopen a running attempt later to obtain a fresh snapshot.</p>
+<h2 id="training">Where are train, checkpoint, resume, and plot_curve?<a class="permalink" href="#training" aria-label="Link to Where are train, checkpoint, resume, and plot_curve?">#</a></h2>
+<p>The current public workflow is <code>align</code>, followed by separate
+evaluation and diagnosis. Method-specific optimization may happen internally.
+<code>RunLog</code> reads saved campaign records; it is not a training logger or a
+checkpoint manager. The website documents the implemented interface.</p>
+<h2 id="reproduce">Will default API calls reproduce the paper tables?<a class="permalink" href="#reproduce" aria-label="Link to Will default API calls reproduce the paper tables?">#</a></h2>
+<p>Not automatically. Formal results bind input instances, effective method
+parameters, seeds, source versions, output variants and resource policies. The
+convenience API uses adapter defaults unless you supply explicit parameters;
+it does not silently select the formal campaign's family-specific profiles.</p>
+<p>Continue with <a href="installation.html">installation</a>,
+<a href="quickstart.html">quickstart</a>, or the
+<a href="api.html">API reference</a>.</p>
+</article><nav class="page-navigation" aria-label="Previous and next pages"><a href="api.html"><span>← Previous</span>Python API reference</a><a href="source.html"><span>Next →</span>Source code</a></nav><footer><span>BPUPGA Python API · v0.1</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link " href="#import">Python cannot import bpupga</a><a class="toc-link " href="#checkout-collision">“common is already loaded from another checkout”</a><a class="toc-link " href="#dependencies">Missing PyTorch, scikit-learn, vendor packages, or weights</a><a class="toc-link " href="#devices">Does device=&#x27;cpu&#x27; mean every implementation is lightweight?</a><a class="toc-link " href="#graph-input">Why does align reject my graph?</a><a class="toc-link " href="#output-dir">Why does construct refuse the output directory?</a><a class="toc-link " href="#ratios">Requested and realized overlap differ slightly</a><a class="toc-link " href="#reference-completeness">What if my correspondences are incomplete?</a><a class="toc-link " href="#missing-ranking">Why is ranking None?</a><a class="toc-link " href="#noninjective">Why is Pair F1 present when is_one_to_one is false?</a><a class="toc-link " href="#diagnose-missing">Diagnostics cannot find diagnostics.py</a><a class="toc-link " href="#log-result">RunLog has no native_metrics</a><a class="toc-link " href="#training">Where are train, checkpoint, resume, and plot_curve?</a><a class="toc-link " href="#reproduce">Will default API calls reproduce the paper tables?</a></aside></div></div>
+<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>

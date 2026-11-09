@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="Analyze native errors and score-level signals with explicit reference scope and oracle labeling."><title>Post-inference diagnostics — BPUPGA documentation</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
+<body data-page="diagnostics"><a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link" href="quickstart.html">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link" href="algorithms.html">Algorithms</a><a class="nav-link" href="evaluation.html">Evaluation</a><a class="nav-link active" href="diagnostics.html" aria-current="page">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link" href="faq.html">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> API v0.1 <span>Research checkout</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
+<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span>Post-inference diagnostics</div><div class="top-actions"><span class="release">PYTHON API · v0.1</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="api.html">API reference ↗</a></div></header>
+<div class="content-layout"><main id="main"><article><div class="eyebrow">BPUPGA / DOCUMENTATION</div><h1>Post-inference diagnostics</h1><p class="lead">Analyze native errors and score-level signals with explicit reference scope and oracle labeling.</p>
+<p>Use <code>diagnose</code> when you need to understand the returned alignment,
+its available scores, and the effect of post-inference oracle comparisons.
+It returns an in-memory report and performs no refit or file write.</p>
+<div class="code-window"><div class="code-header"><span>Post-inference analysis</span></div><pre><code>report = bp.diagnose(
+    result,
+    data,
+    ks=(1, 5, 10),
+    example_limit=10,
+    max_dense_entries=25_000_000,
+)
+print(report[&quot;native_output&quot;])
+print(report[&quot;score_space&quot;])</code></pre></div>
+<h2 id="available-analyses">Available analyses<a class="permalink" href="#available-analyses" aria-label="Link to Available analyses">#</a></h2>
+<div class="table-scroll"><table><thead><tr><th>Analysis</th><th>Question answered</th><th>Required information</th></tr></thead><tbody><tr><td>Native error decomposition</td><td>Are pairs correct, incorrect within the overlap, or incident to reference-private nodes?</td><td>Native pairs and complete matchability labels</td></tr><tr><td>Directional correspondence</td><td>Where does the true counterpart rank, and which shared/private candidates compete with it?</td><td>A usable score representation and reference</td></tr><tr><td>Matchability signals</td><td>How informative are maximum scores and top-two gaps about reference matchability?</td><td>Score data; both label classes for AUROC/AP</td></tr><tr><td>Decoder loss</td><td>Which highly ranked true pairs are absent from the final native output?</td><td>Native pairs and score data</td></tr><tr><td>Oracle decoding ladder</td><td>How do assignments change after revealing source, target, or bilateral reference masks?</td><td>Complete reference masks and usable score data</td></tr></tbody></table></div>
+<h2 id="oracle-scope">Oracle comparisons are analysis-only<a class="permalink" href="#oracle-scope" aria-label="Link to Oracle comparisons are analysis-only">#</a></h2>
+<p>The report labels interventions that use reference endpoint masks or thresholds
+selected from test labels. These are post-hoc comparisons; they do not become
+native predictions or a deployable calibration rule.</p>
+<p>The existing masked comparisons use rectangular Hungarian assignment on the
+retained score matrix. They are not a common fixed-cardinality intervention, and
+more endpoint information does not guarantee monotonic Pair F1. The separate
+true-cardinality oracle is disabled by this public wrapper.</p>
+<h2 id="skip-reasons">Missing data and matrix limits<a class="permalink" href="#skip-reasons" aria-label="Link to Missing data and matrix limits">#</a></h2>
+<p>With no usable score matrix or proxy representation, native accounting is still
+available while <code>score_space.available</code> is false with a skip reason.
+The <code>max_dense_entries</code> limit guards dense diagnostic work; it does not
+alter or reduce a baseline's alignment input.</p>
+<p>The legacy score-analysis helper can use supplied similarity scores, negative
+costs, or a distance representation reconstructed from paired embeddings.
+Diagnostics do not densify sparse candidate lists into invented complete scores.</p>
+<h2 id="incomplete-diagnostic-labels">Incomplete labels<a class="permalink" href="#incomplete-diagnostic-labels" aria-label="Link to Incomplete labels">#</a></h2>
+<p>For a reference flagged incomplete, the facade returns reference pair
+accounting and output validity. It explicitly skips private-node decomposition,
+matchability signals, and reference-mask oracle decoding. See
+<a href="evaluation.html#incomplete-reference">how to mark incomplete annotations</a>.</p>
+<div class="code-window"><div class="code-header"><span>Inspect diagnostic availability</span></div><pre><code># For incomplete references, inspect the reasons instead of assuming
+# every node outside Alignment.json is truly unmatched.
+if &quot;skipped_diagnostics&quot; in report:
+    print(report[&quot;skipped_diagnostics&quot;])</code></pre></div>
+<h2 id="diagnostic-dependency">Source-checkout dependency<a class="permalink" href="#diagnostic-dependency" aria-label="Link to Source-checkout dependency">#</a></h2>
+<p>This wrapper reuses
+<code>BPUPGA/baseline261023/evaluation/diagnostics.py</code> from the sibling
+research tree. Retain that source when moving the project. If it is absent and
+full score diagnostics are requested, a <code>FileNotFoundError</code> identifies
+the missing file. The library does not silently substitute another diagnostic
+implementation.</p>
+<p>Reference: <a href="api.html#diagnose">diagnose</a>,
+<a href="api.html#AlignmentDataset">AlignmentDataset</a>, and
+<a href="api.html#AlignmentResult">AlignmentResult</a>.</p>
+</article><nav class="page-navigation" aria-label="Previous and next pages"><a href="evaluation.html"><span>← Previous</span>Evaluation and metrics</a><a href="logs.html"><span>Next →</span>Saved runs and resources</a></nav><footer><span>BPUPGA Python API · v0.1</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link " href="#available-analyses">Available analyses</a><a class="toc-link " href="#oracle-scope">Oracle comparisons are analysis-only</a><a class="toc-link " href="#skip-reasons">Missing data and matrix limits</a><a class="toc-link " href="#incomplete-diagnostic-labels">Incomplete labels</a><a class="toc-link " href="#diagnostic-dependency">Source-checkout dependency</a></aside></div></div>
+<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>
