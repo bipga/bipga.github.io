@@ -9,13 +9,13 @@
 <div class="note"><strong>Complete artifact</strong>
 <p>Method implementations, graph inputs, experiment configurations, numerical results, figures and tables, and reproduction scripts.</p>
 <p><a class="top-button" href="supplementary/BiPGA_artifacts.zip" download>Download BiPGA_artifacts.zip</a> &nbsp; ZIP · 37.0 MiB</p></div>
-<p><a href="https://github.com/bipga/bipga.github.io/tree/main/supplementary">View on GitHub ↗</a></p>
 <h2 id="reproduce">Reproduce the results</h2>
-<p>Use Python 3.10 to extract the archive and reproduce the supplied diagnostic results:</p>
+<p>Use Python 3.10 to extract the archive and recompute the supplied numerical results for Figures 5–9 and Tables II, IV–VI:</p>
 <div class="code-window"><div class="code-header"><span>Terminal</span></div><pre><code>python -m zipfile -e BiPGA_artifacts.zip .
 cd bipga
 python -m pip install -r requirements-analysis.txt
-python scripts/reproduce_diagnostics.py --output diagnostics_recomputed</code></pre></div>
-<p>The included <code>README.md</code> covers installation, model execution and plotting. <code>DATA_INDEX.md</code> lists the data for each figure and table.</p>
+python scripts/reproduce_results.py --output reproduced</code></pre></div>
+<p><a class="top-button" href="supplementary/reproduce/">Read the complete reproduction guide →</a></p>
+<p>The guide covers graph inputs, model fitting, evaluation, seed aggregation and plotting. It is also included as <code>REPRODUCE.md</code> in the archive.</p>
 </article><footer><span>BiPGA · ICDE 2027</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link" href="supplementary/#reproduce">Reproduce the results</a></aside></div></div>
 <dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>
