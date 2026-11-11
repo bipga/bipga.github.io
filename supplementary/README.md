@@ -1,0 +1,17 @@
+# BiPGA supplementary material
+
+Code, data and experimental results for the ICDE 2027 submission.
+
+- [Download the complete artifact](https://bipga.github.io/supplementary/BiPGA_artifacts.zip)
+- [Supplementary material page](https://bipga.github.io/supplementary/)
+
+The ZIP contains method implementations, graph inputs, experiment configurations, numerical results, paper figures and tables, and reproduction scripts.
+
+```bash
+python -m zipfile -e BiPGA_artifacts.zip .
+cd bipga
+python -m pip install -r requirements-analysis.txt
+python scripts/reproduce_diagnostics.py --output diagnostics_recomputed
+```
+
+See `bipga/README.md` inside the archive for installation, model execution and plotting instructions. `bipga/DATA_INDEX.md` lists the figure and table data.
