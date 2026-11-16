@@ -1,7 +1,11 @@
-# BiPGA
+# BiPGA documentation
 
-Supplementary material for the ICDE 2027 submission and documentation for bilateral partial graph alignment.
+Python interfaces for bilateral partial graph alignment: graph preparation, method execution, native evaluation, diagnostics and experiment records.
 
-- [Supplementary material](https://github.com/bipga/bipga.github.io/tree/main/supplementary)
-- [Download the complete artifact](https://bipga.github.io/supplementary/BiPGA_artifacts.zip)
-- [Project website](https://bipga.github.io/)
+- [Documentation](https://bipga.github.io/)
+- [Quick start](https://bipga.github.io/quickstart.html)
+- [Python API reference](https://bipga.github.io/api.html)
+- [Examples](https://bipga.github.io/examples.html)
+- [Supplementary material](https://bipga.github.io/supplementary/)
+
+This repository hosts the static GitHub Pages website. The documentation is generated with Sphinx and the Read the Docs theme. API examples use the imported package name `bpupga`; SparkAlign uses the implementation identifier `oiteralign`.

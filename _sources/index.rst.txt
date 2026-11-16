@@ -1,0 +1,81 @@
+BiPGA documentation
+===================
+
+**BiPGA** provides Python interfaces for unsupervised bilateral partial graph
+alignment: prepare graph pairs, run an alignment method, and evaluate native
+predictions when either graph can contain unmatched vertices.
+
+The API connects graph loading and construction, twelve method adapters,
+post-inference evaluation, diagnostics, and saved experiment records.
+
+.. note::
+
+   Start with the :doc:`installation` guide and the runnable :doc:`quickstart`.
+   The API is imported as ``bpupga`` and runs in your Python environment.
+
+A common workflow
+-----------------
+
+.. code-block:: python
+
+   import bpupga as bp
+
+   data = bp.Dataset.load("path/to/graph_pair")
+   method = bp.Algorithm("grampa", parameters={"eta": 1.0}, seed=2026)
+   result = method.align(data.graph1, data.graph2)
+   metrics = bp.evaluate(result, data, ks=(1, 5, 10))
+   print(metrics["pair"])
+
+Reference correspondences are used for construction and evaluation. The
+alignment call receives only graph topology. See :doc:`intro` for the partial
+alignment setting and :doc:`evaluation` for the meaning of each metric.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Getting Started
+
+   intro
+   installation
+   quickstart
+   cli
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Tutorials
+
+   datasets
+   algorithms
+   evaluation
+   diagnostics
+   logs
+   extending
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Package Reference
+
+   api
+   reference/data
+   reference/algorithm
+   reference/evaluation
+   reference/diagnostics
+   reference/records
+   reference/logging
+   reference/extensions
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Resources
+
+   examples
+   faq
+   source
+   Supplementary Material <https://bipga.github.io/supplementary/>
+
+Paper artifacts
+---------------
+
+The `supplementary material <https://bipga.github.io/supplementary/>`_ provides
+the paper's code, data, experiment configurations and reproduction instructions.
+Use its recorded configurations to reproduce the reported experiments.
+

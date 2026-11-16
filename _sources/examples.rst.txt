@@ -1,0 +1,41 @@
+Examples
+========
+
+Download the `examples archive <downloads/examples.zip>`_ for the complete
+set of 48 prepared method/dataset examples and the self-contained toy example.
+
+Self-contained example
+----------------------
+
+`toy_example.py <downloads/toy_example.py>`_ creates temporary graph files and
+uses a custom adapter. It exercises loading, alignment and evaluation without
+benchmark data or model training. Follow :doc:`installation` before running it.
+
+Prepared graph example
+----------------------
+
+`quickstart.py <downloads/quickstart.py>`_ runs GRAMPA on the prepared FbTw
+instance. The :doc:`quickstart` example selector generates equivalent calls for
+every supported method and each of the four controlled dataset families.
+
+The archive includes SparkAlign examples under the runnable identifier
+``oiteralign``. Each example is configured through the public API and uses
+CPU by default.
+
+Read an experiment record
+-------------------------
+
+`read_run.py <downloads/read_run.py>`_ opens an existing attempt with
+``RunLog.open`` and prints its summary:
+
+.. code-block:: bash
+
+   python read_run.py path/to/attempt_0001
+
+Paper reproduction
+------------------
+
+The `supplementary material <https://bipga.github.io/supplementary/>`_ contains
+the recorded experiment inputs and execution configurations. Its reproduction
+workflow is separate from these API usage examples.
+

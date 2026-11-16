@@ -1,0 +1,771 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bpupga._api &mdash; BiPGA</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/bipga.css?v=f0f54ec4" />
+
+  
+    <link rel="shortcut icon" href="../../_static/bipga-mark.svg"/>
+    <link rel="canonical" href="https://bipga.github.io/_modules/bpupga/_api.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/bipga-tools.js?v=60309b5e"></script>
+      <script src="../../_static/example-data.js?v=5fb413ac"></script>
+      <script defer="defer" src="../../_static/bipga.js?v=403c47d0"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #246c8d" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BiPGA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to partial graph alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#inputs-and-predictions">Inputs and predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#construction-and-inference">Construction and inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#use-the-research-checkout">Use the research checkout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verify-the-interface">Verify the interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#working-directories">Working directories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#first-run-a-self-contained-example">First run: a self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#run-a-built-in-method">Run a built-in method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#choose-a-method-and-dataset">Choose a method and dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#inspect-the-output">Inspect the output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command-line interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#list-the-available-inputs">List the available inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#preview-a-selection">Preview a selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#select-several-experiments">Select several experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#execution-and-results">Execution and results</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#the-common-file-format">The common file format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#load-and-inspect-an-instance">Load and inspect an instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#convert-prediction-identifiers">Convert prediction identifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#construct-bilateral-partial-overlap">Construct bilateral partial overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#natural-pairs-and-incomplete-annotations">Natural pairs and incomplete annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#use-your-own-dataset">Use your own dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithms.html">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#choose-a-method">Choose a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#configure-a-method">Configure a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#execution-settings-and-dependencies">Execution settings and dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#custom-methods">Custom methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#method-naming">Method naming</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../evaluation.html">Evaluation and metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#exact-pair-recovery">Exact-pair recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#endpoint-matchability-and-overlap">Endpoint matchability and overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#node-classification">Node classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#directional-ranking">Directional ranking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#returned-report">Returned report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#incomplete-reference-annotations">Incomplete reference annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#campaign-decoder-views">Campaign decoder views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#report-repeated-runs">Report repeated runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#available-analyses">Available analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#incomplete-labels">Incomplete labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs.html">Saved runs and resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#read-an-existing-attempt">Read an existing attempt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#status-and-native-scores">Status and native scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#timing-and-memory-scope">Timing and memory scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#browser-local-json-inspector">Browser-local JSON inspector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#read-a-record-from-python">Read a record from Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Custom algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../extending.html#the-adapter-contract">The adapter contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../extending.html#a-minimal-custom-adapter">A minimal custom adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../extending.html#return-optional-score-data">Return optional score data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../extending.html#registration-and-reproducibility">Registration and reproducibility</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Python API overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#reference-pages">Reference pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/data.html">Dataset loading and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/data.html#load-graph-pairs">Load graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/data.html#bpupga.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/data.html#construct-partial-graph-pairs">Construct partial graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/data.html#bpupga.construct"><code class="docutils literal notranslate"><span class="pre">construct()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/algorithm.html">Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/algorithm.html#bpupga.Algorithm"><code class="docutils literal notranslate"><span class="pre">Algorithm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/algorithm.html#bpupga.Algorithm.align"><code class="docutils literal notranslate"><span class="pre">Algorithm.align()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/algorithm.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/evaluation.html">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/evaluation.html#bpupga.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/diagnostics.html#bpupga.diagnose"><code class="docutils literal notranslate"><span class="pre">diagnose()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/records.html">Data and result records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/records.html#alignmentdataset">AlignmentDataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/records.html#bpupga.AlignmentDataset"><code class="docutils literal notranslate"><span class="pre">AlignmentDataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/records.html#alignmentresult">AlignmentResult</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/records.html#bpupga.AlignmentResult"><code class="docutils literal notranslate"><span class="pre">AlignmentResult</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/logging.html">Saved run records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog"><code class="docutils literal notranslate"><span class="pre">RunLog</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.open"><code class="docutils literal notranslate"><span class="pre">RunLog.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.status"><code class="docutils literal notranslate"><span class="pre">RunLog.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.native_metrics"><code class="docutils literal notranslate"><span class="pre">RunLog.native_metrics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.runtime"><code class="docutils literal notranslate"><span class="pre">RunLog.runtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.errors"><code class="docutils literal notranslate"><span class="pre">RunLog.errors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.summary"><code class="docutils literal notranslate"><span class="pre">RunLog.summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/extensions.html">Custom adapter registration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/extensions.html#bpupga.register_algorithm"><code class="docutils literal notranslate"><span class="pre">register_algorithm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#self-contained-example">Self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#prepared-graph-example">Prepared graph example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#read-an-experiment-record">Read an experiment record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#paper-reproduction">Paper reproduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Troubleshooting and FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#requested-and-realized-overlap-differ-slightly">Requested and realized overlap differ slightly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-is-ranking-none">Why is ranking None?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../source.html">Source code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://bipga.github.io/supplementary/">Supplementary Material</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #246c8d" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiPGA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">bpupga._api</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for bpupga._api</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Thin wrappers around existing implementations; no campaign files are changed.</span>
+
+<span class="sd">This in-process interface is not the benchmark's sealed subprocess executor.</span>
+<span class="sd">Labels belong to data construction and post-inference evaluation, never align().</span>
+<span class="sd">"""</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">argparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">Namespace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># The public facade lives under api/; its frozen research dependencies remain</span>
+<span class="c1"># at the dated project root, outside the API source directory.</span>
+<span class="n">_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">_BASELINE</span> <span class="o">=</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"baseline"</span>
+<span class="c1"># Existing adapters use the top-level common contract. Do not load a second</span>
+<span class="c1"># baseline.common contract, or isinstance checks cease to mean the same thing.</span>
+<span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"baseline"</span><span class="p">,</span> <span class="s2">"baselines"</span><span class="p">,</span> <span class="s2">"common"</span><span class="p">,</span> <span class="s2">"common.dataset"</span><span class="p">,</span> <span class="s2">"common.result"</span><span class="p">):</span>
+    <span class="n">_loaded</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_loaded</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_loaded</span><span class="p">,</span> <span class="s2">"__file__"</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">_loaded</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">is_relative_to</span><span class="p">(</span><span class="n">_BASELINE</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2"> is already loaded from another checkout; use a fresh Python process"</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">_ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_ROOT</span><span class="p">))</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">baseline</span>  <span class="c1"># noqa: E402 -- establishes the existing common import path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">common.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">AlignmentDataset</span><span class="p">,</span> <span class="n">load_dataset</span>  <span class="c1"># noqa: E402</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">common.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">AlignmentResult</span>  <span class="c1"># noqa: E402</span>
+
+<span class="n">_BUILTINS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">((</span>
+    <span class="s2">"alpine"</span><span class="p">,</span> <span class="s2">"cena"</span><span class="p">,</span> <span class="s2">"fugal"</span><span class="p">,</span> <span class="s2">"gradalign_plus"</span><span class="p">,</span> <span class="s2">"grampa"</span><span class="p">,</span> <span class="s2">"immnc"</span><span class="p">,</span>
+    <span class="s2">"oiteralign"</span><span class="p">,</span> <span class="s2">"opgm_unsupervised"</span><span class="p">,</span> <span class="s2">"regal"</span><span class="p">,</span> <span class="s2">"s_gwl"</span><span class="p">,</span> <span class="s2">"slotalign"</span><span class="p">,</span> <span class="s2">"ulot"</span><span class="p">,</span>
+<span class="p">))</span>
+<span class="n">_CUSTOM</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_private_package</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Load relative modules without colliding with top-level evaluation."""</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="n">package</span> <span class="o">=</span> <span class="n">ModuleType</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">package</span><span class="o">.</span><span class="n">__path__</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">directory</span><span class="p">)]</span>
+        <span class="n">package</span><span class="o">.</span><span class="n">__package__</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">package</span>
+    <span class="k">return</span> <span class="n">name</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_metrics</span><span class="p">():</span>
+    <span class="n">package</span> <span class="o">=</span> <span class="n">_private_package</span><span class="p">(</span><span class="s2">"bpupga._native_runtime"</span><span class="p">,</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"evaluation/runtime"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span> <span class="o">+</span> <span class="s2">".metrics"</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Dataset">
+<a class="viewcode-back" href="../../reference/data.html#bpupga.Dataset">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Load G1/G2 edge lists, optional node lists, Alignment.json and metadata.</span>
+
+<span class="sd">    Original integer IDs are mapped to contiguous local IDs. Explicit node</span>
+<span class="sd">    files preserve isolates; the returned AlignmentDataset retains both maps.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="Dataset.load">
+<a class="viewcode-back" href="../../reference/data.html#bpupga.Dataset.load">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AlignmentDataset</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">root</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="construct">
+<a class="viewcode-back" href="../../reference/data.html#bpupga.construct">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">construct</span><span class="p">(</span>
+    <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rho_source</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">rho_target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">construction_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2026</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AlignmentDataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Materialize the existing bilateral partial-overlap construction.</span>
+
+<span class="sd">    root contains the raw G1/G2 files and Alignment.json. The constructor</span>
+<span class="sd">    partitions known matched identities into shared/source-only/target-only</span>
+<span class="sd">    groups and excludes pre-existing unmatched identities. Ratios are node</span>
+<span class="sd">    overlap requests, with finite-size rounding recorded in metadata. Existing</span>
+<span class="sd">    outputs are never replaced, including dangling symbolic links.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">date_261023.construct_bilateral_partial</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">construct_dataset</span><span class="p">,</span> <span class="n">load_raw_dataset</span><span class="p">,</span> <span class="n">write_constructed_dataset</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">source</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="n">destination</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">or</span> <span class="n">destination</span><span class="o">.</span><span class="n">is_symlink</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Output already exists: </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span>
+        <span class="n">raw_dir_name</span><span class="o">=</span><span class="s2">"."</span><span class="p">,</span> <span class="n">g1_file</span><span class="o">=</span><span class="s2">"G1.edgelist"</span><span class="p">,</span> <span class="n">g2_file</span><span class="o">=</span><span class="s2">"G2.edgelist"</span><span class="p">,</span>
+        <span class="n">g1_nodes_file</span><span class="o">=</span><span class="s2">"G1.nodes"</span><span class="p">,</span> <span class="n">g2_nodes_file</span><span class="o">=</span><span class="s2">"G2.nodes"</span><span class="p">,</span>
+        <span class="n">alignment_file</span><span class="o">=</span><span class="s2">"Alignment.json"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">load_raw_dataset</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">built</span> <span class="o">=</span> <span class="n">construct_dataset</span><span class="p">(</span>
+        <span class="n">raw</span><span class="p">,</span> <span class="n">rho_source</span><span class="p">,</span> <span class="n">rho_target</span><span class="p">,</span> <span class="n">construction_seed</span><span class="p">,</span>
+        <span class="n">raw_dir_relative</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">source</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">write_constructed_dataset</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="n">built</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="register_algorithm">
+<a class="viewcode-back" href="../../reference/extensions.html#bpupga.register_algorithm">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_algorithm</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Register a new name without replacing a built-in or existing adapter.</span>
+
+<span class="sd">    factory(parameters=..., seed=..., device=..., dataset_family=...) returns</span>
+<span class="sd">    an object with fit(graph1, graph2) -&gt; AlignmentResult. The factory never</span>
+<span class="sd">    receives a Dataset. Custom code must preserve the unsupervised contract.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Algorithm name must be a nonempty, trimmed string"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_BUILTINS</span> <span class="ow">or</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"opgm"</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_CUSTOM</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Algorithm name is already reserved: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">factory</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"factory must be callable"</span><span class="p">)</span>
+    <span class="n">_CUSTOM</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_topology</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="ow">or</span> <span class="n">graph</span><span class="o">.</span><span class="n">is_directed</span><span class="p">()</span> <span class="ow">or</span> <span class="n">graph</span><span class="o">.</span><span class="n">is_multigraph</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"align requires simple undirected NetworkX graphs"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">set</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">))):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Use nonempty graphs with contiguous local IDs 0..n-1; Dataset.load performs reindexing"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_selfloops</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"align requires graphs without self loops"</span><span class="p">)</span>
+    <span class="c1"># Discard graph, node and edge attributes, including any caller annotations.</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+    <span class="n">clean</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)))</span>
+    <span class="n">clean</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+    <span class="c1"># Match the existing graph packet: seeded random walks can depend on</span>
+    <span class="c1"># adjacency iteration order even when the mathematical graph is identical.</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">clean</span><span class="p">:</span>
+        <span class="n">clean</span><span class="o">.</span><span class="n">_adj</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">neighbor</span><span class="p">:</span> <span class="n">clean</span><span class="o">.</span><span class="n">_adj</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">neighbor</span><span class="p">]</span> <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="n">clean</span>
+
+
+<div class="viewcode-block" id="Algorithm">
+<a class="viewcode-back" href="../../reference/algorithm.html#bpupga.Algorithm">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Algorithm</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Configure an adapter, then call align(graph1, graph2).</span>
+
+<span class="sd">    The default device is CPU. Built-in adapter/config defaults apply; this</span>
+<span class="sd">    does not silently import a frozen campaign's family-specific parameters.</span>
+<span class="sd">    Registry construction is lazy and exceptions propagate to the caller.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2026</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cpu"</span><span class="p">,</span> <span class="n">dataset_family</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"opgm"</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Supervised OPGM-rs is protocol-incompatible; use the explicitly changed opgm_unsupervised adapter"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_BUILTINS</span> <span class="ow">and</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_CUSTOM</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown algorithm </span><span class="si">{</span><span class="n">method</span><span class="si">!r}</span><span class="s2">; built-ins: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_BUILTINS</span><span class="p">))</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"alpine"</span> <span class="ow">and</span> <span class="n">device</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"cpu"</span><span class="p">,</span> <span class="s2">"auto"</span><span class="p">}:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The original-author ALPINE adapter supports CPU only; use device='cpu' or 'auto'"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">method</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">parameters</span> <span class="ow">or</span> <span class="p">{}))</span>
+        <span class="n">forbidden</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"ground_truth"</span><span class="p">,</span> <span class="s2">"gt"</span><span class="p">,</span> <span class="s2">"true_k"</span><span class="p">,</span> <span class="s2">"true_K"</span><span class="p">,</span> <span class="s2">"true_overlap"</span><span class="p">,</span> <span class="s2">"dataset"</span><span class="p">,</span> <span class="s2">"data_root"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">forbidden</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Ground truth, true cardinality/overlap and dataset inputs are forbidden parameters"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_family</span> <span class="o">=</span> <span class="n">seed</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dataset_family</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Algorithm.align">
+<a class="viewcode-back" href="../../reference/algorithm.html#bpupga.Algorithm.align">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph1</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">graph2</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AlignmentResult</span><span class="p">:</span>
+        <span class="n">graphs</span> <span class="o">=</span> <span class="p">(</span><span class="n">_topology</span><span class="p">(</span><span class="n">graph1</span><span class="p">),</span> <span class="n">_topology</span><span class="p">(</span><span class="n">graph2</span><span class="p">))</span>
+        <span class="n">input_sizes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">graphs</span><span class="p">))</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="n">_CUSTOM</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">_CUSTOM</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">](</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
+                                         <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dataset_family</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_family</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">parameters</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Importing a built-in registry may require the project's model</span>
+            <span class="c1"># environment; custom adapters do not acquire that dependency.</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"opgm_unsupervised"</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.opgm_unsupervised.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct</span> <span class="k">as</span> <span class="n">make_model</span>
+                <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"alpine"</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.alpine_author_cpu</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthorCPUAlpine</span>
+                <span class="n">defaults</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">inner_iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                <span class="n">sinkhorn_reg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sinkhorn_iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                                <span class="n">sinkhorn_tolerance</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">"cpu"</span><span class="p">)</span>
+                <span class="n">unsupported</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">-</span> <span class="n">defaults</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">unsupported</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unsupported original-author ALPINE parameters: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">unsupported</span><span class="p">))</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"device"</span><span class="p">,</span> <span class="s2">"cpu"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"cpu"</span><span class="p">,</span> <span class="s2">"auto"</span><span class="p">}:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The original-author ALPINE adapter supports CPU only"</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s2">"cpu"</span><span class="p">,</span> <span class="n">implementation</span><span class="o">=</span><span class="s2">"original_author_CPU_261030"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"niter"</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The original ALPINE code fixes ten outer iterations; niter must be 10"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"mu"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"weight"</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"ALPINE requires nonnegative mu and weight in {1, 2}"</span><span class="p">)</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="n">AuthorCPUAlpine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct</span> <span class="k">as</span> <span class="n">make_model</span>
+                <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_family</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">"fit"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Algorithm factory must return an adapter with fit(graph1, graph2)"</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">nullcontext</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"s_gwl"</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.sgwl_numerics_v2</span><span class="w"> </span><span class="kn">import</span> <span class="n">stable_proximal_state</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="n">stable_proximal_state</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">context</span> <span class="k">as</span> <span class="n">numerical</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">graphs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">numerical</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"numerical_revision"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"retained_log_proximal_state_and_dual_gauge_v2"</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"numerical_revision_diagnostics"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">numerical</span><span class="p">)</span>
+        <span class="n">_validate_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="o">*</span><span class="n">input_sizes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_result</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">AlignmentResult</span><span class="p">,</span> <span class="n">n1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">AlignmentResult</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Expected bpupga.AlignmentResult"</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">validate_shapes</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+    <span class="n">validity</span> <span class="o">=</span> <span class="n">_metrics</span><span class="p">()</span><span class="o">.</span><span class="n">validate_predicted_pairs</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">predicted_pairs</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">validity</span><span class="p">[</span><span class="s2">"out_of_range_count"</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Result contains out-of-range predicted pairs"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"nonfinite_guard_triggered"</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">FloatingPointError</span><span class="p">(</span><span class="s2">"Adapter reported a nonfinite guard; no successful score is returned"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"score_matrix"</span><span class="p">,</span> <span class="s2">"cost_matrix"</span><span class="p">,</span> <span class="s2">"source_embeddings"</span><span class="p">,</span> <span class="s2">"target_embeddings"</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FloatingPointError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Non-finite </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">validity</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_ks</span><span class="p">(</span><span class="n">ks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">values</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"ks must contain positive integers"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">values</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_reference_note</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">AlignmentDataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">note</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"Scores and private-node labels are relative to the supplied reference. "</span>
+            <span class="s2">"An unannotated node is not established as truly unmatched when the reference is incomplete."</span><span class="p">)</span>
+    <span class="n">limitation</span> <span class="o">=</span> <span class="n">_reference_limitation</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">note</span> <span class="o">+</span> <span class="p">(</span><span class="s2">" "</span> <span class="o">+</span> <span class="n">limitation</span> <span class="k">if</span> <span class="n">limitation</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_reference_limitation</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">AlignmentDataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">metadata</span>
+    <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"groundtruth_limitations"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"groundtruth_limitations"</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ground_truth_complete"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"groundtruth_complete"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Dataset metadata declares the reference incomplete."</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="evaluate">
+<a class="viewcode-back" href="../../reference/evaluation.html#bpupga.evaluate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">AlignmentResult</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">AlignmentDataset</span><span class="p">,</span>
+             <span class="o">*</span><span class="p">,</span> <span class="n">ks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Score native pairs and available same-fit rankings after inference.</span>
+
+<span class="sd">    Pair scoring removes exact duplicate pairs and reports endpoint conflicts.</span>
+<span class="sd">    Node classification additionally reports accuracy, balanced accuracy and</span>
+<span class="sd">    unmatched-node scores for complete references. No decoder or refit is run.</span>
+<span class="sd">    Rankings cover reference-matched queries and</span>
+<span class="sd">    do not establish rejection quality. GRAMPA uses the current soft transform</span>
+<span class="sd">    and also exposes its raw ranking; sparse candidates are not densified.</span>
+<span class="sd">    """</span>
+    <span class="n">ks</span> <span class="o">=</span> <span class="n">_validate_ks</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">_metrics</span><span class="p">()</span>
+    <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">graph1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">graph2</span><span class="p">)</span>
+    <span class="n">validity</span> <span class="o">=</span> <span class="n">_validate_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+    <span class="n">truth</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">ground_truth</span>
+    <span class="n">reverse</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">truth</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"method"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="s2">"output_variant"</span><span class="p">:</span> <span class="s2">"native"</span><span class="p">,</span>
+        <span class="s2">"pair"</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">evaluate_pair_set</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">predicted_pairs</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">),</span>
+        <span class="s2">"matchability"</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">evaluate_matchability</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">predicted_pairs</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">),</span>
+        <span class="s2">"overlap_estimation"</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">evaluate_overlap_estimation</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">predicted_pairs</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">),</span>
+        <span class="s2">"validity"</span><span class="p">:</span> <span class="n">validity</span><span class="p">,</span> <span class="s2">"reference_note"</span><span class="p">:</span> <span class="n">_reference_note</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span>
+        <span class="s2">"runtime"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"native_reported_seconds"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">runtime_sec</span><span class="p">,</span>
+                    <span class="s2">"peak_memory_mb"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">peak_memory_mb</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">report</span><span class="p">[</span><span class="s2">"node_classification"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">_reference_limitation</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"matchability"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"overlap_estimation"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"node_classification"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"skipped_metrics"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"matchability"</span><span class="p">:</span> <span class="s2">"Incomplete reference cannot identify all truly unmatched nodes"</span><span class="p">,</span>
+            <span class="s2">"overlap_estimation"</span><span class="p">:</span> <span class="s2">"Incomplete reference does not establish true overlap size"</span><span class="p">,</span>
+            <span class="s2">"node_classification"</span><span class="p">:</span> <span class="s2">"Incomplete reference cannot define matched/unmatched confusion counts"</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">runtime</span> <span class="o">=</span> <span class="n">_private_package</span><span class="p">(</span><span class="s2">"bpupga._native_runtime"</span><span class="p">,</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"evaluation/runtime"</span><span class="p">)</span>
+        <span class="n">classification</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">runtime</span> <span class="o">+</span> <span class="s2">".evaluate"</span><span class="p">)</span><span class="o">.</span><span class="n">node_classification</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"node_classification"</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">predicted_pairs</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">directions</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">backward</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"source_to_target"</span><span class="p">:</span> <span class="n">forward</span><span class="p">,</span> <span class="s2">"target_to_source"</span><span class="p">:</span> <span class="n">backward</span><span class="p">,</span>
+                <span class="s2">"bidirectional"</span><span class="p">:</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="n">forward</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">backward</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+                                   <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="sa">f</span><span class="s2">"hits@</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ks</span><span class="p">],</span> <span class="s2">"mrr"</span><span class="p">)}}</span>
+
+    <span class="n">quality</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">score_matrix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">score_matrix</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">larger_is_better</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">quality</span> <span class="o">=</span> <span class="o">-</span><span class="n">quality</span>
+        <span class="n">representation</span> <span class="o">=</span> <span class="s2">"score_matrix"</span>
+    <span class="k">elif</span> <span class="n">result</span><span class="o">.</span><span class="n">cost_matrix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">cost_matrix</span><span class="p">)</span>
+        <span class="n">representation</span> <span class="o">=</span> <span class="s2">"negative_cost_matrix"</span>
+    <span class="k">if</span> <span class="n">quality</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">matrix_ranking</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">directions</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">evaluate_ranking_from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">ks</span><span class="p">),</span>
+                              <span class="n">m</span><span class="o">.</span><span class="n">evaluate_ranking_from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">ks</span><span class="p">))</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"ranking"</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix_ranking</span><span class="p">(</span><span class="n">quality</span><span class="p">)</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"ranking_policy"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"representation"</span><span class="p">:</span> <span class="n">representation</span><span class="p">,</span>
+                                    <span class="s2">"queries"</span><span class="p">:</span> <span class="s2">"reference-matched nodes only"</span><span class="p">,</span>
+                                    <span class="s2">"tie_break"</span><span class="p">:</span> <span class="s2">"lower local candidate ID"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"grampa"</span><span class="p">:</span>
+            <span class="n">package</span> <span class="o">=</span> <span class="n">_private_package</span><span class="p">(</span><span class="s2">"bpupga._native_runtime"</span><span class="p">,</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"evaluation/runtime"</span><span class="p">)</span>
+            <span class="n">soft</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span> <span class="o">+</span> <span class="s2">".grampa_soft_ranking"</span><span class="p">)</span>
+            <span class="n">report</span><span class="p">[</span><span class="s2">"raw_ranking"</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="p">[</span><span class="s2">"ranking"</span><span class="p">]</span>
+            <span class="n">report</span><span class="p">[</span><span class="s2">"ranking"</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix_ranking</span><span class="p">(</span><span class="n">soft</span><span class="o">.</span><span class="n">sinkhorn_soft_scores</span><span class="p">(</span><span class="n">quality</span><span class="p">))</span>
+            <span class="n">report</span><span class="p">[</span><span class="s2">"ranking_policy"</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">soft</span><span class="o">.</span><span class="n">POLICY</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">result</span><span class="o">.</span><span class="n">ranking_candidates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">ranking_candidates</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"ranking"</span><span class="p">]</span> <span class="o">=</span> <span class="n">directions</span><span class="p">(</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">evaluate_ranking_from_candidates</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">ks</span><span class="p">),</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">evaluate_ranking_from_candidates</span><span class="p">(((</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">),</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">ks</span><span class="p">))</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"ranking_policy"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"representation"</span><span class="p">:</span> <span class="s2">"sparse_native_candidates"</span><span class="p">,</span>
+                                    <span class="s2">"missing_reference_pair"</span><span class="p">:</span> <span class="s2">"zero reciprocal rank"</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">result</span><span class="o">.</span><span class="n">source_embeddings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">target_embeddings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">source</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">source_embeddings</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">target_embeddings</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"ranking"</span><span class="p">]</span> <span class="o">=</span> <span class="n">directions</span><span class="p">(</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">evaluate_ranking_from_embeddings</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">ks</span><span class="p">),</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">evaluate_ranking_from_embeddings</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">ks</span><span class="p">))</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"ranking_policy"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"representation"</span><span class="p">:</span> <span class="s2">"euclidean_embedding_distance"</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"ranking"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">report</span><span class="p">[</span><span class="s2">"ranking_policy"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"skipped_reason"</span><span class="p">:</span> <span class="s2">"No same-fit scores, candidates or paired embeddings"</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+
+
+<div class="viewcode-block" id="diagnose">
+<a class="viewcode-back" href="../../reference/diagnostics.html#bpupga.diagnose">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">diagnose</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">AlignmentResult</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">AlignmentDataset</span><span class="p">,</span>
+             <span class="o">*</span><span class="p">,</span> <span class="n">ks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">example_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+             <span class="n">max_dense_entries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25_000_000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Run the existing evaluation-only diagnostic module without saving files.</span>
+
+<span class="sd">    Requires BPUPGA/baseline261023/evaluation from the research checkout.</span>
+<span class="sd">    Endpoint-mask oracle comparisons are explicitly labeled in the report;</span>
+<span class="sd">    true-cardinality oracle decoding remains disabled. No result is refitted.</span>
+<span class="sd">    """</span>
+    <span class="n">ks</span> <span class="o">=</span> <span class="n">_validate_ks</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">example_limit</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">max_dense_entries</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"example_limit must be nonnegative and max_dense_entries positive"</span><span class="p">)</span>
+    <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">graph1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">graph2</span><span class="p">)</span>
+    <span class="n">validity</span> <span class="o">=</span> <span class="n">_validate_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_reference_limitation</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"schema_version"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"method"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="s2">"native_output"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"pair"</span><span class="p">:</span> <span class="n">_metrics</span><span class="p">()</span><span class="o">.</span><span class="n">evaluate_pair_set</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">predicted_pairs</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">),</span>
+                              <span class="s2">"validity"</span><span class="p">:</span> <span class="n">validity</span><span class="p">},</span>
+            <span class="s2">"score_space"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"available"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"skipped_reason"</span><span class="p">:</span> <span class="s2">"Incomplete ground-truth reference"</span><span class="p">},</span>
+            <span class="s2">"skipped_diagnostics"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"private_node_error_decomposition"</span><span class="p">:</span> <span class="s2">"Unannotated nodes are not known private nodes"</span><span class="p">,</span>
+                <span class="s2">"matchability_signal"</span><span class="p">:</span> <span class="s2">"Incomplete reference cannot label true matchability"</span><span class="p">,</span>
+                <span class="s2">"oracle_decoding_ladder"</span><span class="p">:</span> <span class="s2">"Reference overlap masks and cardinality are incomplete"</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">"reference_note"</span><span class="p">:</span> <span class="n">_reference_note</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span>
+            <span class="s2">"leakage_statement"</span><span class="p">:</span> <span class="s2">"Post-inference reference accounting only; no refit or oracle decoding"</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="n">legacy</span> <span class="o">=</span> <span class="n">_ROOT</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"BPUPGA/baseline261023/evaluation"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">legacy</span> <span class="o">/</span> <span class="s2">"diagnostics.py"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Optional diagnostic source is absent: </span><span class="si">{</span><span class="n">legacy</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">'diagnostics.py'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">package</span> <span class="o">=</span> <span class="n">_private_package</span><span class="p">(</span><span class="s2">"bpupga._legacy_evaluation"</span><span class="p">,</span> <span class="n">legacy</span><span class="p">)</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span> <span class="o">+</span> <span class="s2">".diagnostics"</span><span class="p">)</span>
+    <span class="c1"># Legacy diagnostics interprets score_matrix as quality regardless of the</span>
+    <span class="c1"># direction flag. Normalize a shallow dataclass copy, never mutate result.</span>
+    <span class="n">diagnostic_result</span> <span class="o">=</span> <span class="n">result</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">score_matrix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">larger_is_better</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">diagnostic_result</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">score_matrix</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">score_matrix</span><span class="p">),</span> <span class="n">larger_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">diagnose_alignment_result</span><span class="p">(</span>
+        <span class="n">diagnostic_result</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ks</span><span class="o">=</span><span class="n">ks</span><span class="p">,</span> <span class="n">example_limit</span><span class="o">=</span><span class="n">example_limit</span><span class="p">,</span>
+        <span class="n">max_dense_entries</span><span class="o">=</span><span class="n">max_dense_entries</span><span class="p">,</span> <span class="n">include_oracle_k</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">report</span><span class="p">[</span><span class="s2">"reference_note"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_reference_note</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+
+
+<div class="viewcode-block" id="RunLog">
+<a class="viewcode-back" href="../../reference/logging.html#bpupga.RunLog">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RunLog</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Read an existing attempt's current result.json or started.json snapshot.</span>
+
+<span class="sd">    Does not scan matrices, rerun inference, write, watch or update a campaign.</span>
+<span class="sd">    Failure/running scores are None, never successful zeroes.</span>
+<span class="sd">    """</span>
+
+    <span class="n">attempt_dir</span><span class="p">:</span> <span class="n">Path</span>
+    <span class="n">_record</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">_failure</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="RunLog.open">
+<a class="viewcode-back" href="../../reference/logging.html#bpupga.RunLog.open">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attempt_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"RunLog"</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">attempt_dir</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"result.json"</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"started.json"</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">_read_object</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"status"</span><span class="p">),</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing string status in </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">failure</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"fit_failure.json"</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">_read_object</span><span class="p">(</span><span class="n">failure</span><span class="p">)</span> <span class="k">if</span> <span class="n">failure</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">native_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s2">"SUCCESS"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"variants"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"native"</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">runtime</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">runtime</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"runtime"</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="k">if</span> <span class="s2">"end_to_end_seconds"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="p">:</span>
+            <span class="n">runtime</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"end_to_end_seconds"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="p">[</span><span class="s2">"end_to_end_seconds"</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">runtime</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">errors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"status"</span><span class="p">,</span> <span class="s2">"error"</span><span class="p">,</span> <span class="s2">"traceback"</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="p">})</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_failure</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_failure</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">errors</span>
+
+<div class="viewcode-block" id="RunLog.summary">
+<a class="viewcode-back" href="../../reference/logging.html#bpupga.RunLog.summary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"attempt_dir"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attempt_dir</span><span class="p">),</span> <span class="s2">"status"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+                <span class="s2">"task"</span><span class="p">:</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"task"</span><span class="p">,</span> <span class="p">{})),</span>
+                <span class="s2">"native_metrics"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">native_metrics</span><span class="p">,</span> <span class="s2">"runtime"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span>
+                <span class="s2">"errors"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">}</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_object</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Expected a JSON object in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, BiPGA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

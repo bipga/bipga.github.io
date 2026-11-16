@@ -1,83 +1,351 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="Resolve import, dependency, graph-format, annotation-scope and saved-run questions."><title>Troubleshooting and FAQ — BPUPGA documentation</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
-<body data-page="faq"><a class="skip" href="#main">Skip to content</a>
-<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link" href="quickstart.html">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link" href="algorithms.html">Algorithms</a><a class="nav-link" href="evaluation.html">Evaluation</a><a class="nav-link" href="diagnostics.html">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link active" href="faq.html" aria-current="page">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a><div class="sidebar-label">PAPER</div><a class="nav-link" href="supplementary/">Supplementary Material</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> API v0.1 <span>Research checkout</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
-<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span>Troubleshooting and FAQ</div><div class="top-actions"><span class="release">PYTHON API · v0.1</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="api.html">API reference ↗</a></div></header>
-<div class="content-layout"><main id="main"><article><div class="eyebrow">BPUPGA / DOCUMENTATION</div><h1>Troubleshooting and FAQ</h1><p class="lead">Resolve import, dependency, graph-format, annotation-scope and saved-run questions.</p>
-<h2 id="import">Python cannot import bpupga<a class="permalink" href="#import" aria-label="Link to Python cannot import bpupga">#</a></h2>
-<p>Run the setup from the repository root and add the consolidated
-<code>api/</code> directory to Python's import path:</p>
-<div class="code-window"><div class="code-header"><span>Shell</span></div><pre><code>export PYTHONPATH=&quot;$PWD/baseline_exdit_261029/api${PYTHONPATH:+:$PYTHONPATH}&quot;
-python -c &quot;import bpupga; print(bpupga.__file__)&quot;</code></pre></div>
-<p>Use the project's existing model environment. This facade is not a PyPI
-package and depends on the adjacent dated implementation tree. Copying only
-<code>api/bpupga/</code> is insufficient for the built-in methods.</p>
-<h2 id="checkout-collision">“common is already loaded from another checkout”<a class="permalink" href="#checkout-collision" aria-label="Link to “common is already loaded from another checkout”">#</a></h2>
-<p>Historical baseline trees reuse the top-level import names
-<code>baseline</code>, <code>baselines</code>, and <code>common</code>. Start a
-fresh Python process when switching checkouts. Do not mix the historical and
-current result classes in one session.</p>
-<h2 id="dependencies">Missing PyTorch, scikit-learn, vendor packages, or weights<a class="permalink" href="#dependencies" aria-label="Link to Missing PyTorch, scikit-learn, vendor packages, or weights">#</a></h2>
-<p>The facade wraps existing code rather than replacing its environment.
-Loading needs NetworkX and NumPy. Evaluation imports the existing metric module
-and scikit-learn. Built-in execution imports PyTorch and the selected author's
-dependencies; some models require their existing weights. Diagnostics additionally
-reuse the sibling legacy evaluation tree. Follow the repository environment
-instructions rather than installing a guessed universal dependency set.</p>
-<h2 id="devices">Does device='cpu' mean every implementation is lightweight?<a class="permalink" href="#devices" aria-label="Link to Does device=&#x27;cpu&#x27; mean every implementation is lightweight?">#</a></h2>
-<p>No. It requests the CPU path where the selected implementation supports it;
-it does not reduce dense matrices, epochs or candidate sets. Device support and
-memory needs remain method-specific. The facade does not reserve a GPU or attach
-a new job to the background campaign queue.</p>
-<h2 id="graph-input">Why does align reject my graph?<a class="permalink" href="#graph-input" aria-label="Link to Why does align reject my graph?">#</a></h2>
-<p>Direct graph arguments must be nonempty simple undirected NetworkX graphs,
-without self loops and with local IDs <code>0..n-1</code>. Use
-<code>Dataset.load</code> for file-backed inputs: the loader handles sorted integer
-ID reindexing and removes self loops. Explicit node lists preserve isolates.
-Alignment copies topology and discards graph/node/edge attributes.</p>
-<h2 id="output-dir">Why does construct refuse the output directory?<a class="permalink" href="#output-dir" aria-label="Link to Why does construct refuse the output directory?">#</a></h2>
-<p>Every construction writes a new instance. Existing directories and symlinks
-are refused to protect data provenance. Choose a new destination; there is no
-public force-overwrite option.</p>
-<h2 id="ratios">Requested and realized overlap differ slightly<a class="permalink" href="#ratios" aria-label="Link to Requested and realized overlap differ slightly">#</a></h2>
-<p>The constructor allocates integer identity groups, so finite-size rounding
-can alter realized source and target ratios. Read the generated metadata instead
-of assuming the requested floating-point values were achieved exactly. Node
-overlap is not an edge-deletion percentage.</p>
-<h2 id="reference-completeness">What if my correspondences are incomplete?<a class="permalink" href="#reference-completeness" aria-label="Link to What if my correspondences are incomplete?">#</a></h2>
-<p>Record known annotation limitations in metadata. The API retains
-reference-relative pair/ranking accounting and skips matchability/overlap or
-private-node analyses that require complete labels. An absent reference link
-alone does not prove the node is truly unmatched.</p>
-<h2 id="missing-ranking">Why is ranking None?<a class="permalink" href="#missing-ranking" aria-label="Link to Why is ranking None?">#</a></h2>
-<p>A valid pair list does not necessarily provide a continuous ranking over
-candidates. Read <code>ranking_policy.skipped_reason</code>. Do not infer a full
-ranking from accepted hard pairs or replace missing candidates with fabricated
-scores.</p>
-<h2 id="noninjective">Why is Pair F1 present when is_one_to_one is false?<a class="permalink" href="#noninjective" aria-label="Link to Why is Pair F1 present when is_one_to_one is false?">#</a></h2>
-<p>Pair-set recovery and one-to-one feasibility are distinct. Exact duplicates
-are removed during pair scoring, while repeated endpoints are disclosed. Use the
-validity report when interpreting native results.</p>
-<h2 id="diagnose-missing">Diagnostics cannot find diagnostics.py<a class="permalink" href="#diagnose-missing" aria-label="Link to Diagnostics cannot find diagnostics.py">#</a></h2>
-<p>Retain <code>BPUPGA/baseline261023/evaluation/</code> beside the dated project.
-The public wrapper reuses that inspected diagnostic implementation and reports a
-missing source file explicitly. It does not rerun a model to reconstruct artifacts.</p>
-<h2 id="log-result">RunLog has no native_metrics<a class="permalink" href="#log-result" aria-label="Link to RunLog has no native_metrics">#</a></h2>
-<p>Only a recorded <code>SUCCESS</code> exposes native metrics. Running, failed,
-and incompatible attempts return <code>None</code>; a file lacking native metrics
-also remains unavailable. Reopen a running attempt later to obtain a fresh snapshot.</p>
-<h2 id="training">Where are train, checkpoint, resume, and plot_curve?<a class="permalink" href="#training" aria-label="Link to Where are train, checkpoint, resume, and plot_curve?">#</a></h2>
-<p>The current public workflow is <code>align</code>, followed by separate
-evaluation and diagnosis. Method-specific optimization may happen internally.
-<code>RunLog</code> reads saved campaign records; it is not a training logger or a
-checkpoint manager. The website documents the implemented interface.</p>
-<h2 id="reproduce">Will default API calls reproduce the paper tables?<a class="permalink" href="#reproduce" aria-label="Link to Will default API calls reproduce the paper tables?">#</a></h2>
-<p>Not automatically. Formal results bind input instances, effective method
-parameters, seeds, source versions, output variants and resource policies. The
-convenience API uses adapter defaults unless you supply explicit parameters;
-it does not silently select the formal campaign's family-specific profiles.</p>
-<p>Continue with <a href="installation.html">installation</a>,
-<a href="quickstart.html">quickstart</a>, or the
-<a href="api.html">API reference</a>.</p>
-</article><nav class="page-navigation" aria-label="Previous and next pages"><a href="api.html"><span>← Previous</span>Python API reference</a><a href="source.html"><span>Next →</span>Source code</a></nav><footer><span>BPUPGA Python API · v0.1</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link " href="#import">Python cannot import bpupga</a><a class="toc-link " href="#checkout-collision">“common is already loaded from another checkout”</a><a class="toc-link " href="#dependencies">Missing PyTorch, scikit-learn, vendor packages, or weights</a><a class="toc-link " href="#devices">Does device=&#x27;cpu&#x27; mean every implementation is lightweight?</a><a class="toc-link " href="#graph-input">Why does align reject my graph?</a><a class="toc-link " href="#output-dir">Why does construct refuse the output directory?</a><a class="toc-link " href="#ratios">Requested and realized overlap differ slightly</a><a class="toc-link " href="#reference-completeness">What if my correspondences are incomplete?</a><a class="toc-link " href="#missing-ranking">Why is ranking None?</a><a class="toc-link " href="#noninjective">Why is Pair F1 present when is_one_to_one is false?</a><a class="toc-link " href="#diagnose-missing">Diagnostics cannot find diagnostics.py</a><a class="toc-link " href="#log-result">RunLog has no native_metrics</a><a class="toc-link " href="#training">Where are train, checkpoint, resume, and plot_curve?</a><a class="toc-link " href="#reproduce">Will default API calls reproduce the paper tables?</a></aside></div></div>
-<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Troubleshooting and FAQ &mdash; BiPGA</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/bipga.css?v=f0f54ec4" />
+
+  
+    <link rel="shortcut icon" href="_static/bipga-mark.svg"/>
+    <link rel="canonical" href="https://bipga.github.io/faq.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/bipga-tools.js?v=60309b5e"></script>
+      <script src="_static/example-data.js?v=5fb413ac"></script>
+      <script defer="defer" src="_static/bipga.js?v=403c47d0"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Source code" href="source.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #246c8d" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            BiPGA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to partial graph alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#inputs-and-predictions">Inputs and predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#construction-and-inference">Construction and inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#use-the-research-checkout">Use the research checkout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-the-interface">Verify the interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#working-directories">Working directories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#first-run-a-self-contained-example">First run: a self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-a-built-in-method">Run a built-in method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#choose-a-method-and-dataset">Choose a method and dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#inspect-the-output">Inspect the output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-line interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#list-the-available-inputs">List the available inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#preview-a-selection">Preview a selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#select-several-experiments">Select several experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#execution-and-results">Execution and results</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#the-common-file-format">The common file format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#load-and-inspect-an-instance">Load and inspect an instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#convert-prediction-identifiers">Convert prediction identifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#construct-bilateral-partial-overlap">Construct bilateral partial overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#natural-pairs-and-incomplete-annotations">Natural pairs and incomplete annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#use-your-own-dataset">Use your own dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#choose-a-method">Choose a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#configure-a-method">Configure a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#execution-settings-and-dependencies">Execution settings and dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#custom-methods">Custom methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#method-naming">Method naming</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation and metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#exact-pair-recovery">Exact-pair recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#endpoint-matchability-and-overlap">Endpoint matchability and overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#node-classification">Node classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#directional-ranking">Directional ranking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#returned-report">Returned report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#incomplete-reference-annotations">Incomplete reference annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#campaign-decoder-views">Campaign decoder views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#report-repeated-runs">Report repeated runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#available-analyses">Available analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#incomplete-labels">Incomplete labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Saved runs and resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#read-an-existing-attempt">Read an existing attempt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#status-and-native-scores">Status and native scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#timing-and-memory-scope">Timing and memory scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#browser-local-json-inspector">Browser-local JSON inspector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#read-a-record-from-python">Read a record from Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Custom algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#the-adapter-contract">The adapter contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#a-minimal-custom-adapter">A minimal custom adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#return-optional-score-data">Return optional score data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#registration-and-reproducibility">Registration and reproducibility</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reference-pages">Reference pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/data.html">Dataset loading and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/data.html#load-graph-pairs">Load graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/data.html#bpupga.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/data.html#construct-partial-graph-pairs">Construct partial graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/data.html#bpupga.construct"><code class="docutils literal notranslate"><span class="pre">construct()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/algorithm.html">Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/algorithm.html#bpupga.Algorithm"><code class="docutils literal notranslate"><span class="pre">Algorithm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/algorithm.html#bpupga.Algorithm.align"><code class="docutils literal notranslate"><span class="pre">Algorithm.align()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/algorithm.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/evaluation.html">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/evaluation.html#bpupga.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/diagnostics.html#bpupga.diagnose"><code class="docutils literal notranslate"><span class="pre">diagnose()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/records.html">Data and result records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/records.html#alignmentdataset">AlignmentDataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/records.html#bpupga.AlignmentDataset"><code class="docutils literal notranslate"><span class="pre">AlignmentDataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/records.html#alignmentresult">AlignmentResult</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/records.html#bpupga.AlignmentResult"><code class="docutils literal notranslate"><span class="pre">AlignmentResult</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/logging.html">Saved run records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/logging.html#bpupga.RunLog"><code class="docutils literal notranslate"><span class="pre">RunLog</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.open"><code class="docutils literal notranslate"><span class="pre">RunLog.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.status"><code class="docutils literal notranslate"><span class="pre">RunLog.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.native_metrics"><code class="docutils literal notranslate"><span class="pre">RunLog.native_metrics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.runtime"><code class="docutils literal notranslate"><span class="pre">RunLog.runtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.errors"><code class="docutils literal notranslate"><span class="pre">RunLog.errors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.summary"><code class="docutils literal notranslate"><span class="pre">RunLog.summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/extensions.html">Custom adapter registration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/extensions.html#bpupga.register_algorithm"><code class="docutils literal notranslate"><span class="pre">register_algorithm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#self-contained-example">Self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#prepared-graph-example">Prepared graph example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#read-an-experiment-record">Read an experiment record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#paper-reproduction">Paper reproduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting and FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requested-and-realized-overlap-differ-slightly">Requested and realized overlap differ slightly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-is-ranking-none">Why is ranking None?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="source.html">Source code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://bipga.github.io/supplementary/">Supplementary Material</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #246c8d" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BiPGA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Troubleshooting and FAQ</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/faq.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="troubleshooting-and-faq">
+<span class="legacy-anchor" id="import"></span><span class="legacy-anchor" id="checkout-collision"></span><span class="legacy-anchor" id="dependencies"></span><span class="legacy-anchor" id="devices"></span><span class="legacy-anchor" id="graph-input"></span><span class="legacy-anchor" id="output-dir"></span><span class="legacy-anchor" id="ratios"></span><span class="legacy-anchor" id="reference-completeness"></span><span class="legacy-anchor" id="missing-ranking"></span><span class="legacy-anchor" id="noninjective"></span><span class="legacy-anchor" id="diagnose-missing"></span><span class="legacy-anchor" id="log-result"></span><span class="legacy-anchor" id="training"></span><span class="legacy-anchor" id="reproduce"></span><h1>Troubleshooting and FAQ<a class="headerlink" href="#troubleshooting-and-faq" title="Link to this heading"></a></h1>
+<section id="python-cannot-import-bpupga">
+<h2>Python cannot import bpupga<a class="headerlink" href="#python-cannot-import-bpupga" title="Link to this heading"></a></h2>
+<p>Run the setup from the repository root and add the consolidated <code class="docutils literal notranslate"><span class="pre">api/</span></code> directory to Python’s import path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/baseline_exdit_261029/api</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="p">:+:</span><span class="nv">$PYTHONPATH</span><span class="si">}</span><span class="s2">"</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import bpupga; print(bpupga.__file__)"</span>
+</pre></div>
+</div>
+<p>Use the project’s existing model environment. This facade is not a PyPI package and depends on the adjacent dated implementation tree. Copying only <code class="docutils literal notranslate"><span class="pre">api/bpupga/</span></code> is insufficient for the built-in methods.</p>
+</section>
+<section id="common-is-already-loaded-from-another-checkout">
+<h2>“common is already loaded from another checkout”<a class="headerlink" href="#common-is-already-loaded-from-another-checkout" title="Link to this heading"></a></h2>
+<p>Historical baseline trees reuse the top-level import names <code class="docutils literal notranslate"><span class="pre">baseline</span></code>, <code class="docutils literal notranslate"><span class="pre">baselines</span></code>, and <code class="docutils literal notranslate"><span class="pre">common</span></code>. Start a fresh Python process when switching checkouts. Do not mix the historical and current result classes in one session.</p>
+</section>
+<section id="missing-pytorch-scikit-learn-vendor-packages-or-weights">
+<h2>Missing PyTorch, scikit-learn, vendor packages, or weights<a class="headerlink" href="#missing-pytorch-scikit-learn-vendor-packages-or-weights" title="Link to this heading"></a></h2>
+<p>The facade wraps existing code rather than replacing its environment. Loading needs NetworkX and NumPy. Evaluation imports the existing metric module and scikit-learn. Built-in execution imports PyTorch and the selected author’s dependencies; some models require their existing weights. Diagnostics additionally reuse the sibling legacy evaluation tree. Follow the repository environment instructions rather than installing a guessed universal dependency set.</p>
+</section>
+<section id="does-device-cpu-mean-every-implementation-is-lightweight">
+<h2>Does device=’cpu’ mean every implementation is lightweight?<a class="headerlink" href="#does-device-cpu-mean-every-implementation-is-lightweight" title="Link to this heading"></a></h2>
+<p>No. It requests the CPU path where the selected implementation supports it; it does not reduce dense matrices, epochs or candidate sets. Device support and memory needs remain method-specific. The facade does not reserve a GPU or attach a new job to the background campaign queue.</p>
+</section>
+<section id="why-does-align-reject-my-graph">
+<h2>Why does align reject my graph?<a class="headerlink" href="#why-does-align-reject-my-graph" title="Link to this heading"></a></h2>
+<p>Direct graph arguments must be nonempty simple undirected NetworkX graphs, without self loops and with local IDs <code class="docutils literal notranslate"><span class="pre">0..n-1</span></code>. Use <code class="docutils literal notranslate"><span class="pre">Dataset.load</span></code> for file-backed inputs: the loader handles sorted integer ID reindexing and removes self loops. Explicit node lists preserve isolates. Alignment copies topology and discards graph/node/edge attributes.</p>
+</section>
+<section id="why-does-construct-refuse-the-output-directory">
+<h2>Why does construct refuse the output directory?<a class="headerlink" href="#why-does-construct-refuse-the-output-directory" title="Link to this heading"></a></h2>
+<p>Every construction writes a new instance. Existing directories and symlinks are refused to protect data provenance. Choose a new destination; there is no public force-overwrite option.</p>
+</section>
+<section id="requested-and-realized-overlap-differ-slightly">
+<h2>Requested and realized overlap differ slightly<a class="headerlink" href="#requested-and-realized-overlap-differ-slightly" title="Link to this heading"></a></h2>
+<p>The constructor allocates integer identity groups, so finite-size rounding can alter realized source and target ratios. Read the generated metadata instead of assuming the requested floating-point values were achieved exactly. Node overlap is not an edge-deletion percentage.</p>
+</section>
+<section id="what-if-my-correspondences-are-incomplete">
+<h2>What if my correspondences are incomplete?<a class="headerlink" href="#what-if-my-correspondences-are-incomplete" title="Link to this heading"></a></h2>
+<p>Record known annotation limitations in metadata. The API retains reference-relative pair/ranking accounting and skips matchability/overlap or private-node analyses that require complete labels. An absent reference link alone does not prove the node is truly unmatched.</p>
+</section>
+<section id="why-is-ranking-none">
+<h2>Why is ranking None?<a class="headerlink" href="#why-is-ranking-none" title="Link to this heading"></a></h2>
+<p>A valid pair list does not necessarily provide a continuous ranking over candidates. Read <code class="docutils literal notranslate"><span class="pre">ranking_policy.skipped_reason</span></code>. Do not infer a full ranking from accepted hard pairs or replace missing candidates with fabricated scores.</p>
+</section>
+<section id="why-is-pair-f1-present-when-is-one-to-one-is-false">
+<h2>Why is Pair F1 present when is_one_to_one is false?<a class="headerlink" href="#why-is-pair-f1-present-when-is-one-to-one-is-false" title="Link to this heading"></a></h2>
+<p>Pair-set recovery and one-to-one feasibility are distinct. Exact duplicates are removed during pair scoring, while repeated endpoints are disclosed. Use the validity report when interpreting native results.</p>
+</section>
+<section id="diagnostics-cannot-find-diagnostics-py">
+<h2>Diagnostics cannot find diagnostics.py<a class="headerlink" href="#diagnostics-cannot-find-diagnostics-py" title="Link to this heading"></a></h2>
+<p>Retain <code class="docutils literal notranslate"><span class="pre">BPUPGA/baseline261023/evaluation/</span></code> beside the dated project. The public wrapper reuses that inspected diagnostic implementation and reports a missing source file explicitly. It does not rerun a model to reconstruct artifacts.</p>
+</section>
+<section id="runlog-has-no-native-metrics">
+<h2>RunLog has no native_metrics<a class="headerlink" href="#runlog-has-no-native-metrics" title="Link to this heading"></a></h2>
+<p>Only a recorded <code class="docutils literal notranslate"><span class="pre">SUCCESS</span></code> exposes native metrics. Running, failed, and incompatible attempts return <code class="docutils literal notranslate"><span class="pre">None</span></code>; a file lacking native metrics also remains unavailable. Reopen a running attempt later to obtain a fresh snapshot.</p>
+</section>
+<section id="where-are-train-checkpoint-resume-and-plot-curve">
+<h2>Where are train, checkpoint, resume, and plot_curve?<a class="headerlink" href="#where-are-train-checkpoint-resume-and-plot-curve" title="Link to this heading"></a></h2>
+<p>The current public workflow is <code class="docutils literal notranslate"><span class="pre">align</span></code>, followed by separate evaluation and diagnosis. Method-specific optimization may happen internally. <code class="docutils literal notranslate"><span class="pre">RunLog</span></code> reads saved campaign records; it is not a training logger or a checkpoint manager. The website documents the implemented interface.</p>
+</section>
+<section id="will-default-api-calls-reproduce-the-paper-tables">
+<h2>Will default API calls reproduce the paper tables?<a class="headerlink" href="#will-default-api-calls-reproduce-the-paper-tables" title="Link to this heading"></a></h2>
+<p>Not automatically. Formal results bind input instances, effective method parameters, seeds, source versions, output variants and resource policies. The convenience API uses adapter defaults unless you supply explicit parameters; it does not silently select the formal campaign’s family-specific profiles.</p>
+<p>Continue with <a class="reference external" href="installation.html">installation</a>, <a class="reference external" href="quickstart.html">quickstart</a>, or the <a class="reference external" href="api.html">API reference</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="source.html" class="btn btn-neutral float-right" title="Source code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, BiPGA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+Saved runs and resources
+========================
+
+Read an existing attempt
+------------------------
+
+.. code-block:: python
+
+   import bpupga as bp
+
+   run = bp.RunLog.open(
+       "baseline_exdit_261029/evaluation/output/.../attempt_0001")
+   print(run.status)
+   print(run.native_metrics)
+   print(run.runtime)
+   print(run.errors)
+   summary = run.summary()
+
+Use an existing campaign attempt directory. ``RunLog.open`` reads ``result.json`` or falls back to ``started.json`` for an unfinished attempt. Reopen the object for a refreshed snapshot. It does not load saved matrices, fit a method, or update campaign files. A direct ``Algorithm.align`` call returns an in-memory result and does not automatically create a campaign attempt or log directory.
+
+Status and native scores
+------------------------
+
+.. list-table::
+   :header-rows: 1
+   :class: api-table
+
+   * - Record status
+     - native_metrics
+     - Interpretation
+   * - SUCCESS
+     - Native report when present
+     - Inspect pair, validity and ranking scope
+   * - RUNNING / PENDING
+     - None
+     - No completed native score
+   * - TIMEOUT / OOM
+     - None
+     - Resource failure, not a zero-score prediction
+   * - NUMERICAL_ERROR / ERROR
+     - None
+     - Execution failure retained with its reason
+   * - PROTOCOL_INCOMPATIBLE
+     - None
+     - Method did not run under the selected information contract
+
+Common, Method-aware, and legacy decoder outputs are separate campaign variants. ``native_metrics`` selects only the native branch. A valid empty prediction can score zero; an unavailable result remains missing.
+
+Timing and memory scope
+-----------------------
+
+Resource keys depend on the recorded attempt. Fit wall time, evaluator time, end-to-end time, process-tree RSS, and CUDA allocator measurements have different scopes. Retain device and thread settings when comparing them. These records alone do not establish a controlled scalability experiment.
+
+Browser-local JSON inspector
+----------------------------
+
+Choose a saved campaign ``result.json`` or ``started.json``. The browser reads
+the file locally and does not upload it. Native scores are shown only when a
+successful native report is present.
+
+.. raw:: html
+
+   <div class="run-inspector">
+     <label class="file-label" for="run-file">Open an experiment record</label>
+     <input id="run-file" type="file" accept=".json,application/json">
+     <p id="file-error" role="alert" hidden></p>
+     <div id="run-preview" hidden aria-live="polite">
+       <h3 id="run-status"></h3><p id="run-name"></p>
+       <dl id="run-metrics"></dl><p id="run-caveat"></p>
+       <button type="button" class="bipga-button" id="clear-file">Clear record</button>
+     </div>
+   </div>
+
+Read a record from Python
+-------------------------
+
+Download `read_run.py <downloads/read_run.py>`_ and run:
+
+.. code-block:: bash
+
+   python read_run.py path/to/attempt_0001

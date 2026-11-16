@@ -1,0 +1,79 @@
+Command-line interface
+======================
+
+``python -m bpupga`` runs selected prepared inputs with the current adapters
+and saves native predictions and evaluation records in a new output directory.
+The Python :class:`~bpupga.Algorithm` interface is also available for custom
+graphs and in-memory use.
+
+List the available inputs
+-------------------------
+
+From the research repository root, after setting the import path:
+
+.. code-block:: bash
+
+   python -m bpupga --list
+
+The listing includes supported method identifiers, dataset identifiers and
+prepared conditions. ``Arxiv``, ``DBLP`` and ``GradAlign+`` are accepted aliases.
+SparkAlign uses the existing method identifier ``oiteralign``.
+
+Preview a selection
+-------------------
+
+.. code-block:: bash
+
+   python -m bpupga --dataset dblp --method grampa --rho 0.6 --seed 2026 --dry-run
+
+``--dry-run`` resolves the inputs and parameters without starting inference,
+reserving a device or creating an output directory.
+
+Run the selected experiment
+---------------------------
+
+.. code-block:: bash
+
+   python -m bpupga --dataset dblp --method grampa --rho 0.6 --seed 2026 \
+       --output-dir api/runs/dblp_grampa_r06_s2026
+
+The run uses the selected prepared configuration. Its graph-only subprocess
+fits the method; the parent then evaluates native outputs against the reference.
+Predictions, optional continuous outputs, metrics and resource records are
+stored beneath the chosen directory. ``RunLog.open`` reads the per-task
+``attempt_0001`` record directories.
+
+Select several experiments
+--------------------------
+
+.. code-block:: bash
+
+   python -m bpupga --dataset dblp fbtw --method grampa s_gwl \
+       --rho 0.6 0.8 --seeds 2026 2027 --dry-run
+
+   python -m bpupga --dataset all --method all --seeds all --dry-run
+
+The symmetric overlap filter applies to prepared controlled families; natural
+graph pairs retain their snapshots. The default seed is 2026 and ``--seeds all``
+selects prepared seeds 2026–2030.
+
+Options
+-------
+
+.. include:: generated/cli_options.rst
+
+Execution and results
+---------------------
+
+The CLI runs sequentially and defaults to CPU. A GPU request must pass the
+checkout's device-availability checks and is used only by a supported method.
+Each fit uses eight CPU threads. The documented timeout covers preparation
+and fitting; the RSS limit covers the fit process tree.
+
+The output directory must be new. Failed or unfinished attempts retain their
+status and available logs; unavailable scores remain distinct from valid zeros.
+Read the records with :doc:`logs` or :class:`~bpupga.RunLog`.
+
+For the exact paper execution profiles and numerical results, use the
+`supplementary reproduction guide <https://bipga.github.io/supplementary/reproduce/>`_.
+

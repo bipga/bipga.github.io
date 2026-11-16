@@ -1,0 +1,43 @@
+Python API overview
+===================
+
+The public namespace is ``bpupga``. Select a reference page for exact signatures,
+parameters, return records and source links. Definitions are generated from
+the actual Python objects during the documentation build.
+
+.. autosummary::
+   :nosignatures:
+
+   bpupga.Dataset
+   bpupga.construct
+   bpupga.Algorithm
+   bpupga.AlignmentDataset
+   bpupga.AlignmentResult
+   bpupga.evaluate
+   bpupga.diagnose
+   bpupga.RunLog
+   bpupga.register_algorithm
+
+Reference pages
+---------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - Interface
+   * - :doc:`reference/data`
+     - Load graph pairs and construct bilateral partial inputs.
+   * - :doc:`reference/algorithm`
+     - Configure a method and align two topology graphs.
+   * - :doc:`reference/evaluation`
+     - Evaluate native predictions and available rankings.
+   * - :doc:`reference/diagnostics`
+     - Analyze outputs after inference.
+   * - :doc:`reference/records`
+     - Inspect dataset and prediction fields.
+   * - :doc:`reference/logging`
+     - Read saved experiment attempts.
+   * - :doc:`reference/extensions`
+     - Register a custom graph-only adapter.
+

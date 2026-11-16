@@ -1,0 +1,30 @@
+Data and result records
+=======================
+
+AlignmentDataset
+----------------
+
+.. autoclass:: bpupga.AlignmentDataset
+   :members: source_only_nodes, target_only_nodes, source_overlap_ratio, target_overlap_ratio, node_jaccard_overlap, pairs_to_original, summary
+
+The record contains ``root``, ``name``, the two local-ID topology graphs,
+``ground_truth``, the ``g1_old_to_new`` / ``g2_old_to_new`` maps, their inverse
+maps, and ``metadata``. Original identifiers can be recovered with
+``data.pairs_to_original(result.predicted_pairs)``.
+
+AlignmentResult
+---------------
+
+.. autoclass:: bpupga.AlignmentResult
+   :members: validate_shapes
+
+``method``, ``predicted_pairs`` and ``runtime_sec`` identify the native output.
+Optional fields include ``score_matrix``, ``cost_matrix``,
+``source_embeddings``, ``target_embeddings`` and ``ranking_candidates``.
+``larger_is_better`` describes continuous-score direction and ``metadata``
+retains method-specific information.
+
+Matrix dimensions must match the two graph orders. Sparse candidates use
+local source and target IDs with a finite score; missing candidate pairs are
+not fabricated. See :doc:`../extending` for a custom-adapter example.
+

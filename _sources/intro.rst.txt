@@ -1,0 +1,54 @@
+Introduction to partial graph alignment
+=======================================
+
+Graph alignment identifies corresponding vertices across two input graphs.
+In **bilateral partial graph alignment**, each graph can contain private
+vertices with no counterpart in the other graph. A useful output therefore
+includes both a correspondence decision and a decision about which vertices
+should participate in the alignment.
+
+.. figure:: _static/alignment.svg
+   :alt: Two graphs with three corresponding vertex pairs and private vertices on both sides.
+   :width: 650px
+
+   Shared vertices have a counterpart; private vertices occur on only one side.
+
+Inputs and predictions
+----------------------
+
+``Dataset.load`` reads graph topology and a reference mapping. It preserves
+explicitly listed isolated vertices and reindexes integer vertex IDs to local,
+contiguous IDs. The returned :class:`~bpupga.AlignmentDataset` retains the
+mapping back to the original identifiers.
+
+An :class:`~bpupga.Algorithm` receives the two topology graphs through
+``align(graph1, graph2)``. Its :class:`~bpupga.AlignmentResult` contains native
+predicted pairs and, when available, continuous scores, costs or embeddings.
+
+Construction and inference
+--------------------------
+
+:func:`bpupga.construct` creates a controlled partial pair by partitioning
+original matched identities into shared, source-only and target-only groups.
+The requested source and target overlap ratios are rounded to integer group
+sizes and the realized values are recorded in metadata.
+
+References remain outside unsupervised inference. Native predictions are
+evaluated after the method returns; diagnostic analyses that use reference
+information are explicitly post-inference analyses.
+
+Evaluate more than ranking
+--------------------------
+
+Pair precision, recall and F1 describe correspondence recovery. Node
+matchability scores describe selection of participating vertices. Validity
+checks reveal repeated endpoints and other feasibility issues. Hits@K and MRR
+describe rankings over reference-matched queries when the output supplies an
+appropriate ranking representation.
+
+A high ranking score alone does not measure rejection of private vertices.
+Incomplete references also cannot establish that every unannotated vertex is
+truly unmatched; the evaluator reports the available reference scope.
+
+Continue with :doc:`quickstart`, :doc:`datasets`, and :doc:`evaluation`.
+

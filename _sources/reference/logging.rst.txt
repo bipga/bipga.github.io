@@ -1,0 +1,16 @@
+Saved run records
+=================
+
+.. autoclass:: bpupga.RunLog
+   :members: open, status, native_metrics, runtime, errors, summary
+
+``RunLog.open`` accepts an existing per-task attempt directory and reads its
+``result.json`` or ``started.json``. It creates a read-only snapshot and loads
+no saved score matrices. Reopen it to refresh a running attempt.
+
+Only successful native reports expose ``native_metrics``. Failed, unfinished
+or absent reports remain ``None``. Missing records raise ``FileNotFoundError``;
+malformed records raise ``ValueError``.
+
+See :doc:`../logs` for status interpretation and browser-local JSON inspection.
+

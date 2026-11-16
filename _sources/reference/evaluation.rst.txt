@@ -1,0 +1,22 @@
+Evaluation
+==========
+
+.. autofunction:: bpupga.evaluate
+
+``ks`` specifies positive integer ranking cutoffs. The return value is a
+dictionary containing ``pair``, ``matchability``, ``overlap_estimation``,
+``node_classification``, ``validity``, ``ranking`` and ``ranking_policy``.
+Exact duplicate predicted pairs are deduplicated during pair scoring;
+repeated endpoints remain visible in the validity report.
+
+Ranking is available from same-fit scores, costs, paired embeddings or sparse
+native candidates. An unavailable representation yields ``ranking=None`` and
+a reason. GRAMPA exposes its soft ranking and the original raw ranking.
+
+With incomplete reference annotations, matchability, overlap and node
+classification are skipped rather than treating unannotated vertices as
+confirmed private vertices. Invalid cutoffs, indices or nonfinite outputs
+raise ``ValueError``.
+
+See :doc:`../evaluation` for metric definitions and interpretation.
+

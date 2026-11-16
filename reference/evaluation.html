@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation &mdash; BiPGA</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/bipga.css?v=f0f54ec4" />
+
+  
+    <link rel="shortcut icon" href="../_static/bipga-mark.svg"/>
+    <link rel="canonical" href="https://bipga.github.io/reference/evaluation.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/bipga-tools.js?v=60309b5e"></script>
+      <script src="../_static/example-data.js?v=5fb413ac"></script>
+      <script defer="defer" src="../_static/bipga.js?v=403c47d0"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Post-inference diagnostics" href="diagnostics.html" />
+    <link rel="prev" title="Algorithm" href="algorithm.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #246c8d" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BiPGA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction to partial graph alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#inputs-and-predictions">Inputs and predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#construction-and-inference">Construction and inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#use-the-research-checkout">Use the research checkout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#verify-the-interface">Verify the interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#working-directories">Working directories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#first-run-a-self-contained-example">First run: a self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#run-a-built-in-method">Run a built-in method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#choose-a-method-and-dataset">Choose a method and dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#inspect-the-output">Inspect the output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-line interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#list-the-available-inputs">List the available inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#preview-a-selection">Preview a selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#select-several-experiments">Select several experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#execution-and-results">Execution and results</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../datasets.html#the-common-file-format">The common file format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets.html#load-and-inspect-an-instance">Load and inspect an instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets.html#convert-prediction-identifiers">Convert prediction identifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets.html#construct-bilateral-partial-overlap">Construct bilateral partial overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets.html#natural-pairs-and-incomplete-annotations">Natural pairs and incomplete annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets.html#use-your-own-dataset">Use your own dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#choose-a-method">Choose a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#configure-a-method">Configure a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#execution-settings-and-dependencies">Execution settings and dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#custom-methods">Custom methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#method-naming">Method naming</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation and metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation.html#exact-pair-recovery">Exact-pair recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation.html#endpoint-matchability-and-overlap">Endpoint matchability and overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation.html#node-classification">Node classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation.html#directional-ranking">Directional ranking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation.html#returned-report">Returned report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation.html#incomplete-reference-annotations">Incomplete reference annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation.html#campaign-decoder-views">Campaign decoder views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evaluation.html#report-repeated-runs">Report repeated runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics.html#available-analyses">Available analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics.html#incomplete-labels">Incomplete labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../logs.html">Saved runs and resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../logs.html#read-an-existing-attempt">Read an existing attempt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logs.html#status-and-native-scores">Status and native scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logs.html#timing-and-memory-scope">Timing and memory scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logs.html#browser-local-json-inspector">Browser-local JSON inspector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../logs.html#read-a-record-from-python">Read a record from Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../extending.html">Custom algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending.html#the-adapter-contract">The adapter contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending.html#a-minimal-custom-adapter">A minimal custom adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending.html#return-optional-score-data">Return optional score data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending.html#registration-and-reproducibility">Registration and reproducibility</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Python API overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#reference-pages">Reference pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Dataset loading and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#load-graph-pairs">Load graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#bpupga.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#construct-partial-graph-pairs">Construct partial graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#bpupga.construct"><code class="docutils literal notranslate"><span class="pre">construct()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#bpupga.Algorithm"><code class="docutils literal notranslate"><span class="pre">Algorithm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="algorithm.html#bpupga.Algorithm.align"><code class="docutils literal notranslate"><span class="pre">Algorithm.align()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bpupga.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#bpupga.diagnose"><code class="docutils literal notranslate"><span class="pre">diagnose()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="records.html">Data and result records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="records.html#alignmentdataset">AlignmentDataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="records.html#bpupga.AlignmentDataset"><code class="docutils literal notranslate"><span class="pre">AlignmentDataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="records.html#alignmentresult">AlignmentResult</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="records.html#bpupga.AlignmentResult"><code class="docutils literal notranslate"><span class="pre">AlignmentResult</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Saved run records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logging.html#bpupga.RunLog"><code class="docutils literal notranslate"><span class="pre">RunLog</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#bpupga.RunLog.open"><code class="docutils literal notranslate"><span class="pre">RunLog.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#bpupga.RunLog.status"><code class="docutils literal notranslate"><span class="pre">RunLog.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#bpupga.RunLog.native_metrics"><code class="docutils literal notranslate"><span class="pre">RunLog.native_metrics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#bpupga.RunLog.runtime"><code class="docutils literal notranslate"><span class="pre">RunLog.runtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#bpupga.RunLog.errors"><code class="docutils literal notranslate"><span class="pre">RunLog.errors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#bpupga.RunLog.summary"><code class="docutils literal notranslate"><span class="pre">RunLog.summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">Custom adapter registration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extensions.html#bpupga.register_algorithm"><code class="docutils literal notranslate"><span class="pre">register_algorithm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#self-contained-example">Self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#prepared-graph-example">Prepared graph example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#read-an-experiment-record">Read an experiment record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#paper-reproduction">Paper reproduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Troubleshooting and FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#requested-and-realized-overlap-differ-slightly">Requested and realized overlap differ slightly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#why-is-ranking-none">Why is ranking None?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../source.html">Source code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://bipga.github.io/supplementary/">Supplementary Material</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #246c8d" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BiPGA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Evaluation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/reference/evaluation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="evaluation">
+<h1>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="bpupga.evaluate">
+<span class="sig-prename descclassname"><span class="pre">bpupga.</span></span><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">5,</span> <span class="pre">10)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bpupga/_api.html#evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bpupga.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Score native pairs and available same-fit rankings after inference.</p>
+<p>Pair scoring removes exact duplicate pairs and reports endpoint conflicts.
+Node classification additionally reports accuracy, balanced accuracy and
+unmatched-node scores for complete references. No decoder or refit is run.
+Rankings cover reference-matched queries and
+do not establish rejection quality. GRAMPA uses the current soft transform
+and also exposes its raw ranking; sparse candidates are not densified.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<p><code class="docutils literal notranslate"><span class="pre">ks</span></code> specifies positive integer ranking cutoffs. The return value is a
+dictionary containing <code class="docutils literal notranslate"><span class="pre">pair</span></code>, <code class="docutils literal notranslate"><span class="pre">matchability</span></code>, <code class="docutils literal notranslate"><span class="pre">overlap_estimation</span></code>,
+<code class="docutils literal notranslate"><span class="pre">node_classification</span></code>, <code class="docutils literal notranslate"><span class="pre">validity</span></code>, <code class="docutils literal notranslate"><span class="pre">ranking</span></code> and <code class="docutils literal notranslate"><span class="pre">ranking_policy</span></code>.
+Exact duplicate predicted pairs are deduplicated during pair scoring;
+repeated endpoints remain visible in the validity report.</p>
+<p>Ranking is available from same-fit scores, costs, paired embeddings or sparse
+native candidates. An unavailable representation yields <code class="docutils literal notranslate"><span class="pre">ranking=None</span></code> and
+a reason. GRAMPA exposes its soft ranking and the original raw ranking.</p>
+<p>With incomplete reference annotations, matchability, overlap and node
+classification are skipped rather than treating unannotated vertices as
+confirmed private vertices. Invalid cutoffs, indices or nonfinite outputs
+raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
+<p>See <a class="reference internal" href="../evaluation.html"><span class="doc">Evaluation and metrics</span></a> for metric definitions and interpretation.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="algorithm.html" class="btn btn-neutral float-left" title="Algorithm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="diagnostics.html" class="btn btn-neutral float-right" title="Post-inference diagnostics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, BiPGA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

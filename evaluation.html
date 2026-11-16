@@ -1,90 +1,425 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="Interpret native pair scores, endpoint selection, overlap, ranking provenance and report availability."><title>Evaluation and metrics — BPUPGA documentation</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
-<body data-page="evaluation"><a class="skip" href="#main">Skip to content</a>
-<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link" href="quickstart.html">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link" href="algorithms.html">Algorithms</a><a class="nav-link active" href="evaluation.html" aria-current="page">Evaluation</a><a class="nav-link" href="diagnostics.html">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link" href="faq.html">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a><div class="sidebar-label">PAPER</div><a class="nav-link" href="supplementary/">Supplementary Material</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> API v0.1 <span>Research checkout</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
-<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span>Evaluation and metrics</div><div class="top-actions"><span class="release">PYTHON API · v0.1</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="api.html">API reference ↗</a></div></header>
-<div class="content-layout"><main id="main"><article><div class="eyebrow">BPUPGA / DOCUMENTATION</div><h1>Evaluation and metrics</h1><p class="lead">Interpret native pair scores, endpoint selection, overlap, ranking provenance and report availability.</p>
-<p><code>evaluate</code> scores the native result after alignment. It does not
-refit a model or apply a new assignment decoder. Keep the returned native pairs,
-their feasibility checks, and their ranking representation together when reporting
-results.</p>
-<div class="code-window"><div class="code-header"><span>Evaluate the quickstart result</span></div><pre><code>metrics = bp.evaluate(result, data, ks=(1, 5, 10))
-print(metrics[&quot;pair&quot;])
-print(metrics[&quot;validity&quot;])
-print(metrics[&quot;ranking_policy&quot;])</code></pre></div>
-<h2 id="pair-recovery">Exact-pair recovery<a class="permalink" href="#pair-recovery" aria-label="Link to Exact-pair recovery">#</a></h2>
-<p>Let <code>P</code> be the set of distinct native predicted pairs,
-<code>T</code> the reference pair set, and <code>c = |P ∩ T|</code>. The standard
-metrics are:</p>
-<div class="formula">Pair precision = c / |P|<br>
-Pair recall = c / |T|<br>Pair F1 = 2c / (|P| + |T|)</div>
-<p>Zero denominators use zero. Exact duplicate pairs are counted once for
-pair-set scoring. Repeated source or target endpoints remain visible in
-<code>validity</code>; a pair score does not establish one-to-one feasibility.
-A valid empty prediction is distinct from a failed execution.</p>
-<h2 id="matchability">Endpoint matchability and overlap<a class="permalink" href="#matchability" aria-label="Link to Endpoint matchability and overlap">#</a></h2>
-<p>Matched-node precision, recall, and F1 compare the unique predicted endpoint
-set on each graph with the endpoints in the reference. They measure selection of
-participating nodes separately from correct identity pairing.</p>
-<p>Overlap estimates distinguish predicted pair count from distinct source and
-target coverage. For graph orders <code>M</code> and <code>N</code>, predicted
-coverages are <code>|predicted sources| / M</code> and
-<code>|predicted targets| / N</code>. Pair count and endpoint count may differ
-when the native output repeats endpoints.</p>
-<h2 id="node-classification">Node classification<a class="permalink" href="#node-classification" aria-label="Link to Node classification">#</a></h2>
-<p><code>node_classification</code> contains source and target confusion counts,
-node accuracy, balanced accuracy, and unmatched-node precision/recall/F1.
-These use the same endpoint-count function as the campaign evaluator.
-Balanced accuracy is <code>None</code> when either reference class is absent.
-Selecting the correct participating nodes does not establish correct identity
-pairing; inspect pair recovery separately.</p>
-<h2 id="ranking">Directional ranking<a class="permalink" href="#ranking" aria-label="Link to Directional ranking">#</a></h2>
-<p>Hits@k is the fraction of reference-covered queries whose correct counterpart
-appears at rank k or better. MRR is the mean reciprocal rank. Dense scores rank
-against all opposite-side input nodes, with lower local candidate IDs breaking
-exact score ties. Both directions and the arithmetic average of their metric
-values are returned.</p>
-<p>Sparse outputs are ranked within the retrieved candidate lists. An absent true
-counterpart contributes zero to Hits@k and MRR; omitted scores are not fabricated.
-When only paired embeddings are present, ranking uses Euclidean distance and
-records that representation in <code>ranking_policy</code>.</p>
-<p>GRAMPA exposes its current soft-transformed ranking and the corresponding
-<code>raw_ranking</code>. S-GWL's continuous outputs represent recursive block
-scores. Ranking metrics answer a covered-query question; they do not measure
-rejection of unmatched nodes.</p>
-<h2 id="report-fields">Returned report<a class="permalink" href="#report-fields" aria-label="Link to Returned report">#</a></h2>
-<div class="table-scroll"><table><thead><tr><th>Key</th><th>Content</th><th>Availability</th></tr></thead><tbody><tr><td>method / output_variant</td><td>Method identity; output_variant is &#x27;native&#x27;</td><td>Always</td></tr><tr><td>pair</td><td>precision, recall, f1, true_positive, predicted, ground_truth</td><td>Reference-relative pair accounting</td></tr><tr><td>matchability</td><td>source and target precision/recall/F1</td><td>None for a reference flagged incomplete</td></tr><tr><td>overlap_estimation</td><td>Pair-count errors and directional endpoint coverage errors</td><td>None for a reference flagged incomplete</td></tr><tr><td>node_classification</td><td>Source/target TP, FP, FN, TN, accuracy, balanced accuracy, unmatched precision/recall/F1</td><td>None for an incomplete reference; balanced accuracy also requires both classes</td></tr><tr><td>validity</td><td>Index ranges, raw/unique pair counts, repeated pair/endpoints, is_one_to_one</td><td>Always for a validated result</td></tr><tr><td>ranking</td><td>source_to_target, target_to_source, bidirectional</td><td>None when no usable score/candidate/embedding representation exists</td></tr><tr><td>ranking_policy</td><td>Score representation, tie rule, or skipped_reason</td><td>Always</td></tr><tr><td>raw_ranking</td><td>GRAMPA ranking before its soft transform</td><td>GRAMPA with a continuous matrix</td></tr><tr><td>runtime</td><td>native_reported_seconds; optional peak_memory_mb</td><td>Existing result measurements</td></tr><tr><td>reference_note</td><td>Interpretation relative to supplied annotation coverage</td><td>Always</td></tr><tr><td>skipped_metrics</td><td>Reasons matchability, overlap estimates and node classification were skipped</td><td>Reference flagged incomplete</td></tr></tbody></table></div>
-<h2 id="incomplete-reference">Incomplete reference annotations<a class="permalink" href="#incomplete-reference" aria-label="Link to Incomplete reference annotations">#</a></h2>
-<p>Unannotated nodes are not automatically confirmed unmatched nodes. Mark known
-limitations in <code>metadata.json</code> with a nonempty
-<code>groundtruth_limitations</code> value, or set
-<code>ground_truth_complete</code> or <code>groundtruth_complete</code> to
-<code>false</code>. The public API then returns <code>None</code> for matchability,
-overlap estimates and node classification, with explicit reasons. Pair and ranking scores remain
-relative to the known reference.</p>
-<div class="note"><span>i</span><div><p><strong>Annotation scope of campaign records.</strong>
-Existing campaign files may retain classification and coverage quantities
-computed against reference-complement sets. Such quantities are annotation-relative
-when the reference is incomplete; they do not establish that an unannotated node
-is truly unmatched.</p></div></div>
-<h2 id="campaign-decoder-views">Campaign decoder views<a class="permalink" href="#campaign-decoder-views" aria-label="Link to Campaign decoder views">#</a></h2>
-<p>The public <code>evaluate</code> function scores native output only. The
-campaign stores additional decoder views as separate offline analyses of the
-same saved fit; calling <code>align</code> or <code>evaluate</code> does not select
-or apply these extra decoders.</p>
-<div class="table-scroll"><table><thead><tr><th>Saved variant</th><th>Decision rule</th><th>Interpretation</th></tr></thead><tbody><tr><td>native</td><td>Pairs returned by the registered method adapter</td><td>Primary output; endpoint conflicts remain visible</td></tr><tr><td>common_decoder</td><td>Mutual top 1% candidates per row/column (at least one), unmatched_cost=0.05; exact optional assignment with private dummies</td><td>Shared post-fit partial one-to-one rule; no true matching size is supplied</td></tr><tr><td>method_aware_decoder</td><td>Project-defined rules using the method&#x27;s native scores, pairs or recorded iteration signals</td><td>A method-plus-decoder system, not an author&#x27;s native output or a universally best rule</td></tr><tr><td>legacy_common_decoder</td><td>Earlier rectangular heuristic, retained for comparison</td><td>Known private-dummy optimality limitation; not the current Common decoder</td></tr></tbody></table></div>
-<p>The frozen configuration and variant metadata identify the rules used by each
-record. All variants share ranking metrics from the same continuous fit scores
-before hard decoding. A change in pair F1 across decoders is not a new ranking
-result or another model fit; GRAMPA's soft/raw rankings are score views.</p>
 
-<h2 id="reporting-seeds">Report repeated runs<a class="permalink" href="#reporting-seeds" aria-label="Link to Report repeated runs">#</a></h2>
-<p>Compute metrics per run before taking means. Report sample standard deviation
-and successful-run count alongside failure statuses. Do not replace missing scores
-with zero, calculate mean F1 from mean precision/recall, or treat relabelings of a
-single natural graph pair as independent graph samples.</p>
-<p>Reference: <a href="api.html#evaluate">evaluate</a>,
-<a href="api.html#AlignmentResult">AlignmentResult</a>, and
-<a href="logs.html">saved run records</a>.</p>
-</article><nav class="page-navigation" aria-label="Previous and next pages"><a href="algorithms.html"><span>← Previous</span>Algorithms</a><a href="diagnostics.html"><span>Next →</span>Post-inference diagnostics</a></nav><footer><span>BPUPGA Python API · v0.1</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link " href="#pair-recovery">Exact-pair recovery</a><a class="toc-link " href="#matchability">Endpoint matchability and overlap</a><a class="toc-link " href="#node-classification">Node classification</a><a class="toc-link " href="#ranking">Directional ranking</a><a class="toc-link " href="#report-fields">Returned report</a><a class="toc-link " href="#incomplete-reference">Incomplete reference annotations</a><a class="toc-link " href="#campaign-decoder-views">Campaign decoder views</a><a class="toc-link " href="#reporting-seeds">Report repeated runs</a></aside></div></div>
-<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation and metrics &mdash; BiPGA</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/bipga.css?v=f0f54ec4" />
+
+  
+    <link rel="shortcut icon" href="_static/bipga-mark.svg"/>
+    <link rel="canonical" href="https://bipga.github.io/evaluation.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/bipga-tools.js?v=60309b5e"></script>
+      <script src="_static/example-data.js?v=5fb413ac"></script>
+      <script defer="defer" src="_static/bipga.js?v=403c47d0"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Post-inference diagnostics" href="diagnostics.html" />
+    <link rel="prev" title="Algorithms" href="algorithms.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #246c8d" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            BiPGA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to partial graph alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#inputs-and-predictions">Inputs and predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#construction-and-inference">Construction and inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#use-the-research-checkout">Use the research checkout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-the-interface">Verify the interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#working-directories">Working directories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#first-run-a-self-contained-example">First run: a self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-a-built-in-method">Run a built-in method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#choose-a-method-and-dataset">Choose a method and dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#inspect-the-output">Inspect the output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-line interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#list-the-available-inputs">List the available inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#preview-a-selection">Preview a selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#select-several-experiments">Select several experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#execution-and-results">Execution and results</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#the-common-file-format">The common file format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#load-and-inspect-an-instance">Load and inspect an instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#convert-prediction-identifiers">Convert prediction identifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#construct-bilateral-partial-overlap">Construct bilateral partial overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#natural-pairs-and-incomplete-annotations">Natural pairs and incomplete annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#use-your-own-dataset">Use your own dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#choose-a-method">Choose a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#configure-a-method">Configure a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#execution-settings-and-dependencies">Execution settings and dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#custom-methods">Custom methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#method-naming">Method naming</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Evaluation and metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#exact-pair-recovery">Exact-pair recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#endpoint-matchability-and-overlap">Endpoint matchability and overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#node-classification">Node classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#directional-ranking">Directional ranking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#returned-report">Returned report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#incomplete-reference-annotations">Incomplete reference annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#campaign-decoder-views">Campaign decoder views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#report-repeated-runs">Report repeated runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#available-analyses">Available analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#incomplete-labels">Incomplete labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Saved runs and resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#read-an-existing-attempt">Read an existing attempt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#status-and-native-scores">Status and native scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#timing-and-memory-scope">Timing and memory scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#browser-local-json-inspector">Browser-local JSON inspector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#read-a-record-from-python">Read a record from Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Custom algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#the-adapter-contract">The adapter contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#a-minimal-custom-adapter">A minimal custom adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#return-optional-score-data">Return optional score data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#registration-and-reproducibility">Registration and reproducibility</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reference-pages">Reference pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/data.html">Dataset loading and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/data.html#load-graph-pairs">Load graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/data.html#bpupga.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/data.html#construct-partial-graph-pairs">Construct partial graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/data.html#bpupga.construct"><code class="docutils literal notranslate"><span class="pre">construct()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/algorithm.html">Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/algorithm.html#bpupga.Algorithm"><code class="docutils literal notranslate"><span class="pre">Algorithm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/algorithm.html#bpupga.Algorithm.align"><code class="docutils literal notranslate"><span class="pre">Algorithm.align()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/algorithm.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/evaluation.html">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/evaluation.html#bpupga.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/diagnostics.html#bpupga.diagnose"><code class="docutils literal notranslate"><span class="pre">diagnose()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/records.html">Data and result records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/records.html#alignmentdataset">AlignmentDataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/records.html#bpupga.AlignmentDataset"><code class="docutils literal notranslate"><span class="pre">AlignmentDataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/records.html#alignmentresult">AlignmentResult</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/records.html#bpupga.AlignmentResult"><code class="docutils literal notranslate"><span class="pre">AlignmentResult</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/logging.html">Saved run records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/logging.html#bpupga.RunLog"><code class="docutils literal notranslate"><span class="pre">RunLog</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.open"><code class="docutils literal notranslate"><span class="pre">RunLog.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.status"><code class="docutils literal notranslate"><span class="pre">RunLog.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.native_metrics"><code class="docutils literal notranslate"><span class="pre">RunLog.native_metrics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.runtime"><code class="docutils literal notranslate"><span class="pre">RunLog.runtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.errors"><code class="docutils literal notranslate"><span class="pre">RunLog.errors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.summary"><code class="docutils literal notranslate"><span class="pre">RunLog.summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/extensions.html">Custom adapter registration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/extensions.html#bpupga.register_algorithm"><code class="docutils literal notranslate"><span class="pre">register_algorithm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#self-contained-example">Self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#prepared-graph-example">Prepared graph example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#read-an-experiment-record">Read an experiment record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#paper-reproduction">Paper reproduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Troubleshooting and FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#requested-and-realized-overlap-differ-slightly">Requested and realized overlap differ slightly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-ranking-none">Why is ranking None?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="source.html">Source code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://bipga.github.io/supplementary/">Supplementary Material</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #246c8d" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BiPGA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Evaluation and metrics</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/evaluation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="evaluation-and-metrics">
+<span class="legacy-anchor" id="pair-recovery"></span><span class="legacy-anchor" id="matchability"></span><span class="legacy-anchor" id="ranking"></span><span class="legacy-anchor" id="report-fields"></span><span class="legacy-anchor" id="incomplete-reference"></span><span class="legacy-anchor" id="reporting-seeds"></span><h1>Evaluation and metrics<a class="headerlink" href="#evaluation-and-metrics" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">evaluate</span></code> scores the native result after alignment. It does not refit a model or apply a new assignment decoder. Keep the returned native pairs, their feasibility checks, and their ranking representation together when reporting results.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">metrics</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ks</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">metrics</span><span class="p">[</span><span class="s2">"pair"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">metrics</span><span class="p">[</span><span class="s2">"validity"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">metrics</span><span class="p">[</span><span class="s2">"ranking_policy"</span><span class="p">])</span>
+</pre></div>
+</div>
+<section id="exact-pair-recovery">
+<h2>Exact-pair recovery<a class="headerlink" href="#exact-pair-recovery" title="Link to this heading"></a></h2>
+<p>Let <code class="docutils literal notranslate"><span class="pre">P</span></code> be the set of distinct native predicted pairs, <code class="docutils literal notranslate"><span class="pre">T</span></code> the reference pair set, and <code class="docutils literal notranslate"><span class="pre">c</span> <span class="pre">=</span> <span class="pre">|P</span> <span class="pre">∩</span> <span class="pre">T|</span></code>. The standard metrics are:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Pair precision = c / |P|
+Pair recall = c / |T|Pair F1 = 2c / (|P| + |T|)
+</pre></div>
+</div>
+<p>Zero denominators use zero. Exact duplicate pairs are counted once for pair-set scoring. Repeated source or target endpoints remain visible in <code class="docutils literal notranslate"><span class="pre">validity</span></code>; a pair score does not establish one-to-one feasibility. A valid empty prediction is distinct from a failed execution.</p>
+</section>
+<section id="endpoint-matchability-and-overlap">
+<h2>Endpoint matchability and overlap<a class="headerlink" href="#endpoint-matchability-and-overlap" title="Link to this heading"></a></h2>
+<p>Matched-node precision, recall, and F1 compare the unique predicted endpoint set on each graph with the endpoints in the reference. They measure selection of participating nodes separately from correct identity pairing.</p>
+<p>Overlap estimates distinguish predicted pair count from distinct source and target coverage. For graph orders <code class="docutils literal notranslate"><span class="pre">M</span></code> and <code class="docutils literal notranslate"><span class="pre">N</span></code>, predicted coverages are <code class="docutils literal notranslate"><span class="pre">|predicted</span> <span class="pre">sources|</span> <span class="pre">/</span> <span class="pre">M</span></code> and <code class="docutils literal notranslate"><span class="pre">|predicted</span> <span class="pre">targets|</span> <span class="pre">/</span> <span class="pre">N</span></code>. Pair count and endpoint count may differ when the native output repeats endpoints.</p>
+</section>
+<section id="node-classification">
+<h2>Node classification<a class="headerlink" href="#node-classification" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">node_classification</span></code> contains source and target confusion counts, node accuracy, balanced accuracy, and unmatched-node precision/recall/F1. These use the same endpoint-count function as the campaign evaluator. Balanced accuracy is <code class="docutils literal notranslate"><span class="pre">None</span></code> when either reference class is absent. Selecting the correct participating nodes does not establish correct identity pairing; inspect pair recovery separately.</p>
+</section>
+<section id="directional-ranking">
+<h2>Directional ranking<a class="headerlink" href="#directional-ranking" title="Link to this heading"></a></h2>
+<p>Hits&#64;k is the fraction of reference-covered queries whose correct counterpart appears at rank k or better. MRR is the mean reciprocal rank. Dense scores rank against all opposite-side input nodes, with lower local candidate IDs breaking exact score ties. Both directions and the arithmetic average of their metric values are returned.</p>
+<p>Sparse outputs are ranked within the retrieved candidate lists. An absent true counterpart contributes zero to Hits&#64;k and MRR; omitted scores are not fabricated. When only paired embeddings are present, ranking uses Euclidean distance and records that representation in <code class="docutils literal notranslate"><span class="pre">ranking_policy</span></code>.</p>
+<p>GRAMPA exposes its current soft-transformed ranking and the corresponding <code class="docutils literal notranslate"><span class="pre">raw_ranking</span></code>. S-GWL’s continuous outputs represent recursive block scores. Ranking metrics answer a covered-query question; they do not measure rejection of unmatched nodes.</p>
+</section>
+<section id="returned-report">
+<h2>Returned report<a class="headerlink" href="#returned-report" title="Link to this heading"></a></h2>
+<table class="api-table docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Content</p></th>
+<th class="head"><p>Availability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>method / output_variant</p></td>
+<td><p>Method identity; output_variant is ‘native’</p></td>
+<td><p>Always</p></td>
+</tr>
+<tr class="row-odd"><td><p>pair</p></td>
+<td><p>precision, recall, f1, true_positive, predicted, ground_truth</p></td>
+<td><p>Reference-relative pair accounting</p></td>
+</tr>
+<tr class="row-even"><td><p>matchability</p></td>
+<td><p>source and target precision/recall/F1</p></td>
+<td><p>None for a reference flagged incomplete</p></td>
+</tr>
+<tr class="row-odd"><td><p>overlap_estimation</p></td>
+<td><p>Pair-count errors and directional endpoint coverage errors</p></td>
+<td><p>None for a reference flagged incomplete</p></td>
+</tr>
+<tr class="row-even"><td><p>node_classification</p></td>
+<td><p>Source/target TP, FP, FN, TN, accuracy, balanced accuracy, unmatched precision/recall/F1</p></td>
+<td><p>None for an incomplete reference; balanced accuracy also requires both classes</p></td>
+</tr>
+<tr class="row-odd"><td><p>validity</p></td>
+<td><p>Index ranges, raw/unique pair counts, repeated pair/endpoints, is_one_to_one</p></td>
+<td><p>Always for a validated result</p></td>
+</tr>
+<tr class="row-even"><td><p>ranking</p></td>
+<td><p>source_to_target, target_to_source, bidirectional</p></td>
+<td><p>None when no usable score/candidate/embedding representation exists</p></td>
+</tr>
+<tr class="row-odd"><td><p>ranking_policy</p></td>
+<td><p>Score representation, tie rule, or skipped_reason</p></td>
+<td><p>Always</p></td>
+</tr>
+<tr class="row-even"><td><p>raw_ranking</p></td>
+<td><p>GRAMPA ranking before its soft transform</p></td>
+<td><p>GRAMPA with a continuous matrix</p></td>
+</tr>
+<tr class="row-odd"><td><p>runtime</p></td>
+<td><p>native_reported_seconds; optional peak_memory_mb</p></td>
+<td><p>Existing result measurements</p></td>
+</tr>
+<tr class="row-even"><td><p>reference_note</p></td>
+<td><p>Interpretation relative to supplied annotation coverage</p></td>
+<td><p>Always</p></td>
+</tr>
+<tr class="row-odd"><td><p>skipped_metrics</p></td>
+<td><p>Reasons matchability, overlap estimates and node classification were skipped</p></td>
+<td><p>Reference flagged incomplete</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="incomplete-reference-annotations">
+<h2>Incomplete reference annotations<a class="headerlink" href="#incomplete-reference-annotations" title="Link to this heading"></a></h2>
+<p>Unannotated nodes are not automatically confirmed unmatched nodes. Mark known limitations in <code class="docutils literal notranslate"><span class="pre">metadata.json</span></code> with a nonempty <code class="docutils literal notranslate"><span class="pre">groundtruth_limitations</span></code> value, or set <code class="docutils literal notranslate"><span class="pre">ground_truth_complete</span></code> or <code class="docutils literal notranslate"><span class="pre">groundtruth_complete</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>. The public API then returns <code class="docutils literal notranslate"><span class="pre">None</span></code> for matchability, overlap estimates and node classification, with explicit reasons. Pair and ranking scores remain relative to the known reference.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Annotation scope of campaign records.</strong> Existing campaign files may retain classification and coverage quantities computed against reference-complement sets. Such quantities are annotation-relative when the reference is incomplete; they do not establish that an unannotated node is truly unmatched.</p>
+</div>
+</section>
+<section id="campaign-decoder-views">
+<h2>Campaign decoder views<a class="headerlink" href="#campaign-decoder-views" title="Link to this heading"></a></h2>
+<p>The public <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> function scores native output only. The campaign stores additional decoder views as separate offline analyses of the same saved fit; calling <code class="docutils literal notranslate"><span class="pre">align</span></code> or <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> does not select or apply these extra decoders.</p>
+<table class="api-table docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Saved variant</p></th>
+<th class="head"><p>Decision rule</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>native</p></td>
+<td><p>Pairs returned by the registered method adapter</p></td>
+<td><p>Primary output; endpoint conflicts remain visible</p></td>
+</tr>
+<tr class="row-odd"><td><p>common_decoder</p></td>
+<td><p>Mutual top 1% candidates per row/column (at least one), unmatched_cost=0.05; exact optional assignment with private dummies</p></td>
+<td><p>Shared post-fit partial one-to-one rule; no true matching size is supplied</p></td>
+</tr>
+<tr class="row-even"><td><p>method_aware_decoder</p></td>
+<td><p>Project-defined rules using the method’s native scores, pairs or recorded iteration signals</p></td>
+<td><p>A method-plus-decoder system, not an author’s native output or a universally best rule</p></td>
+</tr>
+<tr class="row-odd"><td><p>legacy_common_decoder</p></td>
+<td><p>Earlier rectangular heuristic, retained for comparison</p></td>
+<td><p>Known private-dummy optimality limitation; not the current Common decoder</p></td>
+</tr>
+</tbody>
+</table>
+<p>The frozen configuration and variant metadata identify the rules used by each record. All variants share ranking metrics from the same continuous fit scores before hard decoding. A change in pair F1 across decoders is not a new ranking result or another model fit; GRAMPA’s soft/raw rankings are score views.</p>
+</section>
+<section id="report-repeated-runs">
+<h2>Report repeated runs<a class="headerlink" href="#report-repeated-runs" title="Link to this heading"></a></h2>
+<p>Compute metrics per run before taking means. Report sample standard deviation and successful-run count alongside failure statuses. Do not replace missing scores with zero, calculate mean F1 from mean precision/recall, or treat relabelings of a single natural graph pair as independent graph samples.</p>
+<p>Reference: <a class="reference external" href="api.html#evaluate">evaluate</a>, <a class="reference external" href="api.html#AlignmentResult">AlignmentResult</a>, and <a class="reference external" href="logs.html">saved run records</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="algorithms.html" class="btn btn-neutral float-left" title="Algorithms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="diagnostics.html" class="btn btn-neutral float-right" title="Post-inference diagnostics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, BiPGA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

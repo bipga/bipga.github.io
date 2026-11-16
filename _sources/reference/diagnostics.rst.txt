@@ -1,0 +1,18 @@
+Post-inference diagnostics
+==========================
+
+.. autofunction:: bpupga.diagnose
+
+The inputs are the completed alignment result and its reference-bearing
+dataset. ``ks`` controls ranking cutoffs, ``example_limit`` bounds returned
+examples, and ``max_dense_entries`` limits dense diagnostic materialization.
+The return value records available analyses and explicit reasons for skipped
+analyses.
+
+Diagnostics reuses the sibling evaluation implementation. Missing source code
+raises ``FileNotFoundError``; input validation errors are reported before
+analysis. No model fit is started by this function.
+
+See :doc:`../diagnostics` for score requirements and the interpretation of
+reference-assisted diagnostics.
+

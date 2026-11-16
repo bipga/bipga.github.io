@@ -1,0 +1,16 @@
+Custom adapter registration
+===========================
+
+.. autofunction:: bpupga.register_algorithm
+
+The factory accepts ``parameters``, ``seed``, ``device`` and ``dataset_family``
+as keyword arguments and returns an adapter with ``fit(graph1, graph2)``.
+Its output must be :class:`bpupga.AlignmentResult`.
+
+Names cannot replace a built-in or an existing registration. Duplicate names
+or incompatible factories raise ``ValueError`` or ``TypeError``. Registration
+is local to the Python process.
+
+See :doc:`../extending` for a complete graph-only adapter and optional ranking
+representations.
+

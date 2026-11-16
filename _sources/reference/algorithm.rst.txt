@@ -1,0 +1,24 @@
+Algorithm
+=========
+
+.. autoclass:: bpupga.Algorithm
+   :members: align
+
+Parameters
+----------
+
+``method`` selects a built-in method or a registered custom adapter.
+``parameters`` supplies method-specific controls. ``seed`` and ``device``
+configure execution; ``dataset_family`` selects an existing family-specific
+numerical policy where applicable. The effective configuration is available
+as ``algorithm.config`` after alignment.
+
+``align`` requires nonempty, simple, undirected NetworkX graphs with
+consecutive local IDs and no self loops. It copies topology, discards graph
+attributes, and returns :class:`bpupga.AlignmentResult`.
+Invalid inputs or nonfinite outputs raise ``ValueError``. Missing dependencies
+or unsupported execution settings raise the underlying method error.
+
+See :doc:`../algorithms` for the twelve registered identifiers, parameters and
+device behavior. **SparkAlign** uses the existing identifier ``oiteralign``.
+

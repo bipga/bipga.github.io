@@ -1,0 +1,70 @@
+Quick start
+===========
+
+First run: a self-contained example
+-----------------------------------
+
+After :doc:`installation`, run this example to check graph loading, custom
+adapter registration and evaluation. It creates its own temporary inputs and
+does not invoke a built-in model. Its degree matcher demonstrates the API
+contract rather than a benchmark result.
+
+`Download toy_example.py <downloads/toy_example.py>`_
+
+.. code-block:: bash
+
+   python toy_example.py
+
+.. raw:: html
+
+   <details class="example-source"><summary>View the complete toy example</summary>
+
+.. literalinclude:: downloads/toy_example.py
+   :language: python
+
+.. raw:: html
+
+   </details>
+
+Run a built-in method
+---------------------
+
+With the complete checkout and its prepared data, the same interface runs a
+registered alignment method:
+
+.. literalinclude:: downloads/quickstart.py
+   :language: python
+
+The algorithm receives ``data.graph1`` and ``data.graph2``. Evaluation receives
+the reference-bearing dataset only after alignment returns.
+
+Choose a method and dataset
+---------------------------
+
+Select a prepared input to generate a complete example. Adapter defaults are
+used unless the example specifies a parameter; paper reproduction uses the
+recorded artifact configurations.
+
+.. raw:: html
+
+   <div class="example-picker" aria-label="Example configuration">
+     <div><label for="method-select">Method</label><select id="method-select"></select></div>
+     <div><label for="dataset-select">Dataset</label><select id="dataset-select"></select></div>
+   </div>
+   <div class="highlight-python notranslate"><div class="highlight"><pre id="quickstart-code" aria-live="polite"></pre></div></div>
+   <p><button class="bipga-button" id="download-example" type="button">Download selected example</button></p>
+
+The `examples ZIP <downloads/examples.zip>`_ contains all 48 method/dataset
+combinations and the self-contained example.
+
+Inspect the output
+------------------
+
+``metrics["pair"]`` reports native pair precision, recall and F1.
+``metrics["validity"]`` reports correspondence feasibility.
+``metrics["ranking_policy"]`` explains which same-fit representation supplies
+the rankings, or why ranking metrics are unavailable.
+
+For the command-line workflow, continue with :doc:`cli`. For input formats and
+evaluation definitions, see :doc:`datasets` and :doc:`evaluation`.
+

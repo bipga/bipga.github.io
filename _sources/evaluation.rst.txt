@@ -1,0 +1,134 @@
+Evaluation and metrics
+======================
+
+``evaluate`` scores the native result after alignment. It does not refit a model or apply a new assignment decoder. Keep the returned native pairs, their feasibility checks, and their ranking representation together when reporting results.
+
+.. code-block:: python
+
+   metrics = bp.evaluate(result, data, ks=(1, 5, 10))
+   print(metrics["pair"])
+   print(metrics["validity"])
+   print(metrics["ranking_policy"])
+
+Exact-pair recovery
+-------------------
+
+Let ``P`` be the set of distinct native predicted pairs, ``T`` the reference pair set, and ``c = |P ∩ T|``. The standard metrics are:
+
+.. code-block:: text
+
+   Pair precision = c / |P|
+   Pair recall = c / |T|Pair F1 = 2c / (|P| + |T|)
+
+Zero denominators use zero. Exact duplicate pairs are counted once for pair-set scoring. Repeated source or target endpoints remain visible in ``validity``; a pair score does not establish one-to-one feasibility. A valid empty prediction is distinct from a failed execution.
+
+Endpoint matchability and overlap
+---------------------------------
+
+Matched-node precision, recall, and F1 compare the unique predicted endpoint set on each graph with the endpoints in the reference. They measure selection of participating nodes separately from correct identity pairing.
+
+Overlap estimates distinguish predicted pair count from distinct source and target coverage. For graph orders ``M`` and ``N``, predicted coverages are ``|predicted sources| / M`` and ``|predicted targets| / N``. Pair count and endpoint count may differ when the native output repeats endpoints.
+
+Node classification
+-------------------
+
+``node_classification`` contains source and target confusion counts, node accuracy, balanced accuracy, and unmatched-node precision/recall/F1. These use the same endpoint-count function as the campaign evaluator. Balanced accuracy is ``None`` when either reference class is absent. Selecting the correct participating nodes does not establish correct identity pairing; inspect pair recovery separately.
+
+Directional ranking
+-------------------
+
+Hits@k is the fraction of reference-covered queries whose correct counterpart appears at rank k or better. MRR is the mean reciprocal rank. Dense scores rank against all opposite-side input nodes, with lower local candidate IDs breaking exact score ties. Both directions and the arithmetic average of their metric values are returned.
+
+Sparse outputs are ranked within the retrieved candidate lists. An absent true counterpart contributes zero to Hits@k and MRR; omitted scores are not fabricated. When only paired embeddings are present, ranking uses Euclidean distance and records that representation in ``ranking_policy``.
+
+GRAMPA exposes its current soft-transformed ranking and the corresponding ``raw_ranking``. S-GWL's continuous outputs represent recursive block scores. Ranking metrics answer a covered-query question; they do not measure rejection of unmatched nodes.
+
+Returned report
+---------------
+
+.. list-table::
+   :header-rows: 1
+   :class: api-table
+
+   * - Key
+     - Content
+     - Availability
+   * - method / output_variant
+     - Method identity; output_variant is 'native'
+     - Always
+   * - pair
+     - precision, recall, f1, true_positive, predicted, ground_truth
+     - Reference-relative pair accounting
+   * - matchability
+     - source and target precision/recall/F1
+     - None for a reference flagged incomplete
+   * - overlap_estimation
+     - Pair-count errors and directional endpoint coverage errors
+     - None for a reference flagged incomplete
+   * - node_classification
+     - Source/target TP, FP, FN, TN, accuracy, balanced accuracy, unmatched precision/recall/F1
+     - None for an incomplete reference; balanced accuracy also requires both classes
+   * - validity
+     - Index ranges, raw/unique pair counts, repeated pair/endpoints, is_one_to_one
+     - Always for a validated result
+   * - ranking
+     - source_to_target, target_to_source, bidirectional
+     - None when no usable score/candidate/embedding representation exists
+   * - ranking_policy
+     - Score representation, tie rule, or skipped_reason
+     - Always
+   * - raw_ranking
+     - GRAMPA ranking before its soft transform
+     - GRAMPA with a continuous matrix
+   * - runtime
+     - native_reported_seconds; optional peak_memory_mb
+     - Existing result measurements
+   * - reference_note
+     - Interpretation relative to supplied annotation coverage
+     - Always
+   * - skipped_metrics
+     - Reasons matchability, overlap estimates and node classification were skipped
+     - Reference flagged incomplete
+
+Incomplete reference annotations
+--------------------------------
+
+Unannotated nodes are not automatically confirmed unmatched nodes. Mark known limitations in ``metadata.json`` with a nonempty ``groundtruth_limitations`` value, or set ``ground_truth_complete`` or ``groundtruth_complete`` to ``false``. The public API then returns ``None`` for matchability, overlap estimates and node classification, with explicit reasons. Pair and ranking scores remain relative to the known reference.
+
+.. note::
+
+   **Annotation scope of campaign records.** Existing campaign files may retain classification and coverage quantities computed against reference-complement sets. Such quantities are annotation-relative when the reference is incomplete; they do not establish that an unannotated node is truly unmatched.
+
+Campaign decoder views
+----------------------
+
+The public ``evaluate`` function scores native output only. The campaign stores additional decoder views as separate offline analyses of the same saved fit; calling ``align`` or ``evaluate`` does not select or apply these extra decoders.
+
+.. list-table::
+   :header-rows: 1
+   :class: api-table
+
+   * - Saved variant
+     - Decision rule
+     - Interpretation
+   * - native
+     - Pairs returned by the registered method adapter
+     - Primary output; endpoint conflicts remain visible
+   * - common_decoder
+     - Mutual top 1% candidates per row/column (at least one), unmatched_cost=0.05; exact optional assignment with private dummies
+     - Shared post-fit partial one-to-one rule; no true matching size is supplied
+   * - method_aware_decoder
+     - Project-defined rules using the method's native scores, pairs or recorded iteration signals
+     - A method-plus-decoder system, not an author's native output or a universally best rule
+   * - legacy_common_decoder
+     - Earlier rectangular heuristic, retained for comparison
+     - Known private-dummy optimality limitation; not the current Common decoder
+
+The frozen configuration and variant metadata identify the rules used by each record. All variants share ranking metrics from the same continuous fit scores before hard decoding. A change in pair F1 across decoders is not a new ranking result or another model fit; GRAMPA's soft/raw rankings are score views.
+
+Report repeated runs
+--------------------
+
+Compute metrics per run before taking means. Report sample standard deviation and successful-run count alongside failure statuses. Do not replace missing scores with zero, calculate mean F1 from mean precision/recall, or treat relabelings of a single natural graph pair as independent graph samples.
+
+Reference: `evaluate <api.html#evaluate>`_, `AlignmentResult <api.html#AlignmentResult>`_, and `saved run records <logs.html>`_.

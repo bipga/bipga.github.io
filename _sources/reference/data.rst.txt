@@ -1,0 +1,33 @@
+Dataset loading and construction
+================================
+
+Load graph pairs
+----------------
+
+.. autoclass:: bpupga.Dataset
+   :members: load
+
+``root`` is the directory containing ``G1.edgelist``, ``G2.edgelist`` and
+``Alignment.json``. Optional ``G1.nodes`` and ``G2.nodes`` preserve isolates;
+``metadata.json`` describes provenance and reference limitations.
+The loader returns :class:`bpupga.AlignmentDataset` with local IDs and inverse
+maps to the original integer identifiers.
+
+Missing required files raise ``FileNotFoundError``. Invalid edge or alignment
+data raise ``ValueError``. See :doc:`../datasets` for the file schema and examples.
+
+Construct partial graph pairs
+-----------------------------
+
+.. autofunction:: bpupga.construct
+
+``rho_source`` and ``rho_target`` request the fraction of each output graph
+participating in the shared reference. ``construction_seed`` controls the
+matched-identity partition. ``output_dir`` must be a new destination.
+
+The constructor returns the loaded output dataset, records integer rounding
+and excludes pre-existing unmatched vertices from the controlled construction.
+Invalid ratios raise ``ValueError``; an existing destination raises
+``FileExistsError``. Reference links used for construction are not passed to
+subsequent unsupervised alignment.
+

@@ -1,0 +1,75 @@
+Post-inference diagnostics
+==========================
+
+Use ``diagnose`` when you need to understand the returned alignment, its available scores, and the effect of post-inference oracle comparisons. It returns an in-memory report and performs no refit or file write.
+
+.. code-block:: python
+
+   report = bp.diagnose(
+       result,
+       data,
+       ks=(1, 5, 10),
+       example_limit=10,
+       max_dense_entries=25_000_000,
+   )
+   print(report["native_output"])
+   print(report["score_space"])
+
+Available analyses
+------------------
+
+.. list-table::
+   :header-rows: 1
+   :class: api-table
+
+   * - Analysis
+     - Question answered
+     - Required information
+   * - Native error decomposition
+     - Are pairs correct, incorrect within the overlap, or incident to reference-private nodes?
+     - Native pairs and complete matchability labels
+   * - Directional correspondence
+     - Where does the true counterpart rank, and which shared/private candidates compete with it?
+     - A usable score representation and reference
+   * - Matchability signals
+     - How informative are maximum scores and top-two gaps about reference matchability?
+     - Score data; both label classes for AUROC/AP
+   * - Decoder loss
+     - Which highly ranked true pairs are absent from the final native output?
+     - Native pairs and score data
+   * - Oracle decoding ladder
+     - How do assignments change after revealing source, target, or bilateral reference masks?
+     - Complete reference masks and usable score data
+
+Oracle comparisons are analysis-only
+------------------------------------
+
+The report labels interventions that use reference endpoint masks or thresholds selected from test labels. These are post-hoc comparisons; they do not become native predictions or a deployable calibration rule.
+
+The existing masked comparisons use rectangular Hungarian assignment on the retained score matrix. They are not a common fixed-cardinality intervention, and more endpoint information does not guarantee monotonic Pair F1. The separate true-cardinality oracle is disabled by this public wrapper.
+
+Missing data and matrix limits
+------------------------------
+
+With no usable score matrix or proxy representation, native accounting is still available while ``score_space.available`` is false with a skip reason. The ``max_dense_entries`` limit guards dense diagnostic work; it does not alter or reduce a baseline's alignment input.
+
+The legacy score-analysis helper can use supplied similarity scores, negative costs, or a distance representation reconstructed from paired embeddings. Diagnostics do not densify sparse candidate lists into invented complete scores.
+
+Incomplete labels
+-----------------
+
+For a reference flagged incomplete, the facade returns reference pair accounting and output validity. It explicitly skips private-node decomposition, matchability signals, and reference-mask oracle decoding. See `how to mark incomplete annotations <evaluation.html#incomplete-reference>`_.
+
+.. code-block:: python
+
+   # For incomplete references, inspect the reasons instead of assuming
+   # every node outside Alignment.json is truly unmatched.
+   if "skipped_diagnostics" in report:
+       print(report["skipped_diagnostics"])
+
+Source-checkout dependency
+--------------------------
+
+This wrapper reuses ``BPUPGA/baseline261023/evaluation/diagnostics.py`` from the sibling research tree. Retain that source when moving the project. If it is absent and full score diagnostics are requested, a ``FileNotFoundError`` identifies the missing file. The library does not silently substitute another diagnostic implementation.
+
+Reference: `diagnose <api.html#diagnose>`_, `AlignmentDataset <api.html#AlignmentDataset>`_, and `AlignmentResult <api.html#AlignmentResult>`_.

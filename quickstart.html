@@ -1,78 +1,396 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="A complete first example, followed by a configurable example for prepared benchmark data."><title>Quick start — BPUPGA documentation</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
-<body data-page="quickstart"><a class="skip" href="#main">Skip to content</a>
-<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link active" href="quickstart.html" aria-current="page">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link" href="algorithms.html">Algorithms</a><a class="nav-link" href="evaluation.html">Evaluation</a><a class="nav-link" href="diagnostics.html">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link" href="faq.html">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a><div class="sidebar-label">PAPER</div><a class="nav-link" href="supplementary/">Supplementary Material</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> API v0.1 <span>Research checkout</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
-<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span>Quick start</div><div class="top-actions"><span class="release">PYTHON API · v0.1</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="api.html">API reference ↗</a></div></header>
-<div class="content-layout"><main id="main"><article><div class="eyebrow">BPUPGA / DOCUMENTATION</div><h1>Quick start</h1><p class="lead">A complete first example, followed by a configurable example for prepared benchmark data.</p><h2 id="toy-example">1. Run a self-contained toy example<a class="permalink" href="#toy-example" aria-label="Link to 1. Run a self-contained toy example">#</a></h2><p>The example creates a tiny graph pair in a temporary directory, registers a degree-based adapter, and calls the same load → align → evaluate workflow. The adapter demonstrates the interface and makes no research performance claim.</p><p><a class="download-link" href="toy_example.py" download>↓ Download toy_example.py</a> <a class="download-link" href="examples.zip" download>↓ All examples</a></p><div class="code-window"><div class="code-header"><span>toy_example.py</span></div><pre><code>&quot;&quot;&quot;Run a small local API example without invoking a built-in model.
-
-From the repository root, set PYTHONPATH=baseline_exdit_261029/api.
-This degree-based adapter illustrates the contract; it is not a baseline claim.
-&quot;&quot;&quot;
-import json
-import tempfile
-from pathlib import Path
-
-import bpupga as bp
 
 
-class DegreeAdapter:
-    def fit(self, graph1, graph2):
-        source = sorted(graph1, key=lambda u: (-graph1.degree(u), u))
-        target = sorted(graph2, key=lambda v: (-graph2.degree(v), v))
-        return bp.AlignmentResult(
-            method=&quot;degree_example&quot;,
-            predicted_pairs=list(zip(source, target)),
-            runtime_sec=0.0,
-        )
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick start &mdash; BiPGA</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/bipga.css?v=f0f54ec4" />
+
+  
+    <link rel="shortcut icon" href="_static/bipga-mark.svg"/>
+    <link rel="canonical" href="https://bipga.github.io/quickstart.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/bipga-tools.js?v=60309b5e"></script>
+      <script src="_static/example-data.js?v=5fb413ac"></script>
+      <script defer="defer" src="_static/bipga.js?v=403c47d0"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command-line interface" href="cli.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #246c8d" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            BiPGA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to partial graph alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#inputs-and-predictions">Inputs and predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#construction-and-inference">Construction and inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#use-the-research-checkout">Use the research checkout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-the-interface">Verify the interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#working-directories">Working directories</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#first-run-a-self-contained-example">First run: a self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-a-built-in-method">Run a built-in method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#choose-a-method-and-dataset">Choose a method and dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inspect-the-output">Inspect the output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-line interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#list-the-available-inputs">List the available inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#preview-a-selection">Preview a selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#select-several-experiments">Select several experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#execution-and-results">Execution and results</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#the-common-file-format">The common file format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#load-and-inspect-an-instance">Load and inspect an instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#convert-prediction-identifiers">Convert prediction identifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#construct-bilateral-partial-overlap">Construct bilateral partial overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#natural-pairs-and-incomplete-annotations">Natural pairs and incomplete annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#use-your-own-dataset">Use your own dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#choose-a-method">Choose a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#configure-a-method">Configure a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#execution-settings-and-dependencies">Execution settings and dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#custom-methods">Custom methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms.html#method-naming">Method naming</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation and metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#exact-pair-recovery">Exact-pair recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#endpoint-matchability-and-overlap">Endpoint matchability and overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#node-classification">Node classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#directional-ranking">Directional ranking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#returned-report">Returned report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#incomplete-reference-annotations">Incomplete reference annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#campaign-decoder-views">Campaign decoder views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html#report-repeated-runs">Report repeated runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#available-analyses">Available analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#incomplete-labels">Incomplete labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Saved runs and resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#read-an-existing-attempt">Read an existing attempt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#status-and-native-scores">Status and native scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#timing-and-memory-scope">Timing and memory scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#browser-local-json-inspector">Browser-local JSON inspector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#read-a-record-from-python">Read a record from Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Custom algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#the-adapter-contract">The adapter contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#a-minimal-custom-adapter">A minimal custom adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#return-optional-score-data">Return optional score data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#registration-and-reproducibility">Registration and reproducibility</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reference-pages">Reference pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/data.html">Dataset loading and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/data.html#load-graph-pairs">Load graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/data.html#bpupga.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/data.html#construct-partial-graph-pairs">Construct partial graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/data.html#bpupga.construct"><code class="docutils literal notranslate"><span class="pre">construct()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/algorithm.html">Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/algorithm.html#bpupga.Algorithm"><code class="docutils literal notranslate"><span class="pre">Algorithm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/algorithm.html#bpupga.Algorithm.align"><code class="docutils literal notranslate"><span class="pre">Algorithm.align()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/algorithm.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/evaluation.html">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/evaluation.html#bpupga.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/diagnostics.html#bpupga.diagnose"><code class="docutils literal notranslate"><span class="pre">diagnose()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/records.html">Data and result records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/records.html#alignmentdataset">AlignmentDataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/records.html#bpupga.AlignmentDataset"><code class="docutils literal notranslate"><span class="pre">AlignmentDataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/records.html#alignmentresult">AlignmentResult</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/records.html#bpupga.AlignmentResult"><code class="docutils literal notranslate"><span class="pre">AlignmentResult</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/logging.html">Saved run records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/logging.html#bpupga.RunLog"><code class="docutils literal notranslate"><span class="pre">RunLog</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.open"><code class="docutils literal notranslate"><span class="pre">RunLog.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.status"><code class="docutils literal notranslate"><span class="pre">RunLog.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.native_metrics"><code class="docutils literal notranslate"><span class="pre">RunLog.native_metrics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.runtime"><code class="docutils literal notranslate"><span class="pre">RunLog.runtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.errors"><code class="docutils literal notranslate"><span class="pre">RunLog.errors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/logging.html#bpupga.RunLog.summary"><code class="docutils literal notranslate"><span class="pre">RunLog.summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/extensions.html">Custom adapter registration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/extensions.html#bpupga.register_algorithm"><code class="docutils literal notranslate"><span class="pre">register_algorithm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#self-contained-example">Self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#prepared-graph-example">Prepared graph example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#read-an-experiment-record">Read an experiment record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#paper-reproduction">Paper reproduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Troubleshooting and FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#requested-and-realized-overlap-differ-slightly">Requested and realized overlap differ slightly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-ranking-none">Why is ranking None?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="source.html">Source code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://bipga.github.io/supplementary/">Supplementary Material</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #246c8d" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BiPGA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick start</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-start">
+<span class="legacy-anchor" id="toy-example"></span><span class="legacy-anchor" id="prepared-example"></span><span class="legacy-anchor" id="read-result"></span><span class="legacy-anchor" id="next-steps"></span><h1>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h1>
+<section id="first-run-a-self-contained-example">
+<h2>First run: a self-contained example<a class="headerlink" href="#first-run-a-self-contained-example" title="Link to this heading"></a></h2>
+<p>After <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a>, run this example to check graph loading, custom
+adapter registration and evaluation. It creates its own temporary inputs and
+does not invoke a built-in model. Its degree matcher demonstrates the API
+contract rather than a benchmark result.</p>
+<p><a class="reference external" href="downloads/toy_example.py">Download toy_example.py</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toy_example.py
+</pre></div>
+</div>
+<details class="example-source"><summary>View the complete toy example</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Run a small local API example without invoking a built-in model.</span>
+
+<span class="sd">From the repository root, set PYTHONPATH=baseline_exdit_261029/api.</span>
+<span class="sd">This degree-based adapter illustrates the contract; it is not a baseline claim.</span>
+<span class="sd">"""</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">bpupga</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bp</span>
 
 
-def factory(*, parameters, seed, device, dataset_family):
-    return DegreeAdapter()
+<span class="k">class</span><span class="w"> </span><span class="nc">DegreeAdapter</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph1</span><span class="p">,</span> <span class="n">graph2</span><span class="p">):</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">graph1</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">graph1</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">u</span><span class="p">))</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">graph2</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">graph2</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">v</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">bp</span><span class="o">.</span><span class="n">AlignmentResult</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">"degree_example"</span><span class="p">,</span>
+            <span class="n">predicted_pairs</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)),</span>
+            <span class="n">runtime_sec</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="p">)</span>
 
 
-def main():
-    bp.register_algorithm(&quot;degree_example&quot;, factory)
-    with tempfile.TemporaryDirectory(prefix=&quot;bpupga-demo-&quot;) as directory:
-        root = Path(directory)
-        (root / &quot;G1.edgelist&quot;).write_text(&quot;10 11\n11 12\n&quot;)
-        (root / &quot;G2.edgelist&quot;).write_text(&quot;20 21\n21 22\n&quot;)
-        (root / &quot;G1.nodes&quot;).write_text(&quot;10\n11\n12\n13\n&quot;)
-        (root / &quot;G2.nodes&quot;).write_text(&quot;20\n21\n22\n23\n&quot;)
-        (root / &quot;Alignment.json&quot;).write_text(
-            json.dumps({&quot;10&quot;: 20, &quot;11&quot;: 21, &quot;12&quot;: 22}))
-        (root / &quot;metadata.json&quot;).write_text(json.dumps({
-            &quot;purpose&quot;: &quot;API toy example&quot;,
-            &quot;ground_truth_complete&quot;: True,
-        }))
-        data = bp.Dataset.load(root)
-        method = bp.Algorithm(&quot;degree_example&quot;, seed=2026)
-        result = method.align(data.graph1, data.graph2)
-        report = bp.evaluate(result, data)
-        print(&quot;Pair metrics:&quot;, report[&quot;pair&quot;])
-        print(&quot;Validity:&quot;, report[&quot;validity&quot;])
-        print(&quot;Original IDs:&quot;, data.pairs_to_original(result.predicted_pairs))
-        print(&quot;Ranking availability:&quot;, report[&quot;ranking_policy&quot;])
+<span class="k">def</span><span class="w"> </span><span class="nf">factory</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dataset_family</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">DegreeAdapter</span><span class="p">()</span>
 
 
-if __name__ == &quot;__main__&quot;:
-    main()</code></pre></div><h2 id="prepared-example">2. Align a prepared benchmark instance<a class="permalink" href="#prepared-example" aria-label="Link to 2. Align a prepared benchmark instance">#</a></h2><p>Run from the repository root with the import setup in <a href="installation.html">Installation</a>. Select a method and prepared input to update the code below. Available dependencies and supported devices follow the selected implementation; the example defaults to CPU.</p>
-<div class="example-controls"><label>Method <select id="method-select"><option value="grampa">GRAMPA</option><option value="regal">REGAL</option><option value="fugal">FUGAL</option><option value="cena">CENA</option><option value="s_gwl">S-GWL</option><option value="immnc">iMMNC</option><option value="oiteralign">OIterAlign</option><option value="alpine">ALPINE</option><option value="gradalign_plus">GradAlign+</option><option value="slotalign">SLOTAlign</option><option value="ulot">ULOT</option><option value="opgm_unsupervised">OPGM-U</option></select></label><label>Prepared instance <select id="dataset-select"><option value="fbtw">FbTw · 0.6 overlap</option><option value="grqc">GrQc · 0.6 overlap</option><option value="dblp">DBLP · 0.6 overlap</option><option value="Arxiv1-Arxiv2">Arxiv1–Arxiv2 · 0.6 overlap</option></select></label></div>
-<div class="code-window"><div class="code-header">quickstart.py</div><pre><code id="quickstart-code">import bpupga as bp
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">bp</span><span class="o">.</span><span class="n">register_algorithm</span><span class="p">(</span><span class="s2">"degree_example"</span><span class="p">,</span> <span class="n">factory</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">"bpupga-demo-"</span><span class="p">)</span> <span class="k">as</span> <span class="n">directory</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"G1.edgelist"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"10 11</span><span class="se">\n</span><span class="s2">11 12</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"G2.edgelist"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"20 21</span><span class="se">\n</span><span class="s2">21 22</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"G1.nodes"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"10</span><span class="se">\n</span><span class="s2">11</span><span class="se">\n</span><span class="s2">12</span><span class="se">\n</span><span class="s2">13</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"G2.nodes"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"20</span><span class="se">\n</span><span class="s2">21</span><span class="se">\n</span><span class="s2">22</span><span class="se">\n</span><span class="s2">23</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"Alignment.json"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">"10"</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">"11"</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="s2">"12"</span><span class="p">:</span> <span class="mi">22</span><span class="p">}))</span>
+        <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"metadata.json"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s2">"purpose"</span><span class="p">:</span> <span class="s2">"API toy example"</span><span class="p">,</span>
+            <span class="s2">"ground_truth_complete"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span><span class="s2">"degree_example"</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2026</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">graph1</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">graph2</span><span class="p">)</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Pair metrics:"</span><span class="p">,</span> <span class="n">report</span><span class="p">[</span><span class="s2">"pair"</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Validity:"</span><span class="p">,</span> <span class="n">report</span><span class="p">[</span><span class="s2">"validity"</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Original IDs:"</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">pairs_to_original</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">predicted_pairs</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Ranking availability:"</span><span class="p">,</span> <span class="n">report</span><span class="p">[</span><span class="s2">"ranking_policy"</span><span class="p">])</span>
 
-data = bp.Dataset.load(
-    &quot;baseline_exdit_261029/date_261023/fbtw/bpupga/&quot;
-    &quot;rho_s0p6_rho_t0p6/construction_seed_2026&quot;)
-method = bp.Algorithm(
-    &quot;grampa&quot;, parameters={&quot;eta&quot;: 1.0}, seed=2026, device=&quot;cpu&quot;)
-result = method.align(data.graph1, data.graph2)
-metrics = bp.evaluate(result, data, ks=(1, 5, 10))
-print(metrics[&quot;pair&quot;])
-</code></pre></div><p class="note">These choices produce example calls. They do not load a campaign's frozen parameter overrides or initiate remote computation. See the <a href="algorithms.html">method catalog</a> before running a more expensive method.</p>
-<h2 id="read-result">3. Read the result<a class="permalink" href="#read-result" aria-label="Link to 3. Read the result">#</a></h2><div class="code-window"><div class="code-header"><span>Inspect outputs</span></div><pre><code>print(result.method)
-print(result.predicted_pairs[:5])
-print(data.pairs_to_original(result.predicted_pairs[:5]))
-print(metrics[&quot;pair&quot;])
-print(metrics[&quot;validity&quot;])
-print(metrics[&quot;ranking_policy&quot;])</code></pre></div><p>Native pairs use local integer IDs. Pair metrics deduplicate exact pair repetitions and disclose endpoint conflicts. Rankings are available only when the method returns a suitable score representation. <a href="evaluation.html">Evaluation</a> explains each report field.</p>
-<h2 id="next-steps">Next steps<a class="permalink" href="#next-steps" aria-label="Link to Next steps">#</a></h2><ul><li><a href="datasets.html">Build your own input or a partial-overlap instance.</a></li><li><a href="diagnostics.html">Inspect errors after alignment.</a></li><li><a href="logs.html">Read an existing campaign attempt without fitting again.</a></li><li><a href="extending.html">Register your own graph-only adapter.</a></li></ul></article><nav class="page-navigation" aria-label="Previous and next pages"><a href="installation.html"><span>← Previous</span>Installation</a><a href="datasets.html"><span>Next →</span>Datasets and construction</a></nav><footer><span>BPUPGA Python API · v0.1</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link " href="#toy-example">1. Run a self-contained toy example</a><a class="toc-link " href="#prepared-example">2. Align a prepared benchmark instance</a><a class="toc-link " href="#read-result">3. Read the result</a><a class="toc-link " href="#next-steps">Next steps</a></aside></div></div>
-<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</details></section>
+<section id="run-a-built-in-method">
+<h2>Run a built-in method<a class="headerlink" href="#run-a-built-in-method" title="Link to this heading"></a></h2>
+<p>With the complete checkout and its prepared data, the same interface runs a
+registered alignment method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bpupga</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bp</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+    <span class="s2">"baseline_exdit_261029/date_261023/fbtw/bpupga/"</span>
+    <span class="s2">"rho_s0p6_rho_t0p6/construction_seed_2026"</span><span class="p">)</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span>
+    <span class="s2">"grampa"</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">"eta"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2026</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">"cpu"</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">graph1</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">graph2</span><span class="p">)</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ks</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">metrics</span><span class="p">[</span><span class="s2">"pair"</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The algorithm receives <code class="docutils literal notranslate"><span class="pre">data.graph1</span></code> and <code class="docutils literal notranslate"><span class="pre">data.graph2</span></code>. Evaluation receives
+the reference-bearing dataset only after alignment returns.</p>
+</section>
+<section id="choose-a-method-and-dataset">
+<h2>Choose a method and dataset<a class="headerlink" href="#choose-a-method-and-dataset" title="Link to this heading"></a></h2>
+<p>Select a prepared input to generate a complete example. Adapter defaults are
+used unless the example specifies a parameter; paper reproduction uses the
+recorded artifact configurations.</p>
+<div class="example-picker" aria-label="Example configuration">
+  <div><label for="method-select">Method</label><select id="method-select"></select></div>
+  <div><label for="dataset-select">Dataset</label><select id="dataset-select"></select></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre id="quickstart-code" aria-live="polite"></pre></div></div>
+<p><button class="bipga-button" id="download-example" type="button">Download selected example</button></p><p>The <a class="reference external" href="downloads/examples.zip">examples ZIP</a> contains all 48 method/dataset
+combinations and the self-contained example.</p>
+</section>
+<section id="inspect-the-output">
+<h2>Inspect the output<a class="headerlink" href="#inspect-the-output" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">metrics[&quot;pair&quot;]</span></code> reports native pair precision, recall and F1.
+<code class="docutils literal notranslate"><span class="pre">metrics[&quot;validity&quot;]</span></code> reports correspondence feasibility.
+<code class="docutils literal notranslate"><span class="pre">metrics[&quot;ranking_policy&quot;]</span></code> explains which same-fit representation supplies
+the rankings, or why ranking metrics are unavailable.</p>
+<p>For the command-line workflow, continue with <a class="reference internal" href="cli.html"><span class="doc">Command-line interface</span></a>. For input formats and
+evaluation definitions, see <a class="reference internal" href="datasets.html"><span class="doc">Datasets and construction</span></a> and <a class="reference internal" href="evaluation.html"><span class="doc">Evaluation and metrics</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cli.html" class="btn btn-neutral float-right" title="Command-line interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, BiPGA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

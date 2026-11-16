@@ -1,0 +1,81 @@
+Troubleshooting and FAQ
+=======================
+
+Python cannot import bpupga
+---------------------------
+
+Run the setup from the repository root and add the consolidated ``api/`` directory to Python's import path:
+
+.. code-block:: bash
+
+   export PYTHONPATH="$PWD/baseline_exdit_261029/api${PYTHONPATH:+:$PYTHONPATH}"
+   python -c "import bpupga; print(bpupga.__file__)"
+
+Use the project's existing model environment. This facade is not a PyPI package and depends on the adjacent dated implementation tree. Copying only ``api/bpupga/`` is insufficient for the built-in methods.
+
+“common is already loaded from another checkout”
+------------------------------------------------
+
+Historical baseline trees reuse the top-level import names ``baseline``, ``baselines``, and ``common``. Start a fresh Python process when switching checkouts. Do not mix the historical and current result classes in one session.
+
+Missing PyTorch, scikit-learn, vendor packages, or weights
+----------------------------------------------------------
+
+The facade wraps existing code rather than replacing its environment. Loading needs NetworkX and NumPy. Evaluation imports the existing metric module and scikit-learn. Built-in execution imports PyTorch and the selected author's dependencies; some models require their existing weights. Diagnostics additionally reuse the sibling legacy evaluation tree. Follow the repository environment instructions rather than installing a guessed universal dependency set.
+
+Does device='cpu' mean every implementation is lightweight?
+-----------------------------------------------------------
+
+No. It requests the CPU path where the selected implementation supports it; it does not reduce dense matrices, epochs or candidate sets. Device support and memory needs remain method-specific. The facade does not reserve a GPU or attach a new job to the background campaign queue.
+
+Why does align reject my graph?
+-------------------------------
+
+Direct graph arguments must be nonempty simple undirected NetworkX graphs, without self loops and with local IDs ``0..n-1``. Use ``Dataset.load`` for file-backed inputs: the loader handles sorted integer ID reindexing and removes self loops. Explicit node lists preserve isolates. Alignment copies topology and discards graph/node/edge attributes.
+
+Why does construct refuse the output directory?
+-----------------------------------------------
+
+Every construction writes a new instance. Existing directories and symlinks are refused to protect data provenance. Choose a new destination; there is no public force-overwrite option.
+
+Requested and realized overlap differ slightly
+----------------------------------------------
+
+The constructor allocates integer identity groups, so finite-size rounding can alter realized source and target ratios. Read the generated metadata instead of assuming the requested floating-point values were achieved exactly. Node overlap is not an edge-deletion percentage.
+
+What if my correspondences are incomplete?
+------------------------------------------
+
+Record known annotation limitations in metadata. The API retains reference-relative pair/ranking accounting and skips matchability/overlap or private-node analyses that require complete labels. An absent reference link alone does not prove the node is truly unmatched.
+
+Why is ranking None?
+--------------------
+
+A valid pair list does not necessarily provide a continuous ranking over candidates. Read ``ranking_policy.skipped_reason``. Do not infer a full ranking from accepted hard pairs or replace missing candidates with fabricated scores.
+
+Why is Pair F1 present when is_one_to_one is false?
+---------------------------------------------------
+
+Pair-set recovery and one-to-one feasibility are distinct. Exact duplicates are removed during pair scoring, while repeated endpoints are disclosed. Use the validity report when interpreting native results.
+
+Diagnostics cannot find diagnostics.py
+--------------------------------------
+
+Retain ``BPUPGA/baseline261023/evaluation/`` beside the dated project. The public wrapper reuses that inspected diagnostic implementation and reports a missing source file explicitly. It does not rerun a model to reconstruct artifacts.
+
+RunLog has no native_metrics
+----------------------------
+
+Only a recorded ``SUCCESS`` exposes native metrics. Running, failed, and incompatible attempts return ``None``; a file lacking native metrics also remains unavailable. Reopen a running attempt later to obtain a fresh snapshot.
+
+Where are train, checkpoint, resume, and plot_curve?
+----------------------------------------------------
+
+The current public workflow is ``align``, followed by separate evaluation and diagnosis. Method-specific optimization may happen internally. ``RunLog`` reads saved campaign records; it is not a training logger or a checkpoint manager. The website documents the implemented interface.
+
+Will default API calls reproduce the paper tables?
+--------------------------------------------------
+
+Not automatically. Formal results bind input instances, effective method parameters, seeds, source versions, output variants and resource policies. The convenience API uses adapter defaults unless you supply explicit parameters; it does not silently select the formal campaign's family-specific profiles.
+
+Continue with `installation <installation.html>`_, `quickstart <quickstart.html>`_, or the `API reference <api.html>`_.
