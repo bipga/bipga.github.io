@@ -10,7 +10,7 @@ Complete artifact
 
 The archive contains method implementations, graph inputs, experiment
 configurations, numerical observations, paper figures and tables, and
-reproduction scripts. It includes all twelve methods, including SparkAlign.
+reproduction scripts for all twelve methods.
 
 Reproduce the results
 ---------------------
@@ -29,16 +29,6 @@ This command uses the supplied observations. The
 :doc:`complete reproduction guide <reproduce/index>` covers graph inputs,
 model fitting, evaluation, seed aggregation, expected outputs and plotting.
 The same guide is included as ``REPRODUCE.md`` in the archive.
-
-Select SparkAlign
------------------
-
-.. code-block:: bash
-
-   python run.py --list --dataset fbtw --method SparkAlign
-
-The listed configuration IDs select the recorded graph inputs, parameters and
-seeds. Follow the reproduction guide to execute model fits.
 
 .. toctree::
    :maxdepth: 1

@@ -18,7 +18,6 @@ Prepared graph example
 instance. The :doc:`quickstart` example selector generates equivalent calls for
 every supported method and each of the four controlled dataset families.
 
-The archive includes SparkAlign examples using ``bp.Algorithm("SparkAlign")``.
 Each example is configured through the public API and uses
 CPU by default.
 

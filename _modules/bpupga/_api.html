@@ -18,8 +18,8 @@
       <script src="../../_static/documentation_options.js?v=01f34227"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../../_static/bipga-tools.js?v=c199668a"></script>
-      <script src="../../_static/example-data.js?v=25e7821d"></script>
+      <script src="../../_static/bipga-tools.js?v=d03ebeed"></script>
+      <script src="../../_static/example-data.js?v=0991e004"></script>
       <script defer="defer" src="../../_static/bipga.js?v=403c47d0"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -95,7 +95,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#custom-methods">Custom methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#select-sparkalign">Select SparkAlign</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../evaluation.html">Evaluation and metrics</a><ul>
@@ -223,8 +222,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../source.html">Source code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../supplementary/index.html">Supplementary Material</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../supplementary/index.html#complete-artifact">Complete artifact</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../supplementary/index.html#reproduce-the-results">Reproduce the results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../supplementary/index.html#select-sparkalign">Select SparkAlign</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supplementary/index.html#reproduce-the-results">Reproduce the results</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../supplementary/reproduce/index.html">Reproduction guide</a></li>
 </ul>
 </li>
@@ -280,7 +278,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># The public facade lives under api/; its frozen research dependencies remain</span>
-<span class="c1"># at the dated project root, outside the API source directory.</span>
+<span class="c1"># at the project root, outside the API source directory.</span>
 <span class="n">_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 <span class="n">_BASELINE</span> <span class="o">=</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"baseline"</span>
 <span class="c1"># Existing adapters use the top-level common contract. Do not load a second</span>
@@ -354,9 +352,12 @@
 <span class="sd">    overlap requests, with finite-size rounding recorded in metadata. Existing</span>
 <span class="sd">    outputs are never replaced, including dangling symbolic links.</span>
 <span class="sd">    """</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">date_261023.construct_bilateral_partial</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-        <span class="n">construct_dataset</span><span class="p">,</span> <span class="n">load_raw_dataset</span><span class="p">,</span> <span class="n">write_constructed_dataset</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"data"</span><span class="p">,</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"construction"</span><span class="p">,</span> <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_ROOT</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"date_*"</span><span class="p">))]</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">candidates</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"construct_bilateral_partial.py"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">"Graph constructor is absent from data/ or construction/"</span><span class="p">)</span>
+    <span class="n">package</span> <span class="o">=</span> <span class="n">_private_package</span><span class="p">(</span><span class="s2">"bpupga._construction_runtime"</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span> <span class="o">+</span> <span class="s2">".construct_bilateral_partial"</span><span class="p">)</span>
 
     <span class="n">source</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
     <span class="n">destination</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
@@ -367,12 +368,12 @@
         <span class="n">g1_nodes_file</span><span class="o">=</span><span class="s2">"G1.nodes"</span><span class="p">,</span> <span class="n">g2_nodes_file</span><span class="o">=</span><span class="s2">"G2.nodes"</span><span class="p">,</span>
         <span class="n">alignment_file</span><span class="o">=</span><span class="s2">"Alignment.json"</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">raw</span> <span class="o">=</span> <span class="n">load_raw_dataset</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
-    <span class="n">built</span> <span class="o">=</span> <span class="n">construct_dataset</span><span class="p">(</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">load_raw_dataset</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">built</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">construct_dataset</span><span class="p">(</span>
         <span class="n">raw</span><span class="p">,</span> <span class="n">rho_source</span><span class="p">,</span> <span class="n">rho_target</span><span class="p">,</span> <span class="n">construction_seed</span><span class="p">,</span>
         <span class="n">raw_dir_relative</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">source</span><span class="p">),</span>
     <span class="p">)</span>
-    <span class="n">write_constructed_dataset</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="n">built</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">write_constructed_dataset</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="n">built</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span></div>
 
 
@@ -644,7 +645,7 @@
              <span class="n">max_dense_entries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25_000_000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">"""Run the existing evaluation-only diagnostic module without saving files.</span>
 
-<span class="sd">    Requires BPUPGA/baseline261023/evaluation from the research checkout.</span>
+<span class="sd">    Requires BPUPGA/baseline/evaluation from the research checkout.</span>
 <span class="sd">    Endpoint-mask oracle comparisons are explicitly labeled in the report;</span>
 <span class="sd">    true-cardinality oracle decoding remains disabled. No result is refitted.</span>
 <span class="sd">    """</span>
@@ -667,9 +668,12 @@
             <span class="s2">"reference_note"</span><span class="p">:</span> <span class="n">_reference_note</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span>
             <span class="s2">"leakage_statement"</span><span class="p">:</span> <span class="s2">"Post-inference reference accounting only; no refit or oracle decoding"</span><span class="p">,</span>
         <span class="p">}</span>
-    <span class="n">legacy</span> <span class="o">=</span> <span class="n">_ROOT</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"BPUPGA/baseline261023/evaluation"</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">legacy</span> <span class="o">/</span> <span class="s2">"diagnostics.py"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Optional diagnostic source is absent: </span><span class="si">{</span><span class="n">legacy</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">'diagnostics.py'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">sibling</span> <span class="o">=</span> <span class="n">_ROOT</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"BPUPGA"</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"evaluation"</span><span class="p">,</span> <span class="n">sibling</span> <span class="o">/</span> <span class="s2">"baseline/evaluation"</span><span class="p">,</span>
+                  <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="n">sibling</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"baseline*/evaluation"</span><span class="p">))]</span>
+    <span class="n">legacy</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">candidates</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"diagnostics.py"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">legacy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">"Optional diagnostic source is absent: BPUPGA/baseline/evaluation/diagnostics.py"</span><span class="p">)</span>
     <span class="n">package</span> <span class="o">=</span> <span class="n">_private_package</span><span class="p">(</span><span class="s2">"bpupga._legacy_evaluation"</span><span class="p">,</span> <span class="n">legacy</span><span class="p">)</span>
     <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span> <span class="o">+</span> <span class="s2">".diagnostics"</span><span class="p">)</span>
     <span class="c1"># Legacy diagnostics interprets score_matrix as quality regardless of the</span>

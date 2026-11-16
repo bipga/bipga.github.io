@@ -19,8 +19,8 @@
       <script src="_static/documentation_options.js?v=01f34227"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="_static/bipga-tools.js?v=c199668a"></script>
-      <script src="_static/example-data.js?v=25e7821d"></script>
+      <script src="_static/bipga-tools.js?v=d03ebeed"></script>
+      <script src="_static/example-data.js?v=0991e004"></script>
       <script defer="defer" src="_static/bipga.js?v=403c47d0"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -98,7 +98,6 @@
 <li class="toctree-l2"><a class="reference internal" href="algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithms.html#custom-methods">Custom methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithms.html#select-sparkalign">Select SparkAlign</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation and metrics</a><ul>
@@ -226,8 +225,7 @@
 <li class="toctree-l1"><a class="reference internal" href="source.html">Source code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="supplementary/index.html">Supplementary Material</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="supplementary/index.html#complete-artifact">Complete artifact</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supplementary/index.html#reproduce-the-results">Reproduce the results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supplementary/index.html#select-sparkalign">Select SparkAlign</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="supplementary/index.html#reproduce-the-results">Reproduce the results</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="supplementary/reproduce/index.html">Reproduction guide</a></li>
 </ul>
 </li>
@@ -264,7 +262,7 @@
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>Use Python 3.10 or newer and the complete research checkout. The interface
-package lives in <code class="docutils literal notranslate"><span class="pre">baseline_exdit_261029/api/bpupga</span></code> and delegates to the
+package lives in <code class="docutils literal notranslate"><span class="pre">baseline/api/bpupga</span></code> and delegates to the
 adjacent method implementations and graph-construction code.</p>
 <p>NetworkX and NumPy support graph loading. Evaluation additionally uses
 scikit-learn; diagnostics uses SciPy and the sibling diagnostic implementation.
@@ -274,12 +272,12 @@ Built-in methods need their model dependencies and any bundled weights.</p>
 <h2>Use the research checkout<a class="headerlink" href="#use-the-research-checkout" title="Link to this heading"></a></h2>
 <p>From the repository root, activate the project’s model environment and add the
 API directory to Python’s import path:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/baseline_exdit_261029/api</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="p">:+:</span><span class="nv">$PYTHONPATH</span><span class="si">}</span><span class="s2">"</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/baseline/api</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="p">:+:</span><span class="nv">$PYTHONPATH</span><span class="si">}</span><span class="s2">"</span>
 python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import bpupga; print(bpupga.__file__)"</span>
 </pre></div>
 </div>
 <p>An editable installation is also supported in that environment:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>--no-build-isolation<span class="w"> </span>-e<span class="w"> </span>baseline_exdit_261029/api
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>--no-build-isolation<span class="w"> </span>-e<span class="w"> </span>baseline/api
 </pre></div>
 </div>
 <p>The installed distribution is named <code class="docutils literal notranslate"><span class="pre">bpupga-local</span></code> and the import is
@@ -305,8 +303,9 @@ and evaluates its output. It requires no benchmark data, model fit or GPU.</p>
 </section>
 <section id="working-directories">
 <h2>Working directories<a class="headerlink" href="#working-directories" title="Link to this heading"></a></h2>
-<p>Examples on this site use paths relative to the research repository root.
-From <code class="docutils literal notranslate"><span class="pre">baseline_exdit_261029/</span></code>, set <code class="docutils literal notranslate"><span class="pre">PYTHONPATH=api</span></code> instead. Keep output
+<p>Examples use a checkout folder named <code class="docutils literal notranslate"><span class="pre">baseline/</span></code> with prepared graphs in
+<code class="docutils literal notranslate"><span class="pre">baseline/data/</span></code>. Paths are relative to its parent directory.
+From <code class="docutils literal notranslate"><span class="pre">baseline/</span></code>, set <code class="docutils literal notranslate"><span class="pre">PYTHONPATH=api</span></code> instead. Keep output
 directories new so that construction and experiment records remain intact.</p>
 <p>See <a class="reference internal" href="faq.html"><span class="doc">Troubleshooting and FAQ</span></a> for import collisions, missing dependencies and device errors.</p>
 </section>

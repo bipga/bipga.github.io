@@ -19,8 +19,8 @@
       <script src="_static/documentation_options.js?v=01f34227"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="_static/bipga-tools.js?v=c199668a"></script>
-      <script src="_static/example-data.js?v=25e7821d"></script>
+      <script src="_static/bipga-tools.js?v=d03ebeed"></script>
+      <script src="_static/example-data.js?v=0991e004"></script>
       <script defer="defer" src="_static/bipga.js?v=403c47d0"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -98,7 +98,6 @@
 <li class="toctree-l2"><a class="reference internal" href="algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithms.html#custom-methods">Custom methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithms.html#select-sparkalign">Select SparkAlign</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation and metrics</a><ul>
@@ -226,8 +225,7 @@
 <li class="toctree-l1"><a class="reference internal" href="source.html">Source code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="supplementary/index.html">Supplementary Material</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="supplementary/index.html#complete-artifact">Complete artifact</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supplementary/index.html#reproduce-the-results">Reproduce the results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supplementary/index.html#select-sparkalign">Select SparkAlign</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="supplementary/index.html#reproduce-the-results">Reproduce the results</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="supplementary/reproduce/index.html">Reproduction guide</a></li>
 </ul>
 </li>
@@ -273,7 +271,7 @@ contract rather than a benchmark result.</p>
 </div>
 <details class="example-source"><summary>View the complete toy example</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Run a small local API example without invoking a built-in model.</span>
 
-<span class="sd">From the repository root, set PYTHONPATH=baseline_exdit_261029/api.</span>
+<span class="sd">From the repository root, set PYTHONPATH=baseline/api.</span>
 <span class="sd">This degree-based adapter illustrates the contract; it is not a baseline claim.</span>
 <span class="sd">"""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
@@ -334,7 +332,7 @@ registered alignment method:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bpupga</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bp</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-    <span class="s2">"baseline_exdit_261029/date_261023/fbtw/bpupga/"</span>
+    <span class="s2">"baseline/data/fbtw/bpupga/"</span>
     <span class="s2">"rho_s0p6_rho_t0p6/construction_seed_2026"</span><span class="p">)</span>
 <span class="n">method</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">Algorithm</span><span class="p">(</span>
     <span class="s2">"grampa"</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">"eta"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2026</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">"cpu"</span><span class="p">)</span>

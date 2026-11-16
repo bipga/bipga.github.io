@@ -19,8 +19,8 @@
       <script src="../_static/documentation_options.js?v=01f34227"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/bipga-tools.js?v=c199668a"></script>
-      <script src="../_static/example-data.js?v=25e7821d"></script>
+      <script src="../_static/bipga-tools.js?v=d03ebeed"></script>
+      <script src="../_static/example-data.js?v=0991e004"></script>
       <script defer="defer" src="../_static/bipga.js?v=403c47d0"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -98,7 +98,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithms.html#custom-methods">Custom methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#select-sparkalign">Select SparkAlign</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation and metrics</a><ul>
@@ -226,8 +225,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../source.html">Source code</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Supplementary Material</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#complete-artifact">Complete artifact</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#reproduce-the-results">Reproduce the results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#select-sparkalign">Select SparkAlign</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#reproduce-the-results">Reproduce the results</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="reproduce/index.html">Reproduction guide</a></li>
 </ul>
 </li>
@@ -267,7 +265,7 @@
 <p><a class="reference external" href="BiPGA_artifacts.zip">Download BiPGA_artifacts.zip</a></p>
 <p>The archive contains method implementations, graph inputs, experiment
 configurations, numerical observations, paper figures and tables, and
-reproduction scripts. It includes all twelve methods, including SparkAlign.</p>
+reproduction scripts for all twelve methods.</p>
 </section>
 <section id="reproduce-the-results">
 <h2>Reproduce the results<a class="headerlink" href="#reproduce-the-results" title="Link to this heading"></a></h2>
@@ -283,14 +281,6 @@ python<span class="w"> </span>scripts/reproduce_results.py<span class="w"> </spa
 <a class="reference internal" href="reproduce/index.html"><span class="doc">complete reproduction guide</span></a> covers graph inputs,
 model fitting, evaluation, seed aggregation, expected outputs and plotting.
 The same guide is included as <code class="docutils literal notranslate"><span class="pre">REPRODUCE.md</span></code> in the archive.</p>
-</section>
-<section id="select-sparkalign">
-<h2>Select SparkAlign<a class="headerlink" href="#select-sparkalign" title="Link to this heading"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run.py<span class="w"> </span>--list<span class="w"> </span>--dataset<span class="w"> </span>fbtw<span class="w"> </span>--method<span class="w"> </span>SparkAlign
-</pre></div>
-</div>
-<p>The listed configuration IDs select the recorded graph inputs, parameters and
-seeds. Follow the reproduction guide to execute model fits.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reproduce/index.html">Reproduction guide</a></li>

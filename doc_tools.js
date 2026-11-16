@@ -22,7 +22,7 @@
   function quickstartSource(method, dataset) {
     if (!METHODS.includes(method) || !DATASETS.includes(dataset)) throw new Error('Unknown example selection');
     const params=method==='grampa'?', parameters={"eta": 1.0}':'';
-    return `import bpupga as bp\n\n# Run from the repository root with the documented import setup.\ndata = bp.Dataset.load(\n    "baseline_exdit_261029/date_261023/${dataset}/bpupga/"\n    "rho_s0p6_rho_t0p6/construction_seed_2026")\nmethod = bp.Algorithm(\n    "${method}"${params}, seed=2026, device="cpu")\n\n# The algorithm receives only graph topology.\nresult = method.align(data.graph1, data.graph2)\nmetrics = bp.evaluate(result, data, ks=(1, 5, 10))\nprint(metrics["pair"])`;
+    return `import bpupga as bp\n\n# Run from the repository root with the documented import setup.\ndata = bp.Dataset.load(\n    "baseline/data/${dataset}/bpupga/"\n    "rho_s0p6_rho_t0p6/construction_seed_2026")\nmethod = bp.Algorithm(\n    "${method}"${params}, seed=2026, device="cpu")\n\n# The algorithm receives only graph topology.\nresult = method.align(data.graph1, data.graph2)\nmetrics = bp.evaluate(result, data, ks=(1, 5, 10))\nprint(metrics["pair"])`;
   }
   function isObject(value) { return value!==null && typeof value==='object' && !Array.isArray(value); }
   function parseRunRecord(record) {

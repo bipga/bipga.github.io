@@ -20,5 +20,5 @@ Invalid inputs or nonfinite outputs raise ``ValueError``. Missing dependencies
 or unsupported execution settings raise the underlying method error.
 
 See :doc:`../algorithms` for the twelve registered identifiers, parameters and
-device behavior. Select SparkAlign with ``bp.Algorithm("SparkAlign")``.
+device behavior.
 

@@ -103,8 +103,3 @@ Custom methods
 A registered factory returns an adapter with ``fit(graph1, graph2)`` and an ``AlignmentResult`` output. The shared public caller is still ``Algorithm(...).align(...)``. Follow the `custom-algorithm tutorial <extending.html>`_ for a complete example.
 
 Reference: `Algorithm <api.html#Algorithm>`_, `align <api.html#Algorithm-align>`_, and `register_algorithm <api.html#register-algorithm>`_.
-
-Select SparkAlign
------------------
-
-Use ``bp.Algorithm("SparkAlign")`` or ``--method SparkAlign`` to select this method.

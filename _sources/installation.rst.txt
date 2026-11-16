@@ -5,7 +5,7 @@ Requirements
 ------------
 
 Use Python 3.10 or newer and the complete research checkout. The interface
-package lives in ``baseline_exdit_261029/api/bpupga`` and delegates to the
+package lives in ``baseline/api/bpupga`` and delegates to the
 adjacent method implementations and graph-construction code.
 
 NetworkX and NumPy support graph loading. Evaluation additionally uses
@@ -20,14 +20,14 @@ API directory to Python's import path:
 
 .. code-block:: bash
 
-   export PYTHONPATH="$PWD/baseline_exdit_261029/api${PYTHONPATH:+:$PYTHONPATH}"
+   export PYTHONPATH="$PWD/baseline/api${PYTHONPATH:+:$PYTHONPATH}"
    python -c "import bpupga; print(bpupga.__file__)"
 
 An editable installation is also supported in that environment:
 
 .. code-block:: bash
 
-   python -m pip install --no-deps --no-build-isolation -e baseline_exdit_261029/api
+   python -m pip install --no-deps --no-build-isolation -e baseline/api
 
 The installed distribution is named ``bpupga-local`` and the import is
 ``bpupga``. It is a repository-bound interface rather than a PyPI release;
@@ -56,8 +56,9 @@ and evaluates its output. It requires no benchmark data, model fit or GPU.
 Working directories
 -------------------
 
-Examples on this site use paths relative to the research repository root.
-From ``baseline_exdit_261029/``, set ``PYTHONPATH=api`` instead. Keep output
+Examples use a checkout folder named ``baseline/`` with prepared graphs in
+``baseline/data/``. Paths are relative to its parent directory.
+From ``baseline/``, set ``PYTHONPATH=api`` instead. Keep output
 directories new so that construction and experiment records remain intact.
 
 See :doc:`faq` for import collisions, missing dependencies and device errors.

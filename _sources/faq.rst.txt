@@ -8,7 +8,7 @@ Run the setup from the repository root and add the consolidated ``api/`` directo
 
 .. code-block:: bash
 
-   export PYTHONPATH="$PWD/baseline_exdit_261029/api${PYTHONPATH:+:$PYTHONPATH}"
+   export PYTHONPATH="$PWD/baseline/api${PYTHONPATH:+:$PYTHONPATH}"
    python -c "import bpupga; print(bpupga.__file__)"
 
 Use the project's existing model environment. This facade is not a PyPI package and depends on the adjacent dated implementation tree. Copying only ``api/bpupga/`` is insufficient for the built-in methods.
@@ -61,7 +61,7 @@ Pair-set recovery and one-to-one feasibility are distinct. Exact duplicates are 
 Diagnostics cannot find diagnostics.py
 --------------------------------------
 
-Retain ``BPUPGA/baseline261023/evaluation/`` beside the dated project. The public wrapper reuses that inspected diagnostic implementation and reports a missing source file explicitly. It does not rerun a model to reconstruct artifacts.
+Retain ``BPUPGA/baseline/evaluation/`` beside the project. The public wrapper reuses that inspected diagnostic implementation and reports a missing source file explicitly. It does not rerun a model to reconstruct artifacts.
 
 RunLog has no native_metrics
 ----------------------------

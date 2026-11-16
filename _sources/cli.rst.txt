@@ -17,7 +17,6 @@ From the research repository root, after setting the import path:
 
 The listing includes supported method identifiers, dataset identifiers and
 prepared conditions. ``Arxiv``, ``DBLP`` and ``GradAlign+`` are accepted aliases.
-Use ``--method SparkAlign`` to select SparkAlign.
 
 Preview a selection
 -------------------
