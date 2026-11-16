@@ -19,8 +19,8 @@
       <script src="../_static/documentation_options.js?v=01f34227"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/bipga-tools.js?v=60309b5e"></script>
-      <script src="../_static/example-data.js?v=5fb413ac"></script>
+      <script src="../_static/bipga-tools.js?v=c199668a"></script>
+      <script src="../_static/example-data.js?v=25e7821d"></script>
       <script defer="defer" src="../_static/bipga.js?v=403c47d0"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -98,7 +98,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithms.html#custom-methods">Custom methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#method-naming">Method naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algorithms.html#select-sparkalign">Select SparkAlign</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation and metrics</a><ul>
@@ -224,7 +224,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../source.html">Source code</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://bipga.github.io/supplementary/">Supplementary Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplementary/index.html">Supplementary Material</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../supplementary/index.html#complete-artifact">Complete artifact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../supplementary/index.html#reproduce-the-results">Reproduce the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../supplementary/index.html#select-sparkalign">Select SparkAlign</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../supplementary/reproduce/index.html">Reproduction guide</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -284,7 +292,7 @@ attributes, and returns <a class="reference internal" href="records.html#bpupga.
 Invalid inputs or nonfinite outputs raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. Missing dependencies
 or unsupported execution settings raise the underlying method error.</p>
 <p>See <a class="reference internal" href="../algorithms.html"><span class="doc">Algorithms</span></a> for the twelve registered identifiers, parameters and
-device behavior. <strong>SparkAlign</strong> uses the existing identifier <code class="docutils literal notranslate"><span class="pre">oiteralign</span></code>.</p>
+device behavior. Select SparkAlign with <code class="docutils literal notranslate"><span class="pre">bp.Algorithm(&quot;SparkAlign&quot;)</span></code>.</p>
 </section>
 </section>
 

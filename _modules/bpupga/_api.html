@@ -18,8 +18,8 @@
       <script src="../../_static/documentation_options.js?v=01f34227"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../../_static/bipga-tools.js?v=60309b5e"></script>
-      <script src="../../_static/example-data.js?v=5fb413ac"></script>
+      <script src="../../_static/bipga-tools.js?v=c199668a"></script>
+      <script src="../../_static/example-data.js?v=25e7821d"></script>
       <script defer="defer" src="../../_static/bipga.js?v=403c47d0"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -95,7 +95,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#custom-methods">Custom methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#method-naming">Method naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#select-sparkalign">Select SparkAlign</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../evaluation.html">Evaluation and metrics</a><ul>
@@ -221,7 +221,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../source.html">Source code</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://bipga.github.io/supplementary/">Supplementary Material</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../supplementary/index.html">Supplementary Material</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../supplementary/index.html#complete-artifact">Complete artifact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supplementary/index.html#reproduce-the-results">Reproduce the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../supplementary/index.html#select-sparkalign">Select SparkAlign</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../supplementary/reproduce/index.html">Reproduction guide</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -290,7 +298,7 @@
 
 <span class="n">_BUILTINS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">((</span>
     <span class="s2">"alpine"</span><span class="p">,</span> <span class="s2">"cena"</span><span class="p">,</span> <span class="s2">"fugal"</span><span class="p">,</span> <span class="s2">"gradalign_plus"</span><span class="p">,</span> <span class="s2">"grampa"</span><span class="p">,</span> <span class="s2">"immnc"</span><span class="p">,</span>
-    <span class="s2">"oiteralign"</span><span class="p">,</span> <span class="s2">"opgm_unsupervised"</span><span class="p">,</span> <span class="s2">"regal"</span><span class="p">,</span> <span class="s2">"s_gwl"</span><span class="p">,</span> <span class="s2">"slotalign"</span><span class="p">,</span> <span class="s2">"ulot"</span><span class="p">,</span>
+    <span class="s2">"SparkAlign"</span><span class="p">,</span> <span class="s2">"opgm_unsupervised"</span><span class="p">,</span> <span class="s2">"regal"</span><span class="p">,</span> <span class="s2">"s_gwl"</span><span class="p">,</span> <span class="s2">"slotalign"</span><span class="p">,</span> <span class="s2">"ulot"</span><span class="p">,</span>
 <span class="p">))</span>
 <span class="n">_CUSTOM</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -468,6 +476,17 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"mu"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"weight"</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"ALPINE requires nonnegative mu and weight in {1, 2}"</span><span class="p">)</span>
                 <span class="n">model</span> <span class="o">=</span> <span class="n">AuthorCPUAlpine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"SparkAlign"</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.SparkAlign</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkAlign</span><span class="p">,</span> <span class="n">SparkAlignConfig</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="n">SparkAlignConfig</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
+                        <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compute_cost_matrix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_dense_entries</span><span class="o">=</span><span class="mi">150_000_000</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid parameters for SparkAlign: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="n">SparkAlign</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct</span> <span class="k">as</span> <span class="n">make_model</span>
                 <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_family</span><span class="p">)</span>

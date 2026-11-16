@@ -4,7 +4,7 @@
   else root.BPUPGA_DOCS = factory();
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
-  const METHODS = ['grampa','regal','fugal','cena','s_gwl','immnc','oiteralign','alpine','gradalign_plus','slotalign','ulot','opgm_unsupervised'];
+  const METHODS = ['grampa','regal','fugal','cena','s_gwl','immnc','SparkAlign','alpine','gradalign_plus','slotalign','ulot','opgm_unsupervised'];
   const DATASETS = ['fbtw','grqc','dblp','Arxiv1-Arxiv2'];
   const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function highlightPython(source) {

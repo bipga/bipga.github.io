@@ -33,7 +33,7 @@ The names below select the current project adapters. Parameter excerpts come fro
    * - immnc
      - iMMNC
      - k_de=3; k_nei=3; initial_anchor_ratio=0.04; iterations=10
-   * - oiteralign
+   * - SparkAlign
      - SparkAlign
      - dp_min_degree=6; diffusion_step=5; nearest_candidates=50
    * - opgm_unsupervised
@@ -104,7 +104,7 @@ A registered factory returns an adapter with ``fit(graph1, graph2)`` and an ``Al
 
 Reference: `Algorithm <api.html#Algorithm>`_, `align <api.html#Algorithm-align>`_, and `register_algorithm <api.html#register-algorithm>`_.
 
-Method naming
--------------
+Select SparkAlign
+-----------------
 
-SparkAlign is the paper-facing name. Select the implementation with ``oiteralign`` in API calls and CLI commands.
+Use ``bp.Algorithm("SparkAlign")`` or ``--method SparkAlign`` to select this method.

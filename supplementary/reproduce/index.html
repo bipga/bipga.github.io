@@ -1,57 +1,368 @@
-<!doctype html>
-<html lang="en"><head><base href="../../"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#173f35"><meta name="description" content="Code, data and experimental results for the BiPGA ICDE 2027 submission."><title>Reproduction Guide — BiPGA</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="doc_tools.js" defer></script><script src="search-index.js" defer></script><script src="app.js" defer></script></head>
-<body data-page="supplementary"><a class="skip" href="#main">Skip to content</a>
-<aside class="sidebar" id="sidebar"><a class="brand" href="index.html"><img src="mark.svg" width="32" height="32" alt=""><span>BPUPGA<span class="brand-sub">PYTHON DOCUMENTATION</span></span></a><button id="search-open" class="search-trigger"><span>⌕ &nbsp; Search documentation</span><kbd>/</kbd></button><nav aria-label="Documentation"><div class="sidebar-label">GETTING STARTED</div><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="installation.html">Installation</a><a class="nav-link" href="quickstart.html">Quick start</a><div class="sidebar-label">TUTORIALS</div><a class="nav-link" href="datasets.html">Datasets &amp; construction</a><a class="nav-link" href="algorithms.html">Algorithms</a><a class="nav-link" href="evaluation.html">Evaluation</a><a class="nav-link" href="diagnostics.html">Diagnostics</a><a class="nav-link" href="logs.html">Saved runs &amp; resources</a><a class="nav-link" href="extending.html">Custom algorithms</a><div class="sidebar-label">REFERENCE</div><a class="nav-link" href="api.html">Python API</a><a class="nav-link" href="faq.html">Troubleshooting</a><a class="nav-link" href="source.html">Source code</a><div class="sidebar-label">PAPER</div><a class="nav-link active" href="supplementary/" aria-current="page">Supplementary Material</a></nav><div class="sidebar-bottom"><span class="status-dot"></span> BiPGA <span>ICDE 2027</span><a href="examples.zip" download>Download examples ↗</a></div></aside>
-<div class="page"><header class="topbar"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">Documentation</a><span>/</span><a href="supplementary/">Supplementary Material</a><span>/</span>Reproduction Guide</div><div class="top-actions"><span class="release">ICDE 2027 · EAB</span><button class="icon-button" id="theme-toggle" aria-label="Toggle color theme">◐</button><a class="top-button" href="supplementary/BiPGA_artifacts.zip" download>Download artifact ↧</a></div></header>
-<div class="content-layout"><main id="main"><article><h1>Reproduction guide</h1>
-<p>The workflow is: supplied graph inputs → recorded configurations → graph-only model fitting → evaluation → seed aggregation → figures and tables. All commands below run from the extracted <code>bipga/</code> directory.</p>
-<h2 id="inputs-and-evaluation">Inputs and evaluation</h2>
-<p><code>datasets/index.csv</code> identifies the 323 experiment graph pairs. Each pair includes edge lists, explicit node lists and reference correspondences. Node lists preserve isolated vertices. The supplied graph instances are the exact experiment inputs; the six source pairs are also included under <code>datasets/*/base/</code>. <code>construction/</code> contains the bilateral partial-graph constructor.</p>
-<p><code>experiments/runs.csv</code> lists 3,908 configurations. Each row joins a graph ID to a method, seed, parameter record and execution configuration. <code>experiments/parameters.json</code> contains the parameters. The per-run CSVs under <code>data/</code> select the configurations used by each paper figure and table.</p>
-<p><code>run.py</code> passes only the graph topology, parameters, random seed and device configuration to the inference process. Reference correspondences remain in the parent process and are used after fitting to evaluate native pair F1, node F1 and bidirectional ranking metrics. The native pair output is evaluated as returned by the method. GRAMPA uses the supplied soft-score ranking routine.</p>
-<h2 id="recompute-the-supplied-results">Recompute the supplied results</h2>
-<p>This path uses the supplied observations and runs on a CPU. It does not train models or run CUDA assignment.</p>
-<div class="code-window"><div class="code-header"><span>Terminal</span></div><pre><code>python -m pip install -r requirements-analysis.txt
-python scripts/reproduce_results.py --output reproduced</code></pre></div>
-<p>The command writes <code>reproduced/data/figure_05/</code> through <code>figure_09/</code> and <code>reproduced/data/table_ii/</code>, <code>table_iv/</code>, <code>table_v/</code>, <code>table_vi/</code>. Each directory contains the numerical summary as <code>values.csv</code>; repeated observations also have <code>values_by_run.csv</code>. The command checks that every recomputed summary agrees with the supplied results and stops on a mismatch.</p>
-<p>Figures 5–8 and Table IV are aggregated from individual recorded observations. Figure 9 and Tables V/VI are recomputed from query-level predictions, rankings, assignments and exact orbit records. Table II is recomputed directly from the six source graph pairs.</p>
-<h2 id="render-the-figures">Render the figures</h2>
-<div class="code-window"><div class="code-header"><span>Terminal</span></div><pre><code>python scripts/plot_results.py --figure 5 --data-root reproduced/data --output reproduced/figure05.pdf
-python scripts/plot_results.py --figure 6 --data-root reproduced/data --output reproduced/figure06.pdf
-python scripts/plot_results.py --figure 7 --data-root reproduced/data --output reproduced/figure07.pdf
-python scripts/plot_results.py --figure 8 --data-root reproduced/data --output reproduced/figure08.pdf
-python scripts/plot_figure09.py --data-root reproduced/data --no-tex --output-dir reproduced/figure09</code></pre></div>
-<p>Figures 5–8 use a compact rendering of the same numerical series. Figure 9 uses the nine-panel layout. The supplied <code>figures/</code> PDFs and <code>tables/</code> LaTeX fragments are the paper artifacts; numerical table results are in the corresponding <code>data/</code> directories.</p>
-<h2 id="fit-the-models-from-the-graph-inputs">Fit the models from the graph inputs</h2>
-<p>Model fitting requires Linux, Python 3.10, an NVIDIA GPU and the CUDA compiler. The paper hardware was two Intel Xeon Platinum 8457C CPUs and eight RTX 5090 GPUs with 32 GB each. Each invocation below selects one GPU and uses eight CPU threads. CUDA assignment uses the CUDA Toolkit 12.9 compiler <code>nvcc</code>; set <code>BPUPGA_NVCC</code> to its location if it is outside <code>PATH</code>.</p>
-<div class="code-window"><div class="code-header"><span>Terminal</span></div><pre><code>python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cu128
-python -m pip install -r requirements.txt
-python run.py --list --dataset fbtw --method alpine
-python run.py --run-id RUN_ID --output fresh_fits/RUN_ID --dry-run
-python run.py --run-id RUN_ID --device cuda:0 --output fresh_fits/RUN_ID</code></pre></div>
-<p>Replace <code>RUN_ID</code> with a row from <code>experiments/runs.csv</code>. The last command performs a model fit. Each run saves native predictions, continuous scores or costs, fit metadata and <code>metrics.json</code>. A new fit requires a new output directory.</p>
-<p>To run every recorded configuration sequentially, save the following as <code>fit_all.py</code> in <code>bipga/</code> and run <code>python fit_all.py</code>. This is the full model-fitting experiment and can take substantial time.</p>
-<div class="code-window"><div class="code-header"><span>Python</span></div><pre><code>import csv
-from pathlib import Path
-import subprocess
-import sys
 
-with open(&quot;experiments/runs.csv&quot;, newline=&quot;&quot;) as handle:
-    for row in csv.DictReader(handle):
-        output = Path(&quot;fresh_fits&quot;) / row[&quot;run_id&quot;]
-        if (output / &quot;metrics.json&quot;).is_file():
-            continue
-        subprocess.run([
-            sys.executable, &quot;run.py&quot;, &quot;--run-id&quot;, row[&quot;run_id&quot;],
-            &quot;--device&quot;, &quot;cuda:0&quot;, &quot;--output&quot;, str(output)
-        ], check=True)</code></pre></div>
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reproduction guide &mdash; BiPGA</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/bipga.css?v=f0f54ec4" />
+
+  
+    <link rel="shortcut icon" href="../../_static/bipga-mark.svg"/>
+    <link rel="canonical" href="https://bipga.github.io/supplementary/reproduce/index.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/bipga-tools.js?v=c199668a"></script>
+      <script src="../../_static/example-data.js?v=25e7821d"></script>
+      <script defer="defer" src="../../_static/bipga.js?v=403c47d0"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Supplementary Material" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #246c8d" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BiPGA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction to partial graph alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#inputs-and-predictions">Inputs and predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#construction-and-inference">Construction and inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#use-the-research-checkout">Use the research checkout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verify-the-interface">Verify the interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#working-directories">Working directories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#first-run-a-self-contained-example">First run: a self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#run-a-built-in-method">Run a built-in method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#choose-a-method-and-dataset">Choose a method and dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#inspect-the-output">Inspect the output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command-line interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#list-the-available-inputs">List the available inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#preview-a-selection">Preview a selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#select-several-experiments">Select several experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#execution-and-results">Execution and results</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#the-common-file-format">The common file format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#load-and-inspect-an-instance">Load and inspect an instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#convert-prediction-identifiers">Convert prediction identifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#construct-bilateral-partial-overlap">Construct bilateral partial overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#natural-pairs-and-incomplete-annotations">Natural pairs and incomplete annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets.html#use-your-own-dataset">Use your own dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithms.html">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#choose-a-method">Choose a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#configure-a-method">Configure a method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#execution-settings-and-dependencies">Execution settings and dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#original-author-cpu-alpine">Original-author CPU ALPINE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#s-gwl-numerical-revision">S-GWL numerical revision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#custom-methods">Custom methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms.html#select-sparkalign">Select SparkAlign</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../evaluation.html">Evaluation and metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#exact-pair-recovery">Exact-pair recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#endpoint-matchability-and-overlap">Endpoint matchability and overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#node-classification">Node classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#directional-ranking">Directional ranking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#returned-report">Returned report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#incomplete-reference-annotations">Incomplete reference annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#campaign-decoder-views">Campaign decoder views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../evaluation.html#report-repeated-runs">Report repeated runs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#available-analyses">Available analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#incomplete-labels">Incomplete labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs.html">Saved runs and resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#read-an-existing-attempt">Read an existing attempt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#status-and-native-scores">Status and native scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#timing-and-memory-scope">Timing and memory scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#browser-local-json-inspector">Browser-local JSON inspector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../logs.html#read-a-record-from-python">Read a record from Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Custom algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../extending.html#the-adapter-contract">The adapter contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../extending.html#a-minimal-custom-adapter">A minimal custom adapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../extending.html#return-optional-score-data">Return optional score data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../extending.html#registration-and-reproducibility">Registration and reproducibility</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Python API overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#reference-pages">Reference pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/data.html">Dataset loading and construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/data.html#load-graph-pairs">Load graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/data.html#bpupga.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/data.html#construct-partial-graph-pairs">Construct partial graph pairs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/data.html#bpupga.construct"><code class="docutils literal notranslate"><span class="pre">construct()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/algorithm.html">Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/algorithm.html#bpupga.Algorithm"><code class="docutils literal notranslate"><span class="pre">Algorithm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/algorithm.html#bpupga.Algorithm.align"><code class="docutils literal notranslate"><span class="pre">Algorithm.align()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/algorithm.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/evaluation.html">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/evaluation.html#bpupga.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/diagnostics.html">Post-inference diagnostics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/diagnostics.html#bpupga.diagnose"><code class="docutils literal notranslate"><span class="pre">diagnose()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/records.html">Data and result records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/records.html#alignmentdataset">AlignmentDataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/records.html#bpupga.AlignmentDataset"><code class="docutils literal notranslate"><span class="pre">AlignmentDataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/records.html#alignmentresult">AlignmentResult</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/records.html#bpupga.AlignmentResult"><code class="docutils literal notranslate"><span class="pre">AlignmentResult</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/logging.html">Saved run records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog"><code class="docutils literal notranslate"><span class="pre">RunLog</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.open"><code class="docutils literal notranslate"><span class="pre">RunLog.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.status"><code class="docutils literal notranslate"><span class="pre">RunLog.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.native_metrics"><code class="docutils literal notranslate"><span class="pre">RunLog.native_metrics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.runtime"><code class="docutils literal notranslate"><span class="pre">RunLog.runtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.errors"><code class="docutils literal notranslate"><span class="pre">RunLog.errors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/logging.html#bpupga.RunLog.summary"><code class="docutils literal notranslate"><span class="pre">RunLog.summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/extensions.html">Custom adapter registration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/extensions.html#bpupga.register_algorithm"><code class="docutils literal notranslate"><span class="pre">register_algorithm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#self-contained-example">Self-contained example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#prepared-graph-example">Prepared graph example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#read-an-experiment-record">Read an experiment record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#paper-reproduction">Paper reproduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Troubleshooting and FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#requested-and-realized-overlap-differ-slightly">Requested and realized overlap differ slightly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-is-ranking-none">Why is ranking None?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../source.html">Source code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Supplementary Material</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#complete-artifact">Complete artifact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#reproduce-the-results">Reproduce the results</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#select-sparkalign">Select SparkAlign</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Reproduction guide</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #246c8d" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiPGA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Supplementary Material</a></li>
+      <li class="breadcrumb-item active">Reproduction guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/supplementary/reproduce/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reproduction-guide">
+<h1>Reproduction guide<a class="headerlink" href="#reproduction-guide" title="Link to this heading"></a></h1>
+<p>The workflow is: supplied graph inputs → recorded configurations → graph-only model fitting → evaluation → seed aggregation → figures and tables. All commands below run from the extracted <code class="docutils literal notranslate"><span class="pre">bipga/</span></code> directory.</p>
+<section id="inputs-and-evaluation">
+<h2>Inputs and evaluation<a class="headerlink" href="#inputs-and-evaluation" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">datasets/index.csv</span></code> identifies the 323 experiment graph pairs. Each pair includes edge lists, explicit node lists and reference correspondences. Node lists preserve isolated vertices. The supplied graph instances are the exact experiment inputs; the six source pairs are also included under <code class="docutils literal notranslate"><span class="pre">datasets/*/base/</span></code>. <code class="docutils literal notranslate"><span class="pre">construction/</span></code> contains the bilateral partial-graph constructor.</p>
+<p><code class="docutils literal notranslate"><span class="pre">experiments/runs.csv</span></code> lists 3,908 configurations. Each row joins a graph ID to a method, seed, parameter record and execution configuration. <code class="docutils literal notranslate"><span class="pre">experiments/parameters.json</span></code> contains the parameters. The per-run CSVs under <code class="docutils literal notranslate"><span class="pre">data/</span></code> select the configurations used by each paper figure and table.</p>
+<p><code class="docutils literal notranslate"><span class="pre">run.py</span></code> passes only the graph topology, parameters, random seed and device configuration to the inference process. Reference correspondences remain in the parent process and are used after fitting to evaluate native pair F1, node F1 and bidirectional ranking metrics. The native pair output is evaluated as returned by the method. GRAMPA uses the supplied soft-score ranking routine.</p>
+</section>
+<section id="recompute-the-supplied-results">
+<h2>Recompute the supplied results<a class="headerlink" href="#recompute-the-supplied-results" title="Link to this heading"></a></h2>
+<p>This path uses the supplied observations and runs on a CPU. It does not train models or run CUDA assignment.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements-analysis.txt
+python<span class="w"> </span>scripts/reproduce_results.py<span class="w"> </span>--output<span class="w"> </span>reproduced
+</pre></div>
+</div>
+<p>The command writes <code class="docutils literal notranslate"><span class="pre">reproduced/data/figure_05/</span></code> through <code class="docutils literal notranslate"><span class="pre">figure_09/</span></code> and <code class="docutils literal notranslate"><span class="pre">reproduced/data/table_ii/</span></code>, <code class="docutils literal notranslate"><span class="pre">table_iv/</span></code>, <code class="docutils literal notranslate"><span class="pre">table_v/</span></code>, <code class="docutils literal notranslate"><span class="pre">table_vi/</span></code>. Each directory contains the numerical summary as <code class="docutils literal notranslate"><span class="pre">values.csv</span></code>; repeated observations also have <code class="docutils literal notranslate"><span class="pre">values_by_run.csv</span></code>. The command checks that every recomputed summary agrees with the supplied results and stops on a mismatch.</p>
+<p>Figures 5–8 and Table IV are aggregated from individual recorded observations. Figure 9 and Tables V/VI are recomputed from query-level predictions, rankings, assignments and exact orbit records. Table II is recomputed directly from the six source graph pairs.</p>
+</section>
+<section id="render-the-figures">
+<h2>Render the figures<a class="headerlink" href="#render-the-figures" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>scripts/plot_results.py<span class="w"> </span>--figure<span class="w"> </span><span class="m">5</span><span class="w"> </span>--data-root<span class="w"> </span>reproduced/data<span class="w"> </span>--output<span class="w"> </span>reproduced/figure05.pdf
+python<span class="w"> </span>scripts/plot_results.py<span class="w"> </span>--figure<span class="w"> </span><span class="m">6</span><span class="w"> </span>--data-root<span class="w"> </span>reproduced/data<span class="w"> </span>--output<span class="w"> </span>reproduced/figure06.pdf
+python<span class="w"> </span>scripts/plot_results.py<span class="w"> </span>--figure<span class="w"> </span><span class="m">7</span><span class="w"> </span>--data-root<span class="w"> </span>reproduced/data<span class="w"> </span>--output<span class="w"> </span>reproduced/figure07.pdf
+python<span class="w"> </span>scripts/plot_results.py<span class="w"> </span>--figure<span class="w"> </span><span class="m">8</span><span class="w"> </span>--data-root<span class="w"> </span>reproduced/data<span class="w"> </span>--output<span class="w"> </span>reproduced/figure08.pdf
+python<span class="w"> </span>scripts/plot_figure09.py<span class="w"> </span>--data-root<span class="w"> </span>reproduced/data<span class="w"> </span>--no-tex<span class="w"> </span>--output-dir<span class="w"> </span>reproduced/figure09
+</pre></div>
+</div>
+<p>Figures 5–8 use a compact rendering of the same numerical series. Figure 9 uses the nine-panel layout. The supplied <code class="docutils literal notranslate"><span class="pre">figures/</span></code> PDFs and <code class="docutils literal notranslate"><span class="pre">tables/</span></code> LaTeX fragments are the paper artifacts; numerical table results are in the corresponding <code class="docutils literal notranslate"><span class="pre">data/</span></code> directories.</p>
+</section>
+<section id="fit-the-models-from-the-graph-inputs">
+<h2>Fit the models from the graph inputs<a class="headerlink" href="#fit-the-models-from-the-graph-inputs" title="Link to this heading"></a></h2>
+<p>Model fitting requires Linux, Python 3.10, an NVIDIA GPU and the CUDA compiler. The paper hardware was two Intel Xeon Platinum 8457C CPUs and eight RTX 5090 GPUs with 32 GB each. Each invocation below selects one GPU and uses eight CPU threads. CUDA assignment uses the CUDA Toolkit 12.9 compiler <code class="docutils literal notranslate"><span class="pre">nvcc</span></code>; set <code class="docutils literal notranslate"><span class="pre">BPUPGA_NVCC</span></code> to its location if it is outside <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cu128
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+python<span class="w"> </span>run.py<span class="w"> </span>--list<span class="w"> </span>--dataset<span class="w"> </span>fbtw<span class="w"> </span>--method<span class="w"> </span>alpine
+python<span class="w"> </span>run.py<span class="w"> </span>--run-id<span class="w"> </span>RUN_ID<span class="w"> </span>--output<span class="w"> </span>fresh_fits/RUN_ID<span class="w"> </span>--dry-run
+python<span class="w"> </span>run.py<span class="w"> </span>--run-id<span class="w"> </span>RUN_ID<span class="w"> </span>--device<span class="w"> </span>cuda:0<span class="w"> </span>--output<span class="w"> </span>fresh_fits/RUN_ID
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">RUN_ID</span></code> with a row from <code class="docutils literal notranslate"><span class="pre">experiments/runs.csv</span></code>. The last command performs a model fit. Each run saves native predictions, continuous scores or costs, fit metadata and <code class="docutils literal notranslate"><span class="pre">metrics.json</span></code>. A new fit requires a new output directory.</p>
+<p>To run every recorded configuration sequentially, save the following as <code class="docutils literal notranslate"><span class="pre">fit_all.py</span></code> in <code class="docutils literal notranslate"><span class="pre">bipga/</span></code> and run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">fit_all.py</span></code>. This is the full model-fitting experiment and can take substantial time.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"experiments/runs.csv"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"fresh_fits"</span><span class="p">)</span> <span class="o">/</span> <span class="n">row</span><span class="p">[</span><span class="s2">"run_id"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">output</span> <span class="o">/</span> <span class="s2">"metrics.json"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">continue</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s2">"run.py"</span><span class="p">,</span> <span class="s2">"--run-id"</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">"run_id"</span><span class="p">],</span>
+            <span class="s2">"--device"</span><span class="p">,</span> <span class="s2">"cuda:0"</span><span class="p">,</span> <span class="s2">"--output"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="p">],</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Completed runs are reused. A failed fit stops the loop; inspect its log before rerunning it in a new output directory. Missing or failed runs are never assigned zero scores.</p>
-<h2 id="build-results-from-fresh-fits">Build results from fresh fits</h2>
-<div class="code-window"><div class="code-header"><span>Terminal</span></div><pre><code>python scripts/reproduce_results.py --fits-root fresh_fits --device cuda:0 --output refitted</code></pre></div>
-<p>This command requires the complete fit tree. It collects quality and cost measurements from <code>metrics.json</code>, uses the paper observation membership to group runs, and rebuilds Figure 9 and Tables V/VI from the new saved scores. Missing runs cause an error. Use the plotting commands above with <code>--data-root refitted/data</code> and new output paths.</p>
-<h2 id="diagnostic-protocol-and-aggregation">Diagnostic protocol and aggregation</h2>
-<p>Figure 9 uses F=(1,1), Us=(0.8,1), Ut=(1,0.8) and B=(0.8,0.8). Full-graph scores are restricted after inference to the reference-pair intersection of these four settings. Independent fixed source/target orders resolve ranking ties and define the input order for the maximum-weight, one-to-one CUDA float64 assignment. Candidate membership, orders and run IDs are supplied in <code>data/figure_09/</code>; definitions are in <code>PROTOCOL.json</code> there.</p>
-<p>Table V uses native-correct pairs in F, Us and Ut that are native-incorrect in B. Strict reversal requires a unique true maximum in F, Us and Ut and a strictly higher incorrect score in B. Table VI tests full B-graph automorphism orbit sizes, including private and isolated vertices. The exact orbits can also be recomputed with <code>python scripts/recompute_orbits.py --output exact_orbits</code>.</p>
-<p>Arxiv uses seed 2026 for Figures 5, 6, 8 and 9; Figure 7 uses seeds 2026–2030. Other datasets use seeds 2026–2030. Ratios are calculated per run before taking the mean. Standard deviations are sample standard deviations with <code>ddof=1</code> and are blank for a single run. Natural-pair repetitions use the same graph snapshots.</p>
-<p>Archived-observation replay reproduces the supplied numerical summaries. Fresh fits can vary with numerical libraries, GPU execution and hardware. Runtime and memory also depend on resource sharing; RAM is process peak RSS and GPU memory is peak allocator reservation, both reported in GiB. Quality metrics are fractions unless a field explicitly states percent.</p></article><footer><span>BiPGA · ICDE 2027</span><a href="index.html">Documentation home ↑</a></footer></main><aside class="page-toc"><div>ON THIS PAGE</div><a class="toc-link" href="supplementary/reproduce/#inputs-and-evaluation">Inputs and evaluation</a><a class="toc-link" href="supplementary/reproduce/#recompute-the-supplied-results">Recompute the supplied results</a><a class="toc-link" href="supplementary/reproduce/#render-the-figures">Render the figures</a><a class="toc-link" href="supplementary/reproduce/#fit-the-models-from-the-graph-inputs">Fit the models from the graph inputs</a><a class="toc-link" href="supplementary/reproduce/#build-results-from-fresh-fits">Build results from fresh fits</a><a class="toc-link" href="supplementary/reproduce/#diagnostic-protocol-and-aggregation">Diagnostic protocol and aggregation</a></aside></div></div>
-<dialog id="search-dialog"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search functions, parameters, or tutorials…" aria-label="Search documentation"><button id="search-close" class="icon-button" aria-label="Close search">×</button></div><div id="search-results"></div><p class="search-hint">Search across all pages. <kbd>Esc</kbd> to close.</p></dialog><div class="toast" id="toast" role="status" hidden></div></body></html>
+</section>
+<section id="build-results-from-fresh-fits">
+<h2>Build results from fresh fits<a class="headerlink" href="#build-results-from-fresh-fits" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>scripts/reproduce_results.py<span class="w"> </span>--fits-root<span class="w"> </span>fresh_fits<span class="w"> </span>--device<span class="w"> </span>cuda:0<span class="w"> </span>--output<span class="w"> </span>refitted
+</pre></div>
+</div>
+<p>This command requires the complete fit tree. It collects quality and cost measurements from <code class="docutils literal notranslate"><span class="pre">metrics.json</span></code>, uses the paper observation membership to group runs, and rebuilds Figure 9 and Tables V/VI from the new saved scores. Missing runs cause an error. Use the plotting commands above with <code class="docutils literal notranslate"><span class="pre">--data-root</span> <span class="pre">refitted/data</span></code> and new output paths.</p>
+</section>
+<section id="diagnostic-protocol-and-aggregation">
+<h2>Diagnostic protocol and aggregation<a class="headerlink" href="#diagnostic-protocol-and-aggregation" title="Link to this heading"></a></h2>
+<p>Figure 9 uses F=(1,1), Us=(0.8,1), Ut=(1,0.8) and B=(0.8,0.8). Full-graph scores are restricted after inference to the reference-pair intersection of these four settings. Independent fixed source/target orders resolve ranking ties and define the input order for the maximum-weight, one-to-one CUDA float64 assignment. Candidate membership, orders and run IDs are supplied in <code class="docutils literal notranslate"><span class="pre">data/figure_09/</span></code>; definitions are in <code class="docutils literal notranslate"><span class="pre">PROTOCOL.json</span></code> there.</p>
+<p>Table V uses native-correct pairs in F, Us and Ut that are native-incorrect in B. Strict reversal requires a unique true maximum in F, Us and Ut and a strictly higher incorrect score in B. Table VI tests full B-graph automorphism orbit sizes, including private and isolated vertices. The exact orbits can also be recomputed with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">scripts/recompute_orbits.py</span> <span class="pre">--output</span> <span class="pre">exact_orbits</span></code>.</p>
+<p>Arxiv uses seed 2026 for Figures 5, 6, 8 and 9; Figure 7 uses seeds 2026–2030. Other datasets use seeds 2026–2030. Ratios are calculated per run before taking the mean. Standard deviations are sample standard deviations with <code class="docutils literal notranslate"><span class="pre">ddof=1</span></code> and are blank for a single run. Natural-pair repetitions use the same graph snapshots.</p>
+<p>Archived-observation replay reproduces the supplied numerical summaries. Fresh fits can vary with numerical libraries, GPU execution and hardware. Runtime and memory also depend on resource sharing; RAM is process peak RSS and GPU memory is peak allocator reservation, both reported in GiB. Quality metrics are fractions unless a field explicitly states percent.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Supplementary Material" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, BiPGA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

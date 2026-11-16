@@ -1,0 +1,47 @@
+Supplementary Material
+======================
+
+Code, data and experimental results accompanying the ICDE 2027 submission.
+
+Complete artifact
+-----------------
+
+`Download BiPGA_artifacts.zip <BiPGA_artifacts.zip>`_
+
+The archive contains method implementations, graph inputs, experiment
+configurations, numerical observations, paper figures and tables, and
+reproduction scripts. It includes all twelve methods, including SparkAlign.
+
+Reproduce the results
+---------------------
+
+Use Python 3.10 to extract the archive and recompute the supplied numerical
+results for Figures 5–9 and Tables II, IV–VI:
+
+.. code-block:: bash
+
+   python -m zipfile -e BiPGA_artifacts.zip .
+   cd bipga
+   python -m pip install -r requirements-analysis.txt
+   python scripts/reproduce_results.py --output reproduced
+
+This command uses the supplied observations. The
+:doc:`complete reproduction guide <reproduce/index>` covers graph inputs,
+model fitting, evaluation, seed aggregation, expected outputs and plotting.
+The same guide is included as ``REPRODUCE.md`` in the archive.
+
+Select SparkAlign
+-----------------
+
+.. code-block:: bash
+
+   python run.py --list --dataset fbtw --method SparkAlign
+
+The listed configuration IDs select the recorded graph inputs, parameters and
+seeds. Follow the reproduction guide to execute model fits.
+
+.. toctree::
+   :maxdepth: 1
+
+   reproduce/index
+

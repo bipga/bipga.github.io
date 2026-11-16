@@ -70,7 +70,7 @@ alignment setting and :doc:`evaluation` for the meaning of each metric.
    examples
    faq
    source
-   Supplementary Material <https://bipga.github.io/supplementary/>
+   supplementary/index
 
 Paper artifacts
 ---------------
