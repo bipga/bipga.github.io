@@ -2,13 +2,13 @@
 
 Code, data and experimental results for the ICDE 2027 submission.
 
-- [Download the complete artifact](https://bipga.github.io/supplementary/BiPGA_artifacts.zip)
+- [Download the complete artifact](https://bipga.github.io/supplementary/BiPGA_artifacts.tar.xz)
 - [Supplementary material page](https://bipga.github.io/supplementary/)
 
-The ZIP contains method implementations, graph inputs, experiment configurations, numerical results, paper figures and tables, and reproduction scripts.
+The archive contains method implementations, graph inputs, experiment configurations, numerical results, paper figures and tables, and reproduction scripts.
 
 ```bash
-python -m zipfile -e BiPGA_artifacts.zip .
+tar -xf BiPGA_artifacts.tar.xz
 cd bipga
 python -m pip install -r requirements-analysis.txt
 python scripts/reproduce_results.py --output reproduced

@@ -8,4 +8,4 @@ Python interfaces for bilateral partial graph alignment: graph preparation, meth
 - [Examples](https://bipga.github.io/examples.html)
 - [Supplementary material](https://bipga.github.io/supplementary/)
 
-This repository hosts the static GitHub Pages website. The documentation is generated with Sphinx and the Read the Docs theme. API examples use the imported package name `bpupga` and the method name `SparkAlign`.
+This repository hosts the static GitHub Pages website. The documentation is generated with Sphinx and the Read the Docs theme. API examples use the imported package name `bpupga`.
