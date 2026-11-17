@@ -263,11 +263,12 @@ evaluation, diagnostics and plotting in one standalone Python distribution.
 Use Linux and Python 3.10 for the complete method environment.</p>
 <section id="python-package">
 <h2>Python package<a class="headerlink" href="#python-package" title="Link to this heading"></a></h2>
-<p><a class="reference external" href="downloads/bipga-0.1.0-py3-none-any.whl">Download the wheel</a> ·
+<p><a class="reference external" href="https://pypi.org/project/bipga/">PyPI project</a> ·
+<a class="reference external" href="downloads/bipga-0.1.0-py3-none-any.whl">Download the wheel</a> ·
 <a class="reference external" href="downloads/bipga-0.1.0.tar.gz">Download the source distribution</a></p>
-<p>Install the CPU method dependencies and the wheel directly:</p>
+<p>Install the CPU method dependencies and the package from PyPI:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3.10<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
-python3.10<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"bipga[all] @ https://bipga.github.io/downloads/bipga-0.1.0-py3-none-any.whl"</span>
+python3.10<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"bipga[all]"</span>
 bipga<span class="w"> </span>doctor<span class="w"> </span>--all
 bipga<span class="w"> </span>methods
 </pre></div>

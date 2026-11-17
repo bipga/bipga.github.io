@@ -8,15 +8,16 @@ Use Linux and Python 3.10 for the complete method environment.
 Python package
 --------------
 
+`PyPI project <https://pypi.org/project/bipga/>`_ ·
 `Download the wheel <downloads/bipga-0.1.0-py3-none-any.whl>`_ ·
 `Download the source distribution <downloads/bipga-0.1.0.tar.gz>`_
 
-Install the CPU method dependencies and the wheel directly:
+Install the CPU method dependencies and the package from PyPI:
 
 .. code-block:: bash
 
    python3.10 -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
-   python3.10 -m pip install "bipga[all] @ https://bipga.github.io/downloads/bipga-0.1.0-py3-none-any.whl"
+   python3.10 -m pip install "bipga[all]"
    bipga doctor --all
    bipga methods
 
