@@ -20,7 +20,7 @@
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/bipga-tools.js?v=d03ebeed"></script>
-      <script src="_static/example-data.js?v=0991e004"></script>
+      <script src="_static/example-data.js?v=6f38cfad"></script>
       <script defer="defer" src="_static/bipga.js?v=403c47d0"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -56,11 +56,11 @@
 <li class="toctree-l2"><a class="reference internal" href="intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#use-the-research-checkout">Use the research checkout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-the-interface">Verify the interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#working-directories">Working directories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation and downloads</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#python-package">Python package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#complete-runtime">Complete runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#gpu-container">GPU container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-and-reproduce">Verify and reproduce</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a><ul>
@@ -71,12 +71,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-line interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#list-the-available-inputs">List the available inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#preview-a-selection">Preview a selection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#select-several-experiments">Select several experiments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#options">Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#execution-and-results">Execution and results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#available-commands">Available commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#check-the-installation">Check the installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#align-a-graph-pair">Align a graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#construct-graph-inputs">Construct graph inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#paper-reproduction">Paper reproduction</a></li>
 </ul>
 </li>
 </ul>
@@ -116,7 +115,7 @@
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html#incomplete-labels">Incomplete labels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#bundled-diagnostic-implementation">Bundled diagnostic implementation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="logs.html">Saved runs and resources</a><ul>
@@ -208,7 +207,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting and FAQ</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#missing-dependencies-or-weights">Missing dependencies or weights</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
@@ -216,7 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#why-is-ranking-none">Why is ranking None?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#diagnostics-cannot-find-its-source">Diagnostics cannot find its source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
@@ -261,20 +260,15 @@
 <span class="legacy-anchor" id="import"></span><span class="legacy-anchor" id="checkout-collision"></span><span class="legacy-anchor" id="dependencies"></span><span class="legacy-anchor" id="devices"></span><span class="legacy-anchor" id="graph-input"></span><span class="legacy-anchor" id="output-dir"></span><span class="legacy-anchor" id="ratios"></span><span class="legacy-anchor" id="reference-completeness"></span><span class="legacy-anchor" id="missing-ranking"></span><span class="legacy-anchor" id="noninjective"></span><span class="legacy-anchor" id="diagnose-missing"></span><span class="legacy-anchor" id="log-result"></span><span class="legacy-anchor" id="training"></span><span class="legacy-anchor" id="reproduce"></span><h1>Troubleshooting and FAQ<a class="headerlink" href="#troubleshooting-and-faq" title="Link to this heading"></a></h1>
 <section id="python-cannot-import-bpupga">
 <h2>Python cannot import bpupga<a class="headerlink" href="#python-cannot-import-bpupga" title="Link to this heading"></a></h2>
-<p>Run the setup from the repository root and add the consolidated <code class="docutils literal notranslate"><span class="pre">api/</span></code> directory to Python’s import path:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/baseline/api</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="p">:+:</span><span class="nv">$PYTHONPATH</span><span class="si">}</span><span class="s2">"</span>
-python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import bpupga; print(bpupga.__file__)"</span>
-</pre></div>
-</div>
-<p>Use the project’s existing model environment. This facade is not a PyPI package and depends on the adjacent dated implementation tree. Copying only <code class="docutils literal notranslate"><span class="pre">api/bpupga/</span></code> is insufficient for the built-in methods.</p>
+<p>Install the wheel in the Python environment that runs your program. Both <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bpupga</span></code> and <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">bipga</span></code> are supported. The complete runtime’s <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">bipga.sh</span></code> launcher selects its installed environment. See <a class="reference external" href="installation.html">Installation and downloads</a>.</p>
 </section>
 <section id="common-is-already-loaded-from-another-checkout">
 <h2>“common is already loaded from another checkout”<a class="headerlink" href="#common-is-already-loaded-from-another-checkout" title="Link to this heading"></a></h2>
 <p>Historical baseline trees reuse the top-level import names <code class="docutils literal notranslate"><span class="pre">baseline</span></code>, <code class="docutils literal notranslate"><span class="pre">baselines</span></code>, and <code class="docutils literal notranslate"><span class="pre">common</span></code>. Start a fresh Python process when switching checkouts. Do not mix the historical and current result classes in one session.</p>
 </section>
-<section id="missing-pytorch-scikit-learn-vendor-packages-or-weights">
-<h2>Missing PyTorch, scikit-learn, vendor packages, or weights<a class="headerlink" href="#missing-pytorch-scikit-learn-vendor-packages-or-weights" title="Link to this heading"></a></h2>
-<p>The facade wraps existing code rather than replacing its environment. Loading needs NetworkX and NumPy. Evaluation imports the existing metric module and scikit-learn. Built-in execution imports PyTorch and the selected author’s dependencies; some models require their existing weights. Diagnostics additionally reuse the sibling legacy evaluation tree. Follow the repository environment instructions rather than installing a guessed universal dependency set.</p>
+<section id="missing-dependencies-or-weights">
+<h2>Missing dependencies or weights<a class="headerlink" href="#missing-dependencies-or-weights" title="Link to this heading"></a></h2>
+<p>Run <code class="docutils literal notranslate"><span class="pre">bipga</span> <span class="pre">doctor</span> <span class="pre">--all</span></code> to identify missing dependencies or bundled resources. The complete runtime installer supplies the pinned method dependencies in a local environment. Method sources, weights, constructor, metrics and diagnostics are bundled with the package.</p>
 </section>
 <section id="does-device-cpu-mean-every-implementation-is-lightweight">
 <h2>Does device=’cpu’ mean every implementation is lightweight?<a class="headerlink" href="#does-device-cpu-mean-every-implementation-is-lightweight" title="Link to this heading"></a></h2>
@@ -304,9 +298,9 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import
 <h2>Why is Pair F1 present when is_one_to_one is false?<a class="headerlink" href="#why-is-pair-f1-present-when-is-one-to-one-is-false" title="Link to this heading"></a></h2>
 <p>Pair-set recovery and one-to-one feasibility are distinct. Exact duplicates are removed during pair scoring, while repeated endpoints are disclosed. Use the validity report when interpreting native results.</p>
 </section>
-<section id="diagnostics-cannot-find-diagnostics-py">
-<h2>Diagnostics cannot find diagnostics.py<a class="headerlink" href="#diagnostics-cannot-find-diagnostics-py" title="Link to this heading"></a></h2>
-<p>Retain <code class="docutils literal notranslate"><span class="pre">BPUPGA/baseline/evaluation/</span></code> beside the project. The public wrapper reuses that inspected diagnostic implementation and reports a missing source file explicitly. It does not rerun a model to reconstruct artifacts.</p>
+<section id="diagnostics-cannot-find-its-source">
+<h2>Diagnostics cannot find its source<a class="headerlink" href="#diagnostics-cannot-find-its-source" title="Link to this heading"></a></h2>
+<p>Install the complete wheel or source distribution. Its runtime contains the diagnostic module and shared contracts; copying a single API file does not include these resources. Diagnostics do not rerun a model.</p>
 </section>
 <section id="runlog-has-no-native-metrics">
 <h2>RunLog has no native_metrics<a class="headerlink" href="#runlog-has-no-native-metrics" title="Link to this heading"></a></h2>

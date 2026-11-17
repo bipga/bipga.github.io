@@ -29,8 +29,12 @@ contract rather than a benchmark result.
 Run a built-in method
 ---------------------
 
-With the complete checkout and its prepared data, the same interface runs a
-registered alignment method:
+Download the supplied graph inputs once, then run a registered method:
+
+.. code-block:: bash
+
+   bipga download --output paper
+
 
 .. literalinclude:: downloads/quickstart.py
    :language: python

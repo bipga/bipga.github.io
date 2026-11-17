@@ -1,6 +1,6 @@
 """Run a small local API example without invoking a built-in model.
 
-From the repository root, set PYTHONPATH=baseline/api.
+Install the BiPGA package before running this example.
 This degree-based adapter illustrates the contract; it is not a baseline claim.
 """
 import json

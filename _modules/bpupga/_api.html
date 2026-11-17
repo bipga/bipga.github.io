@@ -19,7 +19,7 @@
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/bipga-tools.js?v=d03ebeed"></script>
-      <script src="../../_static/example-data.js?v=0991e004"></script>
+      <script src="../../_static/example-data.js?v=6f38cfad"></script>
       <script defer="defer" src="../../_static/bipga.js?v=403c47d0"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -53,11 +53,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../../intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../installation.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../installation.html#use-the-research-checkout">Use the research checkout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verify-the-interface">Verify the interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../installation.html#working-directories">Working directories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation and downloads</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#python-package">Python package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#complete-runtime">Complete runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#gpu-container">GPU container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verify-and-reproduce">Verify and reproduce</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a><ul>
@@ -68,12 +68,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command-line interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../cli.html#list-the-available-inputs">List the available inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cli.html#preview-a-selection">Preview a selection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cli.html#select-several-experiments">Select several experiments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cli.html#options">Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cli.html#execution-and-results">Execution and results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#available-commands">Available commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#check-the-installation">Check the installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#align-a-graph-pair">Align a graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#construct-graph-inputs">Construct graph inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#paper-reproduction">Paper reproduction</a></li>
 </ul>
 </li>
 </ul>
@@ -113,7 +112,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#incomplete-labels">Incomplete labels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../diagnostics.html#bundled-diagnostic-implementation">Bundled diagnostic implementation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../logs.html">Saved runs and resources</a><ul>
@@ -205,7 +204,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">Troubleshooting and FAQ</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../faq.html#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#missing-dependencies-or-weights">Missing dependencies or weights</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
@@ -213,7 +212,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-is-ranking-none">Why is ranking None?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../faq.html#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq.html#diagnostics-cannot-find-its-source">Diagnostics cannot find its source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../faq.html#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
@@ -255,10 +254,9 @@
            <div itemprop="articleBody">
              
   <h1>Source code for bpupga._api</h1><div class="highlight"><pre>
-<span></span><span class="sd">"""Thin wrappers around existing implementations; no campaign files are changed.</span>
+<span></span><span class="sd">"""Standalone graph-only alignment API with bundled numerical implementations.</span>
 
-<span class="sd">This in-process interface is not the benchmark's sealed subprocess executor.</span>
-<span class="sd">Labels belong to data construction and post-inference evaluation, never align().</span>
+<span class="sd">Reference labels are used only for construction, evaluation and diagnostics.</span>
 <span class="sd">"""</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -277,9 +275,8 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="c1"># The public facade lives under api/; its frozen research dependencies remain</span>
-<span class="c1"># at the project root, outside the API source directory.</span>
-<span class="n">_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="c1"># All runtime sources and weights are installed with this package.</span>
+<span class="n">_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"_engine"</span>
 <span class="n">_BASELINE</span> <span class="o">=</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"baseline"</span>
 <span class="c1"># Existing adapters use the top-level common contract. Do not load a second</span>
 <span class="c1"># baseline.common contract, or isinstance checks cease to mean the same thing.</span>
@@ -352,7 +349,7 @@
 <span class="sd">    overlap requests, with finite-size rounding recorded in metadata. Existing</span>
 <span class="sd">    outputs are never replaced, including dangling symbolic links.</span>
 <span class="sd">    """</span>
-    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"data"</span><span class="p">,</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"construction"</span><span class="p">,</span> <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_ROOT</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"date_*"</span><span class="p">))]</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"construction"</span><span class="p">]</span>
     <span class="n">directory</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">candidates</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"construct_bilateral_partial.py"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()),</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">"Graph constructor is absent from data/ or construction/"</span><span class="p">)</span>
@@ -431,8 +428,6 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Supervised OPGM-rs is protocol-incompatible; use the explicitly changed opgm_unsupervised adapter"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_BUILTINS</span> <span class="ow">and</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_CUSTOM</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown algorithm </span><span class="si">{</span><span class="n">method</span><span class="si">!r}</span><span class="s2">; built-ins: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_BUILTINS</span><span class="p">))</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"alpine"</span> <span class="ow">and</span> <span class="n">device</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"cpu"</span><span class="p">,</span> <span class="s2">"auto"</span><span class="p">}:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The original-author ALPINE adapter supports CPU only; use device='cpu' or 'auto'"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">method</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">parameters</span> <span class="ow">or</span> <span class="p">{}))</span>
         <span class="n">forbidden</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"ground_truth"</span><span class="p">,</span> <span class="s2">"gt"</span><span class="p">,</span> <span class="s2">"true_k"</span><span class="p">,</span> <span class="s2">"true_K"</span><span class="p">,</span> <span class="s2">"true_overlap"</span><span class="p">,</span> <span class="s2">"dataset"</span><span class="p">,</span> <span class="s2">"data_root"</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">forbidden</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">):</span>
@@ -448,6 +443,7 @@
         <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
         <span class="n">parameters</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="n">_CUSTOM</span><span class="p">:</span>
             <span class="n">model</span> <span class="o">=</span> <span class="n">_CUSTOM</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">](</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
                                          <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dataset_family</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_family</span><span class="p">)</span>
@@ -457,44 +453,19 @@
             <span class="c1"># environment; custom adapters do not acquire that dependency.</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"opgm_unsupervised"</span><span class="p">:</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.opgm_unsupervised.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct</span> <span class="k">as</span> <span class="n">make_model</span>
-                <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"alpine"</span><span class="p">:</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.alpine_author_cpu</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthorCPUAlpine</span>
-                <span class="n">defaults</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">inner_iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                                <span class="n">sinkhorn_reg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sinkhorn_iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-                                <span class="n">sinkhorn_tolerance</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">"cpu"</span><span class="p">)</span>
-                <span class="n">unsupported</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">-</span> <span class="n">defaults</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">unsupported</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unsupported original-author ALPINE parameters: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">unsupported</span><span class="p">))</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"device"</span><span class="p">,</span> <span class="s2">"cpu"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"cpu"</span><span class="p">,</span> <span class="s2">"auto"</span><span class="p">}:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The original-author ALPINE adapter supports CPU only"</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s2">"cpu"</span><span class="p">,</span> <span class="n">implementation</span><span class="o">=</span><span class="s2">"original_author_CPU_261030"</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"niter"</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">10</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The original ALPINE code fixes ten outer iterations; niter must be 10"</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"mu"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"weight"</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"ALPINE requires nonnegative mu and weight in {1, 2}"</span><span class="p">)</span>
-                <span class="n">model</span> <span class="o">=</span> <span class="n">AuthorCPUAlpine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"SparkAlign"</span><span class="p">:</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.SparkAlign</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkAlign</span><span class="p">,</span> <span class="n">SparkAlignConfig</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">config</span> <span class="o">=</span> <span class="n">SparkAlignConfig</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
-                        <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compute_cost_matrix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_dense_entries</span><span class="o">=</span><span class="mi">150_000_000</span><span class="p">))</span>
-                <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid parameters for SparkAlign: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
-                <span class="n">config</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-                <span class="n">model</span> <span class="o">=</span> <span class="n">SparkAlign</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"cuda:0"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">==</span> <span class="s2">"auto"</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
+            <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">"cuda"</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">gpu_backend.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct</span> <span class="k">as</span> <span class="n">make_model</span>
+                <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="n">selected</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_family</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">"cpu"</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">._engine.cpu_registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct</span> <span class="k">as</span> <span class="n">make_model</span>
+                <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="n">selected</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_family</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct</span> <span class="k">as</span> <span class="n">make_model</span>
-                <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">make_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_family</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"device must be cpu, auto or a CUDA device such as cuda:0"</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">"fit"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Algorithm factory must return an adapter with fit(graph1, graph2)"</span><span class="p">)</span>
         <span class="n">context</span> <span class="o">=</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">nullcontext</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"s_gwl"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"s_gwl"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">selected</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"cuda"</span><span class="p">):</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">baseline.sgwl_numerics_v2</span><span class="w"> </span><span class="kn">import</span> <span class="n">stable_proximal_state</span>
             <span class="n">context</span> <span class="o">=</span> <span class="n">stable_proximal_state</span><span class="p">()</span>
         <span class="k">with</span> <span class="n">context</span> <span class="k">as</span> <span class="n">numerical</span><span class="p">:</span>
@@ -645,7 +616,7 @@
              <span class="n">max_dense_entries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25_000_000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">"""Run the existing evaluation-only diagnostic module without saving files.</span>
 
-<span class="sd">    Requires BPUPGA/baseline/evaluation from the research checkout.</span>
+<span class="sd">    Uses the diagnostic implementation bundled with the installed package.</span>
 <span class="sd">    Endpoint-mask oracle comparisons are explicitly labeled in the report;</span>
 <span class="sd">    true-cardinality oracle decoding remains disabled. No result is refitted.</span>
 <span class="sd">    """</span>
@@ -668,12 +639,7 @@
             <span class="s2">"reference_note"</span><span class="p">:</span> <span class="n">_reference_note</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span>
             <span class="s2">"leakage_statement"</span><span class="p">:</span> <span class="s2">"Post-inference reference accounting only; no refit or oracle decoding"</span><span class="p">,</span>
         <span class="p">}</span>
-    <span class="n">sibling</span> <span class="o">=</span> <span class="n">_ROOT</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"BPUPGA"</span>
-    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"evaluation"</span><span class="p">,</span> <span class="n">sibling</span> <span class="o">/</span> <span class="s2">"baseline/evaluation"</span><span class="p">,</span>
-                  <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="n">sibling</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"baseline*/evaluation"</span><span class="p">))]</span>
-    <span class="n">legacy</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">candidates</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"diagnostics.py"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()),</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">legacy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">"Optional diagnostic source is absent: BPUPGA/baseline/evaluation/diagnostics.py"</span><span class="p">)</span>
+    <span class="n">legacy</span> <span class="o">=</span> <span class="n">_ROOT</span> <span class="o">/</span> <span class="s2">"diagnostics"</span>
     <span class="n">package</span> <span class="o">=</span> <span class="n">_private_package</span><span class="p">(</span><span class="s2">"bpupga._legacy_evaluation"</span><span class="p">,</span> <span class="n">legacy</span><span class="p">)</span>
     <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span> <span class="o">+</span> <span class="s2">".diagnostics"</span><span class="p">)</span>
     <span class="c1"># Legacy diagnostics interprets score_matrix as quality regardless of the</span>

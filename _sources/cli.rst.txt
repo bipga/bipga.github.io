@@ -1,78 +1,105 @@
 Command-line interface
 ======================
 
-``python -m bpupga`` runs selected prepared inputs with the current adapters
-and saves native predictions and evaluation records in a new output directory.
-The Python :class:`~bpupga.Algorithm` interface is also available for custom
-graphs and in-memory use.
+The ``bipga`` command runs the installed package. ``python -m bpupga`` and
+``python -m bipga`` expose the same commands.
 
-List the available inputs
--------------------------
+Available commands
+------------------
 
-From the research repository root, after setting the import path:
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
 
-.. code-block:: bash
+   * - Command
+     - Purpose
+   * - ``methods``
+     - List all twelve method identifiers and supported devices.
+   * - ``doctor``
+     - Check dependencies, bundled files and CUDA availability.
+   * - ``demo``
+     - Run a small generated graph example for one or all methods.
+   * - ``run``
+     - Align a supplied graph pair and save native outputs and metrics.
+   * - ``construct``
+     - Construct a bilateral partial pair from supplied graph files.
+   * - ``evaluate``
+     - Evaluate or diagnose saved same-fit outputs.
+   * - ``download``
+     - Download and extract the complete paper artifact.
+   * - ``reproduce``
+     - Recompute the paper's numerical summaries from recorded observations.
+   * - ``plot``
+     - Render Figures 5–9 from supplied or recomputed tables.
+   * - ``paper``
+     - Run a recorded paper configuration with its execution profile.
 
-   python -m bpupga --list
+Use ``bipga COMMAND --help`` for the options of a command.
 
-The listing includes supported method identifiers, dataset identifiers and
-prepared conditions. ``Arxiv``, ``DBLP`` and ``GradAlign+`` are accepted aliases.
-
-Preview a selection
--------------------
-
-.. code-block:: bash
-
-   python -m bpupga --dataset dblp --method grampa --rho 0.6 --seed 2026 --dry-run
-
-``--dry-run`` resolves the inputs and parameters without starting inference,
-reserving a device or creating an output directory.
-
-Run the selected experiment
----------------------------
-
-.. code-block:: bash
-
-   python -m bpupga --dataset dblp --method grampa --rho 0.6 --seed 2026 \
-       --output-dir api/runs/dblp_grampa_r06_s2026
-
-The run uses the selected prepared configuration. Its graph-only subprocess
-fits the method; the parent then evaluates native outputs against the reference.
-Predictions, optional continuous outputs, metrics and resource records are
-stored beneath the chosen directory. ``RunLog.open`` reads the per-task
-``attempt_0001`` record directories.
-
-Select several experiments
---------------------------
+Check the installation
+----------------------
 
 .. code-block:: bash
 
-   python -m bpupga --dataset dblp fbtw --method grampa s_gwl \
-       --rho 0.6 0.8 --seeds 2026 2027 --dry-run
+   bipga doctor --all
+   bipga methods
+   bipga demo --method all --device cpu --output demo_cpu
 
-   python -m bpupga --dataset all --method all --seeds all --dry-run
+For a CUDA environment, add ``--require-gpu`` to ``doctor`` and select a visible
+device such as ``--device cuda:0`` for a fit. The small installation demo uses
+reduced budgets; add ``--defaults`` to use adapter defaults.
 
-The symmetric overlap filter applies to prepared controlled families; natural
-graph pairs retain their snapshots. The default seed is 2026 and ``--seeds all``
-selects prepared seeds 2026–2030.
+Align a graph pair
+------------------
 
-Options
--------
+``--data`` identifies a directory containing ``G1.edgelist``, ``G2.edgelist``,
+optional explicit node lists and an evaluation reference ``Alignment.json``.
 
-.. include:: generated/cli_options.rst
+.. code-block:: bash
 
-Execution and results
----------------------
+   bipga run --data graph_pair --method grampa --parameters '{"eta":1.0}' \
+       --device cpu --seed 2026 --output results --diagnostics
+   bipga evaluate --data graph_pair --fit results/fit --output metrics.json
 
-The CLI runs sequentially and defaults to CPU. A GPU request must pass the
-checkout's device-availability checks and is used only by a supported method.
-Each fit uses eight CPU threads. The documented timeout covers preparation
-and fitting; the RSS limit covers the fit process tree.
+The inference subprocess receives topology, method parameters, seed and device.
+Reference correspondences stay in the parent and are used after inference.
+Outputs include native pairs, same-fit scores or embeddings, fit metadata,
+metrics, logs and a status record. ``RunLog.open("results")`` reads the record.
+Existing output directories are never overwritten. Failed fits retain their
+status and log; missing scores are never reported as valid zeros.
 
-The output directory must be new. Failed or unfinished attempts retain their
-status and available logs; unavailable scores remain distinct from valid zeros.
-Read the records with :doc:`logs` or :class:`~bpupga.RunLog`.
+Construct graph inputs
+----------------------
 
-For the exact paper execution profiles and numerical results, use the
-`supplementary reproduction guide <https://bipga.github.io/supplementary/reproduce/>`_.
+.. code-block:: bash
 
+   bipga construct --data raw_pair --rho-source 0.8 --rho-target 0.8 \
+       --seed 2026 --output partial_pair
+
+Paper reproduction
+------------------
+
+Download the artifact once, or use the ``paper/`` directory included by the
+complete runtime installer:
+
+.. code-block:: bash
+
+   bipga download --output paper
+   bipga reproduce --artifact paper --output reproduced
+   bipga plot --data-root reproduced/data --figure 5 --output figure05.pdf
+   bipga plot --data-root reproduced/data --figure 9 --output figure09
+
+These commands replay observations and render outputs without fitting models.
+To select a recorded model configuration, pass arguments after ``--`` to the
+paper runner:
+
+.. code-block:: bash
+
+   bipga paper --artifact paper -- --list --dataset fbtw --method alpine
+   bipga paper --artifact paper -- --run-id RUN_ID --output fresh_fit --dry-run
+   bipga paper --artifact paper -- --run-id RUN_ID --device cuda:0 --output fresh_fit
+
+Replace ``RUN_ID`` with one listed configuration. The final command fits a model;
+full experiment execution requires the documented GPU environment. See the
+:doc:`complete reproduction guide <supplementary/reproduce/index>` for grouping
+fresh fits, diagnostics, seed aggregation and expected outputs.

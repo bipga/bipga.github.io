@@ -4,24 +4,17 @@ Troubleshooting and FAQ
 Python cannot import bpupga
 ---------------------------
 
-Run the setup from the repository root and add the consolidated ``api/`` directory to Python's import path:
-
-.. code-block:: bash
-
-   export PYTHONPATH="$PWD/baseline/api${PYTHONPATH:+:$PYTHONPATH}"
-   python -c "import bpupga; print(bpupga.__file__)"
-
-Use the project's existing model environment. This facade is not a PyPI package and depends on the adjacent dated implementation tree. Copying only ``api/bpupga/`` is insufficient for the built-in methods.
+Install the wheel in the Python environment that runs your program. Both ``import bpupga`` and ``import bipga`` are supported. The complete runtime's ``bash bipga.sh`` launcher selects its installed environment. See `Installation and downloads <installation.html>`_.
 
 “common is already loaded from another checkout”
 ------------------------------------------------
 
 Historical baseline trees reuse the top-level import names ``baseline``, ``baselines``, and ``common``. Start a fresh Python process when switching checkouts. Do not mix the historical and current result classes in one session.
 
-Missing PyTorch, scikit-learn, vendor packages, or weights
-----------------------------------------------------------
+Missing dependencies or weights
+-------------------------------
 
-The facade wraps existing code rather than replacing its environment. Loading needs NetworkX and NumPy. Evaluation imports the existing metric module and scikit-learn. Built-in execution imports PyTorch and the selected author's dependencies; some models require their existing weights. Diagnostics additionally reuse the sibling legacy evaluation tree. Follow the repository environment instructions rather than installing a guessed universal dependency set.
+Run ``bipga doctor --all`` to identify missing dependencies or bundled resources. The complete runtime installer supplies the pinned method dependencies in a local environment. Method sources, weights, constructor, metrics and diagnostics are bundled with the package.
 
 Does device='cpu' mean every implementation is lightweight?
 -----------------------------------------------------------
@@ -58,10 +51,10 @@ Why is Pair F1 present when is_one_to_one is false?
 
 Pair-set recovery and one-to-one feasibility are distinct. Exact duplicates are removed during pair scoring, while repeated endpoints are disclosed. Use the validity report when interpreting native results.
 
-Diagnostics cannot find diagnostics.py
---------------------------------------
+Diagnostics cannot find its source
+----------------------------------
 
-Retain ``BPUPGA/baseline/evaluation/`` beside the project. The public wrapper reuses that inspected diagnostic implementation and reports a missing source file explicitly. It does not rerun a model to reconstruct artifacts.
+Install the complete wheel or source distribution. Its runtime contains the diagnostic module and shared contracts; copying a single API file does not include these resources. Diagnostics do not rerun a model.
 
 RunLog has no native_metrics
 ----------------------------

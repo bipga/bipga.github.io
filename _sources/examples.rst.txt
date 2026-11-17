@@ -14,8 +14,8 @@ benchmark data or model training. Follow :doc:`installation` before running it.
 Prepared graph example
 ----------------------
 
-`quickstart.py <downloads/quickstart.py>`_ runs GRAMPA on the prepared FbTw
-instance. The :doc:`quickstart` example selector generates equivalent calls for
+`quickstart.py <downloads/quickstart.py>`_ runs GRAMPA on the supplied FbTw
+source pair. The :doc:`quickstart` example selector generates equivalent calls for
 every supported method and each of the four controlled dataset families.
 
 Each example is configured through the public API and uses

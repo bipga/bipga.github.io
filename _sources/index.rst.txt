@@ -13,6 +13,13 @@ post-inference evaluation, diagnostics, and saved experiment records.
    Start with the :doc:`installation` guide and the runnable :doc:`quickstart`.
    The API is imported as ``bpupga`` and runs in your Python environment.
 
+Install and run
+---------------
+
+* `Python package <installation.html#python-package>`_: install the standalone API and CLI.
+* `Complete runtime <installation.html#complete-runtime>`_: download the wheel, launch scripts and paper inputs together.
+* `GPU container <installation.html#gpu-container>`_: use the CUDA development environment.
+
 A common workflow
 -----------------
 

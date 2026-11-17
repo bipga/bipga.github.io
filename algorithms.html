@@ -20,7 +20,7 @@
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/bipga-tools.js?v=d03ebeed"></script>
-      <script src="_static/example-data.js?v=0991e004"></script>
+      <script src="_static/example-data.js?v=6f38cfad"></script>
       <script defer="defer" src="_static/bipga.js?v=403c47d0"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -56,11 +56,11 @@
 <li class="toctree-l2"><a class="reference internal" href="intro.html#evaluate-more-than-ranking">Evaluate more than ranking</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#use-the-research-checkout">Use the research checkout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-the-interface">Verify the interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#working-directories">Working directories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation and downloads</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#python-package">Python package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#complete-runtime">Complete runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#gpu-container">GPU container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-and-reproduce">Verify and reproduce</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a><ul>
@@ -71,12 +71,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command-line interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#list-the-available-inputs">List the available inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#preview-a-selection">Preview a selection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#run-the-selected-experiment">Run the selected experiment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#select-several-experiments">Select several experiments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#options">Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#execution-and-results">Execution and results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#available-commands">Available commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#check-the-installation">Check the installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#align-a-graph-pair">Align a graph pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#construct-graph-inputs">Construct graph inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#paper-reproduction">Paper reproduction</a></li>
 </ul>
 </li>
 </ul>
@@ -116,7 +115,7 @@
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html#oracle-comparisons-are-analysis-only">Oracle comparisons are analysis-only</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html#missing-data-and-matrix-limits">Missing data and matrix limits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="diagnostics.html#incomplete-labels">Incomplete labels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#source-checkout-dependency">Source-checkout dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagnostics.html#bundled-diagnostic-implementation">Bundled diagnostic implementation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="logs.html">Saved runs and resources</a><ul>
@@ -208,7 +207,7 @@
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Troubleshooting and FAQ</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#python-cannot-import-bpupga">Python cannot import bpupga</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#common-is-already-loaded-from-another-checkout">“common is already loaded from another checkout”</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#missing-pytorch-scikit-learn-vendor-packages-or-weights">Missing PyTorch, scikit-learn, vendor packages, or weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#missing-dependencies-or-weights">Missing dependencies or weights</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#does-device-cpu-mean-every-implementation-is-lightweight">Does device=’cpu’ mean every implementation is lightweight?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-does-align-reject-my-graph">Why does align reject my graph?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-does-construct-refuse-the-output-directory">Why does construct refuse the output directory?</a></li>
@@ -216,7 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="faq.html#what-if-my-correspondences-are-incomplete">What if my correspondences are incomplete?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-ranking-none">Why is ranking None?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-pair-f1-present-when-is-one-to-one-is-false">Why is Pair F1 present when is_one_to_one is false?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#diagnostics-cannot-find-diagnostics-py">Diagnostics cannot find diagnostics.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#diagnostics-cannot-find-its-source">Diagnostics cannot find its source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#runlog-has-no-native-metrics">RunLog has no native_metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#where-are-train-checkpoint-resume-and-plot-curve">Where are train, checkpoint, resume, and plot_curve?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#will-default-api-calls-reproduce-the-paper-tables">Will default API calls reproduce the paper tables?</a></li>
@@ -350,7 +349,7 @@
 </section>
 <section id="original-author-cpu-alpine">
 <h2>Original-author CPU ALPINE<a class="headerlink" href="#original-author-cpu-alpine" title="Link to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">alpine</span></code> calls the archived author’s <code class="docutils literal notranslate"><span class="pre">Alpine</span></code> and <code class="docutils literal notranslate"><span class="pre">Alpine_pp_new</span></code> functions through <code class="docutils literal notranslate"><span class="pre">baseline.alpine_author_cpu</span></code>. Both <code class="docutils literal notranslate"><span class="pre">device=&quot;cpu&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">device=&quot;auto&quot;</span></code> select CPU; an explicit CUDA request is rejected. Computation uses float64.</p>
+<p><code class="docutils literal notranslate"><span class="pre">alpine</span></code> calls the archived author’s <code class="docutils literal notranslate"><span class="pre">Alpine</span></code> and <code class="docutils literal notranslate"><span class="pre">Alpine_pp_new</span></code> functions through <code class="docutils literal notranslate"><span class="pre">baseline.alpine_author_cpu</span></code>. <code class="docutils literal notranslate"><span class="pre">device=&quot;cpu&quot;</span></code> selects this CPU implementation. CUDA requests use the bundled GPU implementation; <code class="docutils literal notranslate"><span class="pre">auto</span></code> selects an available device. Computation uses float64.</p>
 <p>The model controls are <code class="docutils literal notranslate"><span class="pre">mu</span></code> and <code class="docutils literal notranslate"><span class="pre">weight</span></code>. The author fixes ten outer iterations, ten inner steps, Sinkhorn regularization 1.0, 500 projection iterations, and tolerance <code class="docutils literal notranslate"><span class="pre">1e-5</span></code>. Corresponding parameter keys must retain these values, including <code class="docutils literal notranslate"><span class="pre">niter=10</span></code>; unsupported controls are rejected.</p>
 </section>
 <section id="s-gwl-numerical-revision">

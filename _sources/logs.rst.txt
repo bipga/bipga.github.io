@@ -9,7 +9,7 @@ Read an existing attempt
    import bpupga as bp
 
    run = bp.RunLog.open(
-       "baseline/evaluation/output/.../attempt_0001")
+       "results")
    print(run.status)
    print(run.native_metrics)
    print(run.runtime)

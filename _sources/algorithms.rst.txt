@@ -82,7 +82,7 @@ Execution settings and dependencies
 Original-author CPU ALPINE
 --------------------------
 
-``alpine`` calls the archived author's ``Alpine`` and ``Alpine_pp_new`` functions through ``baseline.alpine_author_cpu``. Both ``device="cpu"`` and ``device="auto"`` select CPU; an explicit CUDA request is rejected. Computation uses float64.
+``alpine`` calls the archived author's ``Alpine`` and ``Alpine_pp_new`` functions through ``baseline.alpine_author_cpu``. ``device="cpu"`` selects this CPU implementation. CUDA requests use the bundled GPU implementation; ``auto`` selects an available device. Computation uses float64.
 
 The model controls are ``mu`` and ``weight``. The author fixes ten outer iterations, ten inner steps, Sinkhorn regularization 1.0, 500 projection iterations, and tolerance ``1e-5``. Corresponding parameter keys must retain these values, including ``niter=10``; unsupported controls are rejected.
 

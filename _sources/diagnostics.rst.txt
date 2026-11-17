@@ -67,9 +67,9 @@ For a reference flagged incomplete, the facade returns reference pair accounting
    if "skipped_diagnostics" in report:
        print(report["skipped_diagnostics"])
 
-Source-checkout dependency
---------------------------
+Bundled diagnostic implementation
+---------------------------------
 
-This wrapper reuses ``BPUPGA/baseline/evaluation/diagnostics.py`` from the sibling research tree. Retain that source when moving the project. If it is absent and full score diagnostics are requested, a ``FileNotFoundError`` identifies the missing file. The library does not silently substitute another diagnostic implementation.
+The installed package includes the diagnostic implementation and shared result records. Diagnostics use the completed same-fit output and reference after inference; no research checkout or second model fit is required.
 
 Reference: `diagnose <api.html#diagnose>`_, `AlignmentDataset <api.html#AlignmentDataset>`_, and `AlignmentResult <api.html#AlignmentResult>`_.
