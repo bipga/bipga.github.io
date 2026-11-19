@@ -9,7 +9,7 @@
   <title>BiPGA documentation &mdash; BiPGA</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/bipga.css?v=f0f54ec4" />
+      <link rel="stylesheet" type="text/css" href="_static/bipga.css?v=d4f76c83" />
 
   
     <link rel="shortcut icon" href="_static/bipga-mark.svg"/>
@@ -19,9 +19,9 @@
       <script src="_static/documentation_options.js?v=01f34227"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="_static/bipga-tools.js?v=d03ebeed"></script>
+      <script src="_static/bipga-tools.js?v=b5960346"></script>
       <script src="_static/example-data.js?v=6f38cfad"></script>
-      <script defer="defer" src="_static/bipga.js?v=403c47d0"></script>
+      <script defer="defer" src="_static/bipga.js?v=af35394c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -33,6 +33,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: #246c8d" >
+
 
           
           
@@ -46,6 +47,11 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
+<div class="bipga-site-links">
+  <span>Version 0.1.0</span>
+  <a href="https://github.com/bipga/bpupga-api">GitHub repository</a>
+</div>
+
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
@@ -262,12 +268,11 @@ alignment: prepare graph pairs, run an alignment method, and evaluate native
 predictions when either graph can contain unmatched vertices.</p>
 <p>The API connects graph loading and construction, twelve method adapters,
 post-inference evaluation, diagnostics, and saved experiment records.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Start with the <a class="reference internal" href="installation.html"><span class="doc">Installation and downloads</span></a> guide and the runnable <a class="reference internal" href="quickstart.html"><span class="doc">Quick start</span></a>.
-The API is imported as <code class="docutils literal notranslate"><span class="pre">bpupga</span></code> and runs in your Python environment.</p>
-</div>
-<section id="install-and-run">
+<nav class="bipga-start-grid" aria-label="Start here">
+  <a href="installation.html"><strong>Install BiPGA</strong><span>Choose the Python package, complete runtime or GPU container.</span></a>
+  <a href="quickstart.html"><strong>Run an example</strong><span>Try a self-contained example or a built-in method.</span></a>
+  <a href="supplementary/"><strong>Paper materials</strong><span>Code, data and reproduction instructions for the ICDE 2027 submission.</span></a>
+</nav><section id="install-and-run">
 <h2>Install and run<a class="headerlink" href="#install-and-run" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="installation.html#python-package">Python package</a>: install the standalone API and CLI.</p></li>
@@ -290,46 +295,12 @@ The API is imported as <code class="docutils literal notranslate"><span class="p
 alignment call receives only graph topology. See <a class="reference internal" href="intro.html"><span class="doc">Introduction to partial graph alignment</span></a> for the partial
 alignment setting and <a class="reference internal" href="evaluation.html"><span class="doc">Evaluation and metrics</span></a> for the meaning of each metric.</p>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to partial graph alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation and downloads</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-line interface</a></li>
-</ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets and construction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation and metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="diagnostics.html">Post-inference diagnostics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="logs.html">Saved runs and resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extending.html">Custom algorithms</a></li>
-</ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Package Reference</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Python API overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/data.html">Dataset loading and construction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/algorithm.html">Algorithm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/evaluation.html">Evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/diagnostics.html">Post-inference diagnostics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/records.html">Data and result records</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/logging.html">Saved run records</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/extensions.html">Custom adapter registration</a></li>
-</ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Troubleshooting and FAQ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="source.html">Source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="supplementary/index.html">Supplementary Material</a></li>
-</ul>
 </div>
 </section>
 <section id="paper-artifacts">

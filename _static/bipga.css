@@ -7,6 +7,8 @@ body,.wy-body-for-nav,.wy-menu-vertical,.wy-nav-top,input,button,select{font-fam
 .wy-side-nav-search{background:var(--bipga-blue);padding:22px 18px 18px}
 .wy-side-nav-search>a{font-size:24px;letter-spacing:.2px}
 .wy-side-nav-search input[type=text]{border-color:transparent;border-radius:4px;min-height:36px;font-size:14px}
+.wy-side-nav-search .bipga-site-links{display:flex;justify-content:center;gap:14px;margin-top:13px;color:#fff;font-size:13px;line-height:1.5}
+.wy-side-nav-search .bipga-site-links a{color:#fff;text-decoration:underline}
 .wy-menu-vertical p.caption{color:#8dcced;font-weight:700;letter-spacing:.02em}
 .wy-menu-vertical a{font-size:14px;line-height:1.55;padding-top:7px;padding-bottom:7px}
 .wy-menu-vertical li.current>a{color:var(--bipga-ink)}
@@ -17,8 +19,16 @@ body,.wy-body-for-nav,.wy-menu-vertical,.wy-nav-top,input,button,select{font-fam
 .rst-content p,.rst-content li{line-height:1.7}
 .rst-content p{margin-bottom:18px}
 .rst-content code{font-size:85%;overflow-wrap:anywhere;color:#365267}
+.rst-content code.literal,.rst-content tt.literal{color:#365267}
+.rst-content footer{color:#626b73}
 .rst-content a{color:var(--bipga-blue)}
 .rst-content a:hover{text-decoration:underline}
+.bipga-start-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:24px 0 30px}
+.rst-content .bipga-start-grid a{display:block;padding:18px;border:1px solid var(--bipga-border);border-radius:4px;background:#f4f7f9;text-decoration:none}
+.bipga-start-grid a:hover{border-color:var(--bipga-blue);background:#edf5fa}
+.bipga-start-grid strong{display:block;font-size:17px;line-height:1.4;margin-bottom:8px}
+.bipga-start-grid span{display:block;font-size:14px;line-height:1.6;color:var(--bipga-ink)}
+@media(max-width:768px){.bipga-start-grid{grid-template-columns:1fr;gap:10px}.rst-content .bipga-start-grid a{padding:14px 16px}}
 .rst-content .highlight,.rst-content .literal-block-wrapper{position:relative}
 .rst-content .highlight pre{font-size:13px;line-height:1.65;padding:15px 48px 15px 15px;overflow-x:auto}
 .rst-content .highlight{border:1px solid var(--bipga-border);border-radius:3px;background:#f7f9fb}

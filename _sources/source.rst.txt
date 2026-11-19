@@ -4,6 +4,8 @@ Source code
 The snapshots below come from the current API and shared record definitions.
 The package reference also provides ``[source]`` links to the definitions.
 
+`Browse the complete repository on GitHub <https://github.com/bipga/bpupga-api>`_ for runtime sources, release history and project files.
+
 .. raw:: html
 
    <p>The installed package bundles its runtime implementations and weights. The snapshots below show its public API and shared result/data records.</p><div class="source-code"><pre><code><span class="source-line" id="L1"><a href="#L1" aria-label="Line 1">1</a>&quot;&quot;&quot;Standalone graph-only alignment API with bundled numerical implementations.</span>

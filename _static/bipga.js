@@ -12,7 +12,15 @@
       if(search&&((event.key==='/'&&!typing)||((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'))){event.preventDefault();search.focus();}
     });
     const mobile=document.querySelector('.wy-nav-top [data-toggle="wy-nav-top"]');
-    if(mobile){mobile.tabIndex=0;mobile.setAttribute('role','button');mobile.setAttribute('aria-label','Toggle navigation');mobile.setAttribute('aria-expanded','false');mobile.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mobile.click();}});mobile.addEventListener('click',()=>requestAnimationFrame(()=>mobile.setAttribute('aria-expanded',String(document.querySelector('.wy-nav-content-wrap')?.classList.contains('shift')))));}
+    if(mobile){
+      const contentWrap=document.querySelector('.wy-nav-content-wrap');
+      const syncNavigation=()=>mobile.setAttribute('aria-expanded',String(window.matchMedia('(max-width:768px)').matches && !!contentWrap?.classList.contains('shift')));
+      mobile.tabIndex=0;mobile.setAttribute('role','button');mobile.setAttribute('aria-label','Toggle navigation');
+      mobile.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mobile.click();}});
+      if(contentWrap)new MutationObserver(syncNavigation).observe(contentWrap,{attributes:true,attributeFilter:['class']});
+      window.addEventListener('resize',syncNavigation);
+      syncNavigation();
+    }
     async function copyCode(pre,button){
       const original='Copy';
       try{await navigator.clipboard.writeText(pre.textContent);button.textContent='Copied';}
@@ -39,7 +47,7 @@
           if(file.size>10*1024*1024)throw Error('Choose a JSON file smaller than 10 MB.');
           const run=window.BPUPGA_DOCS.parseRunRecord(JSON.parse(await file.text()));
           document.getElementById('run-status').textContent=run.status;
-          document.getElementById('run-name').textContent=run.dataset+' / '+run.method+(run.seed?' / seed '+run.seed:'');
+          document.getElementById('run-name').textContent=run.dataset+' / '+run.method+(run.seed!==undefined && run.seed!==null?' / seed '+run.seed:'');
           const metrics=document.getElementById('run-metrics');metrics.replaceChildren();
           for(const [label,value]of [['Pair precision',run.precision],['Pair recall',run.recall],['Native Pair F1',run.f1]]){const box=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value===null?'N/A':value.toFixed(4);box.append(dt,dd);metrics.appendChild(box);}
           document.getElementById('run-caveat').textContent=run.label;preview.hidden=false;

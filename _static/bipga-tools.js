@@ -27,13 +27,14 @@
   function isObject(value) { return value!==null && typeof value==='object' && !Array.isArray(value); }
   function parseRunRecord(record) {
     if (!isObject(record)) throw new Error('The JSON file must contain an object.');
-    if (typeof record.status!=='string' || !record.status.trim()) throw new Error('Expected a campaign record with a nonempty status.');
-    if (!isObject(record.task) || typeof record.task.method!=='string' || typeof record.task.dataset!=='string') throw new Error('Expected campaign task.method and task.dataset fields.');
+    if (typeof record.status!=='string' || !record.status.trim()) throw new Error('Expected a run record with a nonempty status.');
+    if (!isObject(record.task) || typeof record.task.method!=='string' || !record.task.method.trim()) throw new Error('Expected a run record with a nonempty task.method field.');
+    const dataset=typeof record.task.dataset==='string' && record.task.dataset.trim()?record.task.dataset.trim():'Dataset not recorded';
     const native=record.status==='SUCCESS' && isObject(record.variants?.native)?record.variants.native:null;
     const pair=native && isObject(native.pair)?native.pair:null;
     const metric=(key)=>{const value=pair?.[key];return typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=1?value:null;};
     return {
-      status:record.status,method:record.task.method,dataset:record.task.dataset,condition:record.task.condition,seed:record.task.seed,
+      status:record.status,method:record.task.method,dataset,condition:record.task.condition,seed:record.task.seed,
       precision:metric('precision'),recall:metric('recall'),f1:metric('f1'),native,
       runtime:isObject(record.runtime)?record.runtime:{},
       error:typeof record.error==='string'?record.error:null,

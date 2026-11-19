@@ -8,10 +8,13 @@ predictions when either graph can contain unmatched vertices.
 The API connects graph loading and construction, twelve method adapters,
 post-inference evaluation, diagnostics, and saved experiment records.
 
-.. note::
+.. raw:: html
 
-   Start with the :doc:`installation` guide and the runnable :doc:`quickstart`.
-   The API is imported as ``bpupga`` and runs in your Python environment.
+   <nav class="bipga-start-grid" aria-label="Start here">
+     <a href="installation.html"><strong>Install BiPGA</strong><span>Choose the Python package, complete runtime or GPU container.</span></a>
+     <a href="quickstart.html"><strong>Run an example</strong><span>Try a self-contained example or a built-in method.</span></a>
+     <a href="supplementary/"><strong>Paper materials</strong><span>Code, data and reproduction instructions for the ICDE 2027 submission.</span></a>
+   </nav>
 
 Install and run
 ---------------
@@ -39,6 +42,7 @@ alignment setting and :doc:`evaluation` for the meaning of each metric.
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
    :caption: Getting Started
 
    intro
@@ -48,6 +52,7 @@ alignment setting and :doc:`evaluation` for the meaning of each metric.
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
    :caption: Tutorials
 
    datasets
@@ -59,6 +64,7 @@ alignment setting and :doc:`evaluation` for the meaning of each metric.
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
    :caption: Package Reference
 
    api
@@ -72,6 +78,7 @@ alignment setting and :doc:`evaluation` for the meaning of each metric.
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
    :caption: Resources
 
    examples
